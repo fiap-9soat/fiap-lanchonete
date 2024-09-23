@@ -1,0 +1,38 @@
+services:
+  app:
+    container_name: lanchonete
+    restart: always
+    build: 
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    # command:
+    #   - './mvnw quarkus:dev'
+    depends_on:
+      - db
+  
+  db:
+    container_name: my-db
+    restart: always
+    build: 
+      context: ./database
+      dockerfile: Dockerfile
+      args:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: --init-file /etc/mysql/db.sql
+    ports:
+      - '${MYSQL_PORT}:3306'
+    expose:
+       - 3306
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database/db.sql:/docker-entrypoint-initdb.d/db.sql:ro
+      - ./database/db.sql:/opt/db/db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p$$MYSQL_ROOT_PASSWORD","--protocol","tcp"]
+volumes:
+  db-data:
+    driver: local
