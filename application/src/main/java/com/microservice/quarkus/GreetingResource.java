@@ -1,3 +1,4 @@
+package com.microservice.quarkus;
 
 
 import jakarta.ws.rs.GET;
