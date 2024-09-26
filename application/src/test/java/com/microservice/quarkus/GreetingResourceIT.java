@@ -1,4 +1,4 @@
-package my.groupId;
+package com.microservice.quarkus;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
