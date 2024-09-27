@@ -10,4 +10,4 @@ ENV MYSQL_USER=$MYSQL_USER
 ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
 ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 
-ADD db.sql /etc/mysql/db.sql
+ADD ../infrastructure/src/main/resources/db/migration/db.sql /etc/mysql/db.sql
