@@ -13,7 +13,22 @@
     <packaging>pom</packaging>
 
     <name>infrastructure</name>
-    <description>Infrastructure Adpaters implementation</description>    
+    <description>Infrastructure Adpaters implementation</description>
+
+    <dependencies>
+        <!-- Hibernate ORM specific dependencies -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+        </dependency>
+
+        <!-- JDBC driver dependencies -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-mysql</artifactId>
+        </dependency>
+
+    </dependencies>
 
     <modules>
         
