@@ -16,25 +16,6 @@
     <description>Infrastructure Adpaters implementation</description>
 
     <dependencies>
-        <!-- Hibernate ORM specific dependencies -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm-panache</artifactId>
-        </dependency>
-
-        <!-- JDBC driver dependencies -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-flyway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.microservice.quarkus</groupId>
             <artifactId>domain</artifactId>
@@ -47,10 +28,9 @@
             <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <modules>
-        
+        <module>adapter-mysql</module>
     </modules>
 </project>
