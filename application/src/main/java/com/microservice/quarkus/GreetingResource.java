@@ -1,11 +1,17 @@
 package com.microservice.quarkus;
 
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+@ApplicationScoped
+@Tag(name = "Teste")
 @Path("/hello")
 public class GreetingResource {
 
