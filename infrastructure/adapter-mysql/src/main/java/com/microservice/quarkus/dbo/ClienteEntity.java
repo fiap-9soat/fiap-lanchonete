@@ -1,4 +1,4 @@
-package dbo;
+package com.microservice.quarkus.dbo;
 
 import com.microservice.quarkus.domain.model.Cliente;
 import jakarta.persistence.*;
