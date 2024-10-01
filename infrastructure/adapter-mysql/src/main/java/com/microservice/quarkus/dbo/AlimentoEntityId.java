@@ -1,4 +1,4 @@
-package dbo;
+package com.microservice.quarkus.dbo;
 
 import jakarta.persistence.Id;
 import lombok.*;
