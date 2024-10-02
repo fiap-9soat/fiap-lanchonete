@@ -37,7 +37,7 @@ CREATE TABLE Pedidos (
         REFERENCES Alimentos(codigo_tipo_alimento, codigo_alimento) ON UPDATE CASCADE
 );
 
-CREATE TABLE Hist_pedidos (
+CREATE TABLE Hist_Pedidos (
     codigo_pedido INT NOT NULL,
     codigo_cliente INT,
     ts_pedido TIMESTAMP NOT NULL,
