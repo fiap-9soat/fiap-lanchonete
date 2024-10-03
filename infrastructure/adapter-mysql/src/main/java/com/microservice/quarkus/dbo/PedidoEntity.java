@@ -1,19 +1,23 @@
 package com.microservice.quarkus.dbo;
 
 import java.time.LocalDateTime;
-
-import com.microservice.quarkus.domain.shared.PedidoAbstract;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Pedidos")
-public class PedidoEntity extends PedidoAbstract {
+@Getter
+@Setter
+public class PedidoEntity {
     @Id
     @Column(name = "codigo_pedido")
     private Integer codigoPedido;
@@ -26,8 +30,8 @@ public class PedidoEntity extends PedidoAbstract {
     @Column(name = "ts_pedido")
     private LocalDateTime tsPedido;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "codigo_alimento", referencedColumnName = "codigo_alimento")
     @JoinColumn(name = "codigo_tipo_alimento", referencedColumnName = "codigo_tipo_alimento")
-    private AlimentoEntity alimento;
+    private Set<AlimentoEntity> alimentos = new HashSet<>();
 }

@@ -2,8 +2,8 @@ package com.microservice.quarkus.domain.ports.out;
 
 import java.util.List;
 
+import com.microservice.quarkus.domain.model.EstadoPedido;
 import com.microservice.quarkus.domain.model.Pedido;
-import com.microservice.quarkus.domain.shared.EstadoPedido;
 
 public interface PedidoRepository {
 

@@ -1,9 +1,15 @@
 package com.microservice.quarkus.domain.model;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import com.microservice.quarkus.domain.shared.ClienteAbstract;
-
-public class Cliente extends ClienteAbstract {
-    
-
-    
+@Builder
+@Getter
+@Setter
+public class Cliente {
+    private Long codigoCliente;
+    private String cpf;
+    private String nome;
+    private String sobrenome;
+    private String email;
 }

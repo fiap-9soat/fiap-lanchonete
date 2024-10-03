@@ -2,18 +2,21 @@ package com.microservice.quarkus.dbo;
 
 import java.time.LocalDateTime;
 
-import com.microservice.quarkus.domain.shared.AlimentoAbstract;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "Alimentos")
 @IdClass(AlimentoEntityId.class)
-public class AlimentoEntity extends AlimentoAbstract {
+@Getter
+@Setter
+public class AlimentoEntity {
 
     @Id
     @Column(name = "codigo_tipo_alimento")
@@ -30,9 +33,9 @@ public class AlimentoEntity extends AlimentoAbstract {
     private String nomeAlimento;
 
     @Column(name = "nome_funci_alter")
-    private String nomeFunci;
+    private String nomeFunciAlter;
 
     @Column(name = "ts_alter")
-    private LocalDateTime tsAlteracao;
+    private LocalDateTime tsAlter;
 }
     

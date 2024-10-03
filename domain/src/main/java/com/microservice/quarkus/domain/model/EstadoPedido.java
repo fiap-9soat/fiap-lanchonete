@@ -1,4 +1,4 @@
-package com.microservice.quarkus.domain.shared;
+package com.microservice.quarkus.domain.model;
 
 public enum EstadoPedido {
     RECEBIDO,

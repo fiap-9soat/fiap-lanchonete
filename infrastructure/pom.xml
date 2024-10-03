@@ -15,21 +15,6 @@
     <name>infrastructure</name>
     <description>Infrastructure Adpaters implementation</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.microservice.quarkus</groupId>
-            <artifactId>domain</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>adapter-mysql</module>
     </modules>
