@@ -50,13 +50,16 @@
       <version>2.1.0</version>
     </dependency>
   </dependencies>
+
   <build>
+    <pluginManagement>
     <plugins>
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
       </plugin>
     </plugins>
+  </pluginManagement>
   </build>
   <profiles>
     <profile>

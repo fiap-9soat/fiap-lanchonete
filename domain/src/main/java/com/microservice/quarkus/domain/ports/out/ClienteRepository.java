@@ -6,5 +6,5 @@ public interface ClienteRepository {
 
     Cliente consultaCliente(String cpf);
 
-    void cadastrarCliente(Cliente cliente);
+    Long cadastrarCliente(String cpf, String nome, String sobrenome, String email);
 }

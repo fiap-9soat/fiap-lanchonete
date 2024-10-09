@@ -6,8 +6,8 @@ import com.microservice.quarkus.domain.ports.out.ClienteRepository;
 public class ClienteService {
     ClienteRepository clienteRepository;
 
-    public void cadastrarCliente(Cliente cliente) {
-        clienteRepository.cadastrarCliente(cliente);
+    public Long cadastrarCliente(String cpf, String nome, String sobrenome, String email) {
+        return clienteRepository.cadastrarCliente(cpf, nome, sobrenome, email);
     }
 
     public Cliente consultarCliente(String cpf) {

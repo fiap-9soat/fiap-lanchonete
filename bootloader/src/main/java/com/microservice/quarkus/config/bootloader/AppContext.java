@@ -1,17 +1,20 @@
-package com.microservices.quarkus.config.bootloader;
+package com.microservice.quarkus.config.bootloader;
+
+import com.microservice.quarkus.application.out.ClienteService;
+import com.microservice.quarkus.application.service.ClienteServiceImpl;
+import com.microservice.quarkus.domain.model.ClienteFactory;
+import com.microservice.quarkus.domain.ports.out.ClienteRepository;
 
 import jakarta.enterprise.inject.Produces;
-import com.microservice.quarkus.domain.model.Cliente;
-import com.microservice.quarkus.domain.ports.out.ClienteRepository;
 
 public class AppContext {
     @Produces
-    public Cliente cliente(ClienteRepository clienteRepository) {
-        return new Cliente(clienteRepository);
+    public ClienteFactory cliente(ClienteRepository clienteRepository) {
+        return new ClienteFactory(clienteRepository);
     }
 
-    // @Produces
-    // public LoanAPIService loanAPIService(LoanRepository loanRepository, EventBus eventBus, LoanFactory loanFactory) {        
-    //     return new LoanAPIServiceImpl(loanRepository, loanFactory, eventBus);
-    // }
+    @Produces
+    public ClienteService loanAPIService(ClienteRepository clienteRepository, ClienteFactory clienteFactory) {
+        return new ClienteServiceImpl(clienteRepository, clienteFactory);
+    }
 }
