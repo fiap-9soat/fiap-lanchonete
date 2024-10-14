@@ -17,5 +17,6 @@
 
     <modules>
         <module>adapter-mysql</module>
+        <module>adapter-rest</module>
     </modules>
 </project>

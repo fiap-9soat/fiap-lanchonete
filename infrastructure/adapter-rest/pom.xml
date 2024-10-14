@@ -9,9 +9,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>adapter-mysql</artifactId>
-    <name>Hibernate Mysql adapter</name>
-    <description>Hibernate Mysql adapter implementation</description>
+    <artifactId>adapter-rest</artifactId>
+    <name>Rest Adapter</name>
+    <description>Rest adapter implementation</description>
 
     <dependencies>
         <dependency>
@@ -20,10 +20,16 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- Hibernate ORM specific dependencies -->
+        <!-- Annotation based Rest controllers with JSON serialization / desearialization -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+
+        <!-- Add OpenAPI spec to the project and helps with the generation of both schema and Swagger UI -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
         </dependency>
 
         <!-- Quarkus CDI based build-time dependency injection -->
@@ -32,26 +38,36 @@
             <artifactId>quarkus-arc</artifactId>
         </dependency>
 
-        <!-- JDBC driver dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-mysql</artifactId>
+            <artifactId>quarkus-config-yaml</artifactId>
+            <scope>test</scope>
         </dependency>
+
+        <!-- Adds mockito framework for testing purposes -->
         <dependency>
-            <groupId>com.microservice.quarkus</groupId>
-            <artifactId>domain</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
+            <scope>test</scope>
         </dependency>
-        <!-- lombok -->
+
+        <!-- Testing and validating REST services -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Lombok :) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-        </dependency>
+        <!--  <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok-mapstruct-binding</artifactId>
+         </dependency>
+  -->
         <!-- Utility for easy annotation based mapper creation -->
         <dependency>
             <groupId>org.mapstruct</groupId>

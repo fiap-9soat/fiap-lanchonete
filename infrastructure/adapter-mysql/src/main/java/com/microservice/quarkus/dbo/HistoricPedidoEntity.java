@@ -1,6 +1,5 @@
-package com.microservice;
+package com.microservice.quarkus.dbo;
 
-import com.microservice.quarkus.dbo.AlimentoEntity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;

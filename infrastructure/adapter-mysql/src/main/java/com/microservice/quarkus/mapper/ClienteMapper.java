@@ -11,4 +11,7 @@ public interface ClienteMapper {
 
     @Mapping(source = "codigoCliente", target = "codigoCliente")
     ClienteEntity toDbo(Cliente domain);
+
+    @Mapping(source = "codigoCliente", target = "codigoCliente")
+    Cliente toDomain(ClienteEntity entity);
 }

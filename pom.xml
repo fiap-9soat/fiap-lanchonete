@@ -142,6 +142,5 @@
         <module>domain</module>
         <module>application</module>
         <module>infrastructure</module>
-        <module>bootloader</module>
     </modules>
 </project>

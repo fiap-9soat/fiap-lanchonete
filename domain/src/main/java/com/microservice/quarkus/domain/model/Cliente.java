@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Cliente {
-
     private Long codigoCliente;
     private String cpf;
     private String nome;
