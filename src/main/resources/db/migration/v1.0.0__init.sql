@@ -4,7 +4,7 @@ USE lanchonete;
 
 CREATE TABLE Clientes (
                           codigo_cliente INT NOT NULL AUTO_INCREMENT,
-                          cpf CHAR(11) NOT NULL,
+                          cpf VARCHAR(11) NOT NULL,
                           nome VARCHAR(14) NOT NULL,
                           sobrenome VARCHAR(16) NOT NULL,
                           email VARCHAR(30) NOT NULL,
