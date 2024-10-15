@@ -62,5 +62,5 @@ VALUES (1, 1, "Lanche", "X-burger", "João", CURRENT_TIMESTAMP());
 INSERT INTO Pedidos (codigo_pedido, codigo_cliente, ts_pedido, codigo_tipo_alimento, codigo_alimento, estado_pedido)
 VALUES (1, 1, CURRENT_TIMESTAMP(), 1, 1, 1);
 
-INSERT INTO Hist_pedidos (codigo_pedido, codigo_cliente, ts_pedido, ts_alter, codigo_tipo_alimento, codigo_alimento, estado_pedido)
+INSERT INTO Hist_Pedidos (codigo_pedido, codigo_cliente, ts_pedido, ts_alter, codigo_tipo_alimento, codigo_alimento, estado_pedido)
 VALUES (1, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1, 1, 1);
