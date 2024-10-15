@@ -5,6 +5,8 @@ import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
 
@@ -18,5 +20,10 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente consultarClientePorCpf(String cpf) {
         return clienteRepository.getClienteByCpf(cpf);
+    }
+
+    @Override
+    public List<Cliente> listarClientes() {
+        return clienteRepository.getAllClientes();
     }
 }

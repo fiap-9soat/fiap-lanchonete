@@ -6,10 +6,7 @@ import com.fiap.lanchonete.application.mapper.ClienteDTOMapper;
 import com.fiap.lanchonete.domain.model.Cliente;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -27,6 +24,11 @@ public class ClienteResource {
     ClienteService clienteService;
 
     ClienteDTOMapper clienteDTOMapper;
+
+    @GET
+    public Response consultaClientes(){
+        return Response.ok(clienteService.listarClientes()).build();
+    }
 
     @POST
     public Response cadastrarCliente(@Valid CreateClienteDto dto, @Context UriInfo uriInfo) {
