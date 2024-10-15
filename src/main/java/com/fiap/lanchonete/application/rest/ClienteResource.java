@@ -5,6 +5,7 @@ import com.fiap.lanchonete.application.dto.CreateClienteDto;
 import com.fiap.lanchonete.application.mapper.ClienteDTOMapper;
 import com.fiap.lanchonete.domain.model.Cliente;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -31,6 +32,7 @@ public class ClienteResource {
     }
 
     @POST
+    @Transactional
     public Response cadastrarCliente(@Valid CreateClienteDto dto, @Context UriInfo uriInfo) {
         Cliente cliente = clienteDTOMapper.toDomain(dto);
         int codigoCliente = clienteService.cadastrarCliente(cliente);

@@ -19,7 +19,7 @@ public class ClienteEntity {
     private String nome;
     @Column(nullable = false, name = "sobrenome", length = 16)
     private String sobrenome;
-    @Column(nullable = false, name = "email", length = 30)
+    @Column(nullable = false, name = "email", length = 90)
     private String email;
 
 }
