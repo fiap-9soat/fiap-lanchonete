@@ -4,7 +4,7 @@ import com.fiap.lanchonete.domain.model.Cliente;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.ClientePanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.ClienteEntity;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.ClienteMapper;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.ClienteEntityMapper;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -15,29 +15,29 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     ClientePanacheRepository clientePanacheRepository;
 
-    ClienteMapper clienteMapper;
+    ClienteEntityMapper clienteEntityMapper;
 
     @Override
     public int insertCliente(Cliente cliente) {
-        ClienteEntity entity = clienteMapper.toEntity(cliente);
+        ClienteEntity entity = clienteEntityMapper.toEntity(cliente);
         clientePanacheRepository.persist(entity);
         return entity.getCodigoCliente();
     }
 
     @Override
     public Cliente getClienteById(int id) {
-        ClienteEntity entity = clientePanacheRepository.findById(id);
-        return clienteMapper.toDomain(entity);
+        ClienteEntity entity = clientePanacheRepository.findByIdOptional(id).orElseThrow(NotFoundException::new);
+        return clienteEntityMapper.toDomain(entity);
     }
 
     @Override
     public List<Cliente> getAllClientes() {
-        return clientePanacheRepository.listAll().stream().map(clienteMapper::toDomain).toList();
+        return clientePanacheRepository.listAll().stream().map(clienteEntityMapper::toDomain).toList();
     }
 
     @Override
     public Cliente getClienteByCpf(String cpf) {
         ClienteEntity entity = clientePanacheRepository.find("cpf", cpf).firstResultOptional().orElseThrow(NotFoundException::new);
-        return clienteMapper.toDomain(entity);
+        return clienteEntityMapper.toDomain(entity);
     }
 }

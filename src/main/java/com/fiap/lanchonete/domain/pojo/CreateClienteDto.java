@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.application.dto;
+package com.fiap.lanchonete.domain.pojo;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;

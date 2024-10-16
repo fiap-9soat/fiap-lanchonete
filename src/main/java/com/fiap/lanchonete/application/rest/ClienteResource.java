@@ -1,20 +1,18 @@
 package com.fiap.lanchonete.application.rest;
 
 
-import com.fiap.lanchonete.application.dto.CreateClienteDto;
-import com.fiap.lanchonete.application.mapper.ClienteDTOMapper;
 import com.fiap.lanchonete.domain.model.Cliente;
+import com.fiap.lanchonete.domain.pojo.CreateClienteDto;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.AllArgsConstructor;
 
-import java.net.URI;
+import java.util.List;
 
 @Path("/clientes")
 @AllArgsConstructor
@@ -24,21 +22,16 @@ public class ClienteResource {
 
     ClienteService clienteService;
 
-    ClienteDTOMapper clienteDTOMapper;
-
     @GET
-    public Response consultaClientes(){
-        return Response.ok(clienteService.listarClientes()).build();
+    public List<Cliente> consultaClientes() {
+        return clienteService.listarClientes();
     }
 
     @POST
     @Transactional
-    public Response cadastrarCliente(@Valid CreateClienteDto dto, @Context UriInfo uriInfo) {
-        Cliente cliente = clienteDTOMapper.toDomain(dto);
-        int codigoCliente = clienteService.cadastrarCliente(cliente);
+    public Integer cadastrarCliente(@Valid CreateClienteDto dto, @Context UriInfo uriInfo) {
 
-        URI location = uriInfo.getAbsolutePathBuilder().path(Integer.toString(codigoCliente)).build();
-        return Response.created(location).build();
+        return clienteService.cadastrarCliente(dto);
     }
 
 }

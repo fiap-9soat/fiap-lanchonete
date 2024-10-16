@@ -1,5 +1,6 @@
-package com.fiap.lanchonete.infrastructure.config;
+package com.fiap.lanchonete.infrastructure.config.context;
 
+import com.fiap.lanchonete.domain.mapper.ClienteMapper;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import com.fiap.lanchonete.domain.ports.in.EstadoPedidoListener;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -18,18 +19,19 @@ import jakarta.enterprise.inject.Produces;
 public class ServiceContext {
 
     @Produces
-    public ClienteService clienteService(ClienteRepository clienteRepository) {
-        return new ClienteServiceImpl(clienteRepository);
-    }
-
-    @Produces
     public PedidoService pedidoService(PedidoRepository pedidoRepository) {
         return new PedidoServiceImpl(pedidoRepository);
     }
 
     @Produces
-    public EstadoPedidoListener EstadoPedidoListener(PedidoService pedidoService){
+    public EstadoPedidoListener EstadoPedidoListener(PedidoService pedidoService) {
         return new EstadoPedidoListenerImpl(pedidoService);
+    }
+
+    @Produces
+    public ClienteService clienteService(ClienteRepository clienteRepository,
+                                         ClienteMapper clienteMapper) {
+        return new ClienteServiceImpl(clienteRepository, clienteMapper);
     }
 
 }

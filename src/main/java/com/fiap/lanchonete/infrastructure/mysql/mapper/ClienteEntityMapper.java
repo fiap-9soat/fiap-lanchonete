@@ -5,7 +5,7 @@ import com.fiap.lanchonete.infrastructure.mysql.entity.ClienteEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "jakarta")
-public interface ClienteMapper {
+public interface ClienteEntityMapper {
     Cliente toDomain(ClienteEntity entity);
 
     ClienteEntity toEntity(Cliente domain);

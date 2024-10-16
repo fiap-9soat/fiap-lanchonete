@@ -15,7 +15,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void atualizar(Pedido pedido) {
         Pedido pedidoPersistido = pedidoRepository.buscarPedidoPorId(pedido.getCodigoPedido());
-        if (pedido.getEstadoPedido() != pedidoPersistido.getEstadoPedido()){
+        if (pedido.getEstadoPedido() != pedidoPersistido.getEstadoPedido()) {
             throw new NotAllowedException("O estado do pedido só pode ser alterado por eventos.");
         }
 

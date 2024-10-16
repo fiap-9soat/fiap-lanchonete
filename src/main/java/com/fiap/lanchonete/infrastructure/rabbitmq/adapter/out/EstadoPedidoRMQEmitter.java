@@ -2,21 +2,22 @@ package com.fiap.lanchonete.infrastructure.rabbitmq.adapter.out;
 
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.out.EstadoPedidoEmitter;
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.AllArgsConstructor;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
-@AllArgsConstructor
 public class EstadoPedidoRMQEmitter implements EstadoPedidoEmitter {
 
-    @Channel("pedido")
+    @Channel("pedido.estado")
+    @Broadcast
     Emitter<MudancaEstadoPedido> emitter;
 
+    private final Logger logger = Logger.getLogger(EstadoPedidoRMQEmitter.class);
+
     @Override
-    @Outgoing("pedido.estado")
     public void emitir(MudancaEstadoPedido mudancaEstadoPedido) {
         emitter.send(mudancaEstadoPedido);
     }
