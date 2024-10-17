@@ -7,7 +7,7 @@ import com.fiap.lanchonete.domain.model.Alimento;
 public interface AlimentoService {
     public void cadastrarAlimento(Alimento alimento);
 
-    public void editarAlimento(Alimento alimento, Integer codigoTipoAlimento, Integer codigoAlimento);
+    public void editarAlimento(Alimento alimento);
 
     public void deletarAlimento(Alimento alimento);
 

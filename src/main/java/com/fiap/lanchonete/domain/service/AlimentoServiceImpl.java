@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.model.Alimento;
@@ -15,12 +16,14 @@ public class AlimentoServiceImpl implements AlimentoService {
 
     @Override
     public void cadastrarAlimento(Alimento alimento) {
+        Integer ultimoAlimento = alimentoRepository.getLastCodigoAlimento(alimento);
+        alimento.setCodigoAlimento(ultimoAlimento);
         alimentoRepository.insertAlimento(alimento);
     }
 
     @Override
-    public void editarAlimento(Alimento alimento, Integer codigoTipoAlimento, Integer codigoAlimento) {
-        alimentoRepository.editAlimento(alimento, codigoTipoAlimento, codigoAlimento);
+    public void editarAlimento(Alimento alimento) {
+        alimentoRepository.editAlimento(alimento);
     }
 
     @Override

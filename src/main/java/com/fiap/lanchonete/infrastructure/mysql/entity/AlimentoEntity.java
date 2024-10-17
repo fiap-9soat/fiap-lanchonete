@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -25,9 +27,6 @@ public class AlimentoEntity {
     @Id
     @Column(name = "codigo_alimento")
     private Short codigoAlimento;
-
-    @Column(name = "nome_tipo_alimento")
-    private String nomeTipoAlimento;
 
     @Column(name = "nome_alimento")
     private String nomeAlimento;

@@ -24,9 +24,24 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public void editAlimento(Alimento alimento, Integer codigoTipoAlimento, Integer codigoAlimento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'editAlimento'");
+    public Integer getLastCodigoAlimento(Alimento alimento) {
+        AlimentoEntity entity = alimentoMapper.toEntity(alimento);
+        return alimentoPanacheRepository.getEntityManager()
+                .createQuery("""
+                        SELECT IFNULL(MAX(codigoAlimento)+1, '1')
+                        FROM AlimentoEntity
+                        WHERE codigoTipoAlimento = :codigoTipoAlimento
+                        """, Integer.class)
+                .setParameter("codigoTipoAlimento", entity.getCodigoTipoAlimento())
+                .getSingleResult();
+    }
+
+    @Override
+    public void editAlimento(Alimento alimento) {
+        AlimentoEntity entity = alimentoMapper.toEntity(alimento);
+        alimentoPanacheRepository.getEntityManager()
+                .merge(entity);
+
     }
 
     @Override
