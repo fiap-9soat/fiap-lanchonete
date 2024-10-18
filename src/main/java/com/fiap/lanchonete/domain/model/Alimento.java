@@ -19,5 +19,4 @@ public class Alimento {
     private String nomeAlimento;
     private String nomeFunciAlter;
     private Instant tsAlter;
-    private TipoAlimento tipoAlimento;
 }

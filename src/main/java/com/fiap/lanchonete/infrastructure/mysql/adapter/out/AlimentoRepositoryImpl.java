@@ -46,8 +46,14 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
 
     @Override
     public void deleteAlimento(Alimento alimento) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteAlimento'");
+        AlimentoEntity entity = alimentoMapper.toEntity(alimento);
+
+        alimentoPanacheRepository.delete("""
+                FROM AlimentoEntity ali
+                WHERE codigoTipoAlimento = ?1
+                AND codigoAlimento = ?2
+                AND nomeAlimento = ?3
+                """, entity.getCodigoTipoAlimento(), entity.getCodigoAlimento(), entity.getNomeAlimento());
     }
 
     @Override
