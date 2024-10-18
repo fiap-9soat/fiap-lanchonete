@@ -1,11 +1,14 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
 import com.fiap.lanchonete.domain.mapper.ClienteMapper;
+import com.fiap.lanchonete.domain.ports.in.AlimentoService;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import com.fiap.lanchonete.domain.ports.in.EstadoPedidoListener;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
+import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
+import com.fiap.lanchonete.domain.service.AlimentoServiceImpl;
 import com.fiap.lanchonete.domain.service.ClienteServiceImpl;
 import com.fiap.lanchonete.domain.service.EstadoPedidoListenerImpl;
 import com.fiap.lanchonete.domain.service.PedidoServiceImpl;
@@ -32,6 +35,11 @@ public class ServiceContext {
     public ClienteService clienteService(ClienteRepository clienteRepository,
                                          ClienteMapper clienteMapper) {
         return new ClienteServiceImpl(clienteRepository, clienteMapper);
+    }
+
+    @Produces
+    public AlimentoService alimentoService(AlimentoRepository alimentoRepository) {
+        return new AlimentoServiceImpl(alimentoRepository);
     }
 
 }
