@@ -1,20 +1,19 @@
 package com.fiap.lanchonete.domain.ports.out;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import com.fiap.lanchonete.domain.model.Alimento;
+
+import java.util.List;
 
 public interface AlimentoRepository {
     public void insertAlimento(Alimento alimento);
 
-    public void editAlimento(Alimento alimento);
+    public void updateAlimento(Alimento alimento);
 
-    public void deleteAlimento(Alimento alimento);
+    public void deleteAlimento(Integer codigoAlimento, Integer codigoTipoAlimento);
 
     public Integer getLastCodigoAlimento(Alimento alimento);
 
-    public Alimento getAlimentoById(int codigoTipoAlimento, int codigoAlimento);
+    public Alimento getAlimentoById(int codigoAlimento, int codigoTipoAlimento);
 
-    public List<Alimento> getAlimentosByCategory(int codigoTipoAlimento);
+    public List<Alimento> getAlimentosByTipo(int codigoTipoAlimento);
 }

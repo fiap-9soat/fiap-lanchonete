@@ -1,21 +1,20 @@
 package com.fiap.lanchonete.infrastructure.mysql.mapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
+import com.fiap.lanchonete.domain.model.Alimento;
+import com.fiap.lanchonete.infrastructure.mysql.entity.AlimentoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import com.fiap.lanchonete.domain.model.Alimento;
-import com.fiap.lanchonete.infrastructure.mysql.entity.AlimentoEntity;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Mapper(componentModel = "jakarta")
-public interface AlimentoMapper {
+public interface AlimentoEntityMapper {
 
-    AlimentoMapper INSTANCE = Mappers.getMapper(AlimentoMapper.class);
+    AlimentoEntityMapper INSTANCE = Mappers.getMapper(AlimentoEntityMapper.class);
 
     @Named("instantParaLocalDateTime")
     default LocalDateTime instantParaLocalDateTime(Instant instant) {

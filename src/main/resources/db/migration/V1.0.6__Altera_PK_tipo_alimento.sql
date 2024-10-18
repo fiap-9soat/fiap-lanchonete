@@ -1,5 +1,8 @@
-alter table Alimentos_Tipo
-    modify codigo_tipo_alimento INT SIGNED not null;
+alter table Alimentos
+    modify codigo_alimento smallint auto_increment;
+
+alter table Alimentos
+    auto_increment = 1;
 
 alter table Alimentos_Tipo
     drop primary key;

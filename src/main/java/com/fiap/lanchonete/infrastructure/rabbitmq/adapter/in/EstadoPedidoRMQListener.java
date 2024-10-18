@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.infrastructure.rabbitmq.adapter.out;
+package com.fiap.lanchonete.infrastructure.rabbitmq.adapter.in;
 
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.EstadoPedidoListener;

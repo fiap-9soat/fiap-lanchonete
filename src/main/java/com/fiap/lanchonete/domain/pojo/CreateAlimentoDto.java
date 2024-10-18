@@ -1,7 +1,9 @@
-package com.fiap.lanchonete.application.dto;
+package com.fiap.lanchonete.domain.pojo;
+
+import jakarta.validation.constraints.NotEmpty;
 
 public record CreateAlimentoDto(
-        Integer codigoTipoAlimento,
-        String nomeAlimento,
-        String nomeFunciAlter) {
+    @NotEmpty Integer codigoTipoAlimento,
+    @NotEmpty String nomeAlimento,
+    @NotEmpty String nomeFunciAlter) {
 }

@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
+import com.fiap.lanchonete.domain.mapper.AlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.ClienteMapper;
 import com.fiap.lanchonete.domain.ports.in.AlimentoService;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
@@ -38,8 +39,8 @@ public class ServiceContext {
     }
 
     @Produces
-    public AlimentoService alimentoService(AlimentoRepository alimentoRepository) {
-        return new AlimentoServiceImpl(alimentoRepository);
+    public AlimentoService alimentoService(AlimentoRepository alimentoRepository, AlimentoMapper alimentoMapper) {
+        return new AlimentoServiceImpl(alimentoRepository, alimentoMapper);
     }
 
 }

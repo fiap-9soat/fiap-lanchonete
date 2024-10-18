@@ -1,15 +1,18 @@
 package com.fiap.lanchonete.domain.ports.in;
 
+import com.fiap.lanchonete.domain.model.Alimento;
+import com.fiap.lanchonete.domain.pojo.CreateAlimentoDto;
+import com.fiap.lanchonete.domain.pojo.DeleteAlimentoDto;
+import com.fiap.lanchonete.domain.pojo.EditAlimentoDto;
+
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.Alimento;
-
 public interface AlimentoService {
-    public void cadastrarAlimento(Alimento alimento);
+    void cadastrarAlimento(CreateAlimentoDto createAlimentoDto);
 
-    public void editarAlimento(Alimento alimento);
+    void editarAlimento(EditAlimentoDto editAlimentoDto);
 
-    public void deletarAlimento(Alimento alimento);
+    void deletarAlimento(DeleteAlimentoDto deleteAlimentoDto);
 
-    public List<Alimento> listarAlimentosPorCategoria(Integer codigoTipoAlimento);
+    List<Alimento> listarAlimentosPorTipo(Integer codigoTipoAlimento);
 }

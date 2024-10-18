@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class AlimentoEntityId implements Serializable {
-    private Integer codigoTipoAlimento;
-    private Integer codigoAlimento;
+public class TipoAlimentoEntityId implements Serializable {
+    private Short codigoTipoAlimento;
+    private String nomeTipoAlimento;
 }

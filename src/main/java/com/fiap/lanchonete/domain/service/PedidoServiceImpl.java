@@ -7,10 +7,22 @@ import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import jakarta.ws.rs.NotAllowedException;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
 
     PedidoRepository pedidoRepository;
+
+    @Override
+    public Pedido buscarPedidoPorId(Integer id) {
+        return pedidoRepository.buscarPedidoPorId(id);
+    }
+
+    @Override
+    public List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
+        return pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
+    }
 
     @Override
     public void atualizar(Pedido pedido) {
