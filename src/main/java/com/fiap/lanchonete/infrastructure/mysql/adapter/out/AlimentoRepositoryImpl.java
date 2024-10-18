@@ -24,15 +24,14 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public Integer getLastCodigoAlimento(Alimento alimento) {
-        AlimentoEntity entity = alimentoEntityMapper.toEntity(alimento);
+    public Short getLastCodigoAlimento(Short codigoTipoAlimento) {
         return alimentoPanacheRepository.getEntityManager()
             .createQuery("""
                 SELECT IFNULL(MAX(codigoAlimento)+1, '1')
                 FROM AlimentoEntity
                 WHERE codigoTipoAlimento = :codigoTipoAlimento
-                """, Integer.class)
-            .setParameter("codigoTipoAlimento", entity.getCodigoTipoAlimento())
+                """, Short.class)
+            .setParameter("codigoTipoAlimento", codigoTipoAlimento)
             .getSingleResult();
     }
 
@@ -44,7 +43,7 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public void deleteAlimento(Integer codigoAlimento, Integer codigoTipoAlimento) {
+    public void deleteAlimento(Short codigoAlimento, Short codigoTipoAlimento) {
 
         alimentoPanacheRepository.delete("""
                 FROM AlimentoEntity ali
@@ -56,7 +55,7 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public Alimento getAlimentoById(int codigoAlimento, int codigoTipoAlimento) {
+    public Alimento getAlimentoById(Short codigoAlimento, Short codigoTipoAlimento) {
         AlimentoEntityId entityId = new AlimentoEntityId();
         entityId.setCodigoAlimento(codigoAlimento);
         entityId.setCodigoTipoAlimento(codigoTipoAlimento);
@@ -65,7 +64,7 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public List<Alimento> getAlimentosByTipo(int codigoTipoAlimento) {
+    public List<Alimento> getAlimentosByTipo(Short codigoTipoAlimento) {
         return alimentoPanacheRepository
             .find("codigoTipoAlimento", codigoTipoAlimento)
             .stream()

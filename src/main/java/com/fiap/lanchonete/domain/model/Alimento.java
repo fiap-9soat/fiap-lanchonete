@@ -14,8 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Alimento {
-    private Integer codigoTipoAlimento;
-    private Integer codigoAlimento;
+    private Short codigoTipoAlimento;
+    private Short codigoAlimento;
     private String nomeAlimento;
     private String nomeFunciAlter;
     private Instant tsAlter;

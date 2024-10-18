@@ -9,11 +9,11 @@ public interface AlimentoRepository {
 
     public void updateAlimento(Alimento alimento);
 
-    public void deleteAlimento(Integer codigoAlimento, Integer codigoTipoAlimento);
+    public void deleteAlimento(Short codigoAlimento, Short codigoTipoAlimento);
 
-    public Integer getLastCodigoAlimento(Alimento alimento);
+    public Short getLastCodigoAlimento(Short codigoTipoAlimento);
 
-    public Alimento getAlimentoById(int codigoAlimento, int codigoTipoAlimento);
+    public Alimento getAlimentoById(Short codigoAlimento, Short codigoTipoAlimento);
 
-    public List<Alimento> getAlimentosByTipo(int codigoTipoAlimento);
+    public List<Alimento> getAlimentosByTipo(Short codigoTipoAlimento);
 }

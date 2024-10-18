@@ -10,5 +10,5 @@ import org.mapstruct.Mapping;
 public interface ClienteDTOMapper extends ClienteMapper {
 
     @Mapping(target = "codigoCliente", ignore = true)
-    public Cliente toDomain(CreateClienteDto dto);
+    Cliente toDomain(CreateClienteDto dto);
 }

@@ -14,5 +14,5 @@ public interface AlimentoService {
 
     void deletarAlimento(DeleteAlimentoDto deleteAlimentoDto);
 
-    List<Alimento> listarAlimentosPorTipo(Integer codigoTipoAlimento);
+    List<Alimento> listarAlimentosPorTipo(Short codigoTipoAlimento);
 }

@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.application.rest;
 
+import com.fiap.lanchonete.domain.model.Alimento;
 import com.fiap.lanchonete.domain.pojo.CreateAlimentoDto;
 import com.fiap.lanchonete.domain.pojo.DeleteAlimentoDto;
 import com.fiap.lanchonete.domain.pojo.EditAlimentoDto;
@@ -12,7 +13,10 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.reactive.ResponseStatus;
+
+import java.util.List;
 
 @Path("/alimentos")
 @AllArgsConstructor
@@ -21,6 +25,15 @@ import org.jboss.resteasy.reactive.ResponseStatus;
 public class AlimentoResource {
 
     AlimentoService alimentoService;
+
+    @GET
+    @Path("tipo/{tipo_alimento}")
+    @Operation(summary = "Lista alimentos por tipo")
+    @APIResponses(value = {@APIResponse(responseCode = "200"), @APIResponse(responseCode = "404")})
+    public List<Alimento> listarAlimentosPorTipo(@PathParam("tipo_alimento") Short codigoTipoAlimento){
+        return alimentoService.listarAlimentosPorTipo(codigoTipoAlimento);
+    }
+
 
     @POST
     @ResponseStatus(201)

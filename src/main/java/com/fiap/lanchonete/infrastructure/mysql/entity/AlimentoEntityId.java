@@ -8,6 +8,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class AlimentoEntityId implements Serializable {
-    private Integer codigoTipoAlimento;
-    private Integer codigoAlimento;
+    private Short codigoTipoAlimento;
+    private Short codigoAlimento;
 }

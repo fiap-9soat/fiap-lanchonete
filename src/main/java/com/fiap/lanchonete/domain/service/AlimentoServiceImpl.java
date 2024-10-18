@@ -22,7 +22,9 @@ public class AlimentoServiceImpl implements AlimentoService {
 
     @Override
     public void cadastrarAlimento(CreateAlimentoDto createAlimentoDto) {
+        Short lastCodigoAlimento = alimentoRepository.getLastCodigoAlimento(createAlimentoDto.codigoTipoAlimento());
         Alimento alimento = alimentoMapper.toDomain(createAlimentoDto);
+        alimento.setCodigoAlimento(lastCodigoAlimento);
 
         alimentoRepository.insertAlimento(alimento);
     }
@@ -48,7 +50,7 @@ public class AlimentoServiceImpl implements AlimentoService {
     }
 
     @Override
-    public List<Alimento> listarAlimentosPorTipo(Integer codigoTipoAlimento) {
+    public List<Alimento> listarAlimentosPorTipo(Short codigoTipoAlimento) {
         return alimentoRepository.getAlimentosByTipo(codigoTipoAlimento);
     }
 }
