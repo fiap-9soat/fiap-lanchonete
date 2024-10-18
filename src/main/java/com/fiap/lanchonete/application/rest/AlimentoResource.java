@@ -27,19 +27,18 @@ public class AlimentoResource {
     AlimentoService alimentoService;
 
     @GET
-    @Path("tipo/{tipo_alimento}")
+    @Path("tipo/{codigoTipoAlimento}")
     @Operation(summary = "Lista alimentos por tipo")
-    @APIResponses(value = {@APIResponse(responseCode = "200"), @APIResponse(responseCode = "404")})
-    public List<Alimento> listarAlimentosPorTipo(@PathParam("tipo_alimento") Short codigoTipoAlimento){
+    @APIResponses(value = { @APIResponse(responseCode = "200"), @APIResponse(responseCode = "404") })
+    public List<Alimento> listarAlimentosPorTipo(@PathParam("codigoTipoAlimento") Short codigoTipoAlimento) {
         return alimentoService.listarAlimentosPorTipo(codigoTipoAlimento);
     }
-
 
     @POST
     @ResponseStatus(201)
     @Operation(summary = "Insere um alimento na base de dados")
     @APIResponse(responseCode = "201", description = "Alimento inserido na base de dados", content = {
-        @Content(mediaType = "application/json", schema = @Schema(implementation = CreateAlimentoDto.class))})
+            @Content(mediaType = "application/json", schema = @Schema(implementation = CreateAlimentoDto.class)) })
     @Transactional
     public void cadastrarAlimento(CreateAlimentoDto dto) {
         alimentoService.cadastrarAlimento(dto);
@@ -48,6 +47,8 @@ public class AlimentoResource {
     @PATCH
     @ResponseStatus(200)
     @Operation(summary = "Edita um alimento da base de dados")
+    @APIResponse(responseCode = "200", description = "Alimento editado na base de dados", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = EditAlimentoDto.class)) })
     @Transactional
     public void editarAlimento(EditAlimentoDto dto) {
         alimentoService.editarAlimento(dto);
@@ -56,6 +57,8 @@ public class AlimentoResource {
     @DELETE
     @ResponseStatus(200)
     @Operation(summary = "Deleta um alimento da base de dados")
+    @APIResponse(responseCode = "200", description = "Alimento deletado na base de dados", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = DeleteAlimentoDto.class)) })
     @Transactional
     public void deletarAlimento(DeleteAlimentoDto deleteDto) {
         alimentoService.deletarAlimento(deleteDto);
