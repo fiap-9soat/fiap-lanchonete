@@ -16,4 +16,5 @@ public class Pedido {
     private Short codigoTipoAlimento;
     private Short codigoAlimento;
     private EstadoPedido estadoPedido;
+    private Short quantidadeAlimento;
 }

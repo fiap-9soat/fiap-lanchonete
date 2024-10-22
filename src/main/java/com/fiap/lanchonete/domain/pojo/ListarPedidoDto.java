@@ -2,8 +2,11 @@ package com.fiap.lanchonete.domain.pojo;
 
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.model.EstadoPedido;
 
 public record ListarPedidoDto(
-        List<Pedido> listaPedidos) {
+        Integer codigoPedido,
+        Integer codigoCliente,
+        EstadoPedido estadoPedido,
+        List<PedidoAgrupadoDto> listaPedidos) {
 }
