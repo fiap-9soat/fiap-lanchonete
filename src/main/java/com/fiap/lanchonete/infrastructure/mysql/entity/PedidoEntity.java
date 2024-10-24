@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Pedidos")
@@ -24,20 +25,17 @@ public class PedidoEntity {
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "ts_pedido")
     @CreationTimestamp
-    private Instant tsPedido;
+    private LocalDateTime tsUltimoPedido;
 
     @Column(nullable = false, name = "estado_pedido")
     private EstadoPedido estadoPedido;
 
-    // TODO: Descomentar quando implementar o AlimentoEntity
-    //    @Column(nullable = false, name = "codigo_tipo_alimento")
-    //    private Short codigoTipoAlimento;
-    //    @Column(nullable = false, name = "codigo_alimento")
-    //    private Short codigoAlimento;
-
+    @OneToMany
+    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido")
+    private PedidoAlimentoEntity pedidoAlimento;
 
     @ManyToOne
-    @JoinColumn(name="codigo_cliente", referencedColumnName = "codigo_cliente")
+    @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo_cliente")
     private ClienteEntity cliente;
 
 }

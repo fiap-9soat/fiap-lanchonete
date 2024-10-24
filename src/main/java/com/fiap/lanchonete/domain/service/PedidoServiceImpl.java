@@ -2,7 +2,7 @@ package com.fiap.lanchonete.domain.service;
 
 import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.ListarPedidoDto;
+import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import jakarta.ws.rs.NotAllowedException;
@@ -43,7 +43,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public ListarPedidoDto listarPedidos() {
-        return pedidoRepository.listarPedidosAgrupados();
+    public Integer criarPedido(CreatePedidoDto createPedidoDto) {
+        return pedidoRepository.criarPedido(createPedidoDto);
     }
 }

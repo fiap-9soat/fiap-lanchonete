@@ -1,13 +1,15 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.ListarPedidoDto;
+import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 
 import java.util.List;
 
 public class PedidoRepositoryImpl extends PedidoPanacheRepository implements PedidoRepository {
+
+    PedidoPanacheRepository pedidoPanacheRepository;
 
     @Override
     public void criarPedido(Pedido pedido) {
@@ -33,7 +35,8 @@ public class PedidoRepositoryImpl extends PedidoPanacheRepository implements Ped
     }
 
     @Override
-    public ListarPedidoDto listarPedidosAgrupados() {
+    public Integer criarPedido(CreatePedidoDto createPedidoDto) {
+
         return null;
     }
 }

@@ -4,14 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
 @Builder
 @Getter
 @Setter
-public class Pedido {
+public class PedidoAlimento {
     private Integer codigoPedido;
-    private Integer codigoCliente;
-    private Instant tsUltimoPedido;
-    private EstadoPedido estadoPedido;
+    private Short codigoTipoAlimento;
+    private Short codigoAlimento;
+    private Short quantidadeAlimento;
 }

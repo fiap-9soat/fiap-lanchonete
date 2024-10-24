@@ -2,7 +2,7 @@ package com.fiap.lanchonete.domain.ports.in;
 
 import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.ListarPedidoDto;
+import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface PedidoService {
 
     public void modificarEstado(Integer id, EstadoPedido estadoPedido);
 
-    public ListarPedidoDto listarPedidos();
+    public Integer criarPedido(CreatePedidoDto createPedidoDto);
 }
