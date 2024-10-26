@@ -8,9 +8,10 @@ import java.util.List;
 public interface HistoricoPedidoService {
     /**
      * Adiciona o pedido conforme modelo diretamente no histórico
+     *
      * @param pedido
      */
-    void registrarPedido(Pedido pedido, Short quantidadeAlimentos);
+    void registrarPedido(Pedido pedido);
 
     List<HistoricoPedido> consultarPorCodigoPedido(Integer codigoPedido);
 }

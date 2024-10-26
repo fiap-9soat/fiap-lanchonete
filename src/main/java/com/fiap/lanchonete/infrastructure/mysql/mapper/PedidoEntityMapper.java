@@ -1,16 +1,15 @@
 package com.fiap.lanchonete.infrastructure.mysql.mapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
+import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Mapper(componentModel = "jakarta")
 public interface PedidoEntityMapper {
@@ -29,8 +28,8 @@ public interface PedidoEntityMapper {
         return localDateTime.atZone(zone).toInstant();
     }
 
-    @Mapping(source = "codigoCliente", target = "codigoCliente")
     @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
-    @Mapping(source = "estadoPedido", target = "estadoPedido")
+    @Mapping(target = "pedidoAlimento", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
     PedidoEntity toEntity(Pedido domain);
 }

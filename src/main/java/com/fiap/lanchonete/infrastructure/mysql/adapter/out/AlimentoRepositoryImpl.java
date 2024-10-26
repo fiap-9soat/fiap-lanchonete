@@ -25,21 +25,23 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
 
     @Override
     public Short getLastCodigoAlimento(Short codigoTipoAlimento) {
-        return alimentoPanacheRepository.getEntityManager()
-                .createQuery("""
-                        SELECT IFNULL(MAX(codigoAlimento)+1, '1')
-                        FROM AlimentoEntity
-                        WHERE codigoTipoAlimento = :codigoTipoAlimento
-                        """, Short.class)
-                .setParameter("codigoTipoAlimento", codigoTipoAlimento)
-                .getSingleResult();
+        Integer proximoCodigoAlimento = alimentoPanacheRepository.getEntityManager()
+            .createQuery("""
+                SELECT IFNULL(MAX(codigoAlimento)+1, '1')
+                FROM AlimentoEntity
+                WHERE codigoTipoAlimento = :codigoTipoAlimento
+                """, Integer.class)
+            .setParameter("codigoTipoAlimento", codigoTipoAlimento)
+            .getSingleResult();
+        
+        return proximoCodigoAlimento.shortValue();
     }
 
     @Override
     public void updateAlimento(Alimento alimento) {
         AlimentoEntity entity = alimentoEntityMapper.toEntity(alimento);
         alimentoPanacheRepository.getEntityManager()
-                .merge(entity);
+            .merge(entity);
     }
 
     @Override
@@ -49,8 +51,8 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
                 WHERE codigoAlimento = ?1
                 AND codigoTipoAlimento = ?2
                 """,
-                codigoAlimento,
-                codigoTipoAlimento);
+            codigoAlimento,
+            codigoTipoAlimento);
     }
 
     @Override
@@ -65,10 +67,10 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     @Override
     public List<Alimento> getAlimentosByTipo(Short codigoTipoAlimento) {
         return alimentoPanacheRepository
-                .find("codigoTipoAlimento", codigoTipoAlimento)
-                .stream()
-                .map(alimentoEntityMapper::toDomain)
-                .toList();
+            .find("codigoTipoAlimento", codigoTipoAlimento)
+            .stream()
+            .map(alimentoEntityMapper::toDomain)
+            .toList();
     }
 
 }

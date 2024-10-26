@@ -1,21 +1,9 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
-import com.fiap.lanchonete.domain.mapper.AlimentoMapper;
-import com.fiap.lanchonete.domain.mapper.ClienteMapper;
-import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
-import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.ports.in.AlimentoService;
-import com.fiap.lanchonete.domain.ports.in.ClienteService;
-import com.fiap.lanchonete.domain.ports.in.EstadoPedidoListener;
-import com.fiap.lanchonete.domain.ports.in.PedidoService;
-import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
-import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
-import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
-import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.domain.service.AlimentoServiceImpl;
-import com.fiap.lanchonete.domain.service.ClienteServiceImpl;
-import com.fiap.lanchonete.domain.service.EstadoPedidoListenerImpl;
-import com.fiap.lanchonete.domain.service.PedidoServiceImpl;
+import com.fiap.lanchonete.domain.mapper.*;
+import com.fiap.lanchonete.domain.ports.in.*;
+import com.fiap.lanchonete.domain.ports.out.*;
+import com.fiap.lanchonete.domain.service.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Produces;
 
@@ -28,11 +16,11 @@ public class ServiceContext {
 
     @Produces
     public PedidoService pedidoService(PedidoRepository pedidoRepository,
-            PedidoAlimentoRepository pedidoAlimentoRepository,
-            PedidoMapper pedidoMapper,
-            PedidoAlimentoMapper pedidoAlimentoMapper) {
+                                       PedidoAlimentoRepository pedidoAlimentoRepository,
+                                       PedidoMapper pedidoMapper,
+                                       PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService) {
         return new PedidoServiceImpl(pedidoRepository, pedidoAlimentoRepository,
-                pedidoMapper, pedidoAlimentoMapper);
+            pedidoMapper, pedidoAlimentoMapper, historicoPedidoService);
     }
 
     @Produces
@@ -42,13 +30,18 @@ public class ServiceContext {
 
     @Produces
     public ClienteService clienteService(ClienteRepository clienteRepository,
-            ClienteMapper clienteMapper) {
+                                         ClienteMapper clienteMapper) {
         return new ClienteServiceImpl(clienteRepository, clienteMapper);
     }
 
     @Produces
     public AlimentoService alimentoService(AlimentoRepository alimentoRepository, AlimentoMapper alimentoMapper) {
         return new AlimentoServiceImpl(alimentoRepository, alimentoMapper);
+    }
+
+    @Produces
+    public HistoricoPedidoService historicoPedidoService(HistoricoPedidoRepository historicoPedidoRepository, HistoricoPedidoMapper historicoPedidoMapper) {
+        return new HistoricoPedidoServiceImpl(historicoPedidoRepository, historicoPedidoMapper);
     }
 
 }

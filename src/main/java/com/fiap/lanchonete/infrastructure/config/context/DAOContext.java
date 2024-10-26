@@ -1,22 +1,9 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
-import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
-import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
-import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
-import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.infrastructure.mysql.adapter.out.AlimentoRepositoryImpl;
-import com.fiap.lanchonete.infrastructure.mysql.adapter.out.ClienteRepositoryImpl;
-import com.fiap.lanchonete.infrastructure.mysql.adapter.out.PedidoAlimentoRepositoryImpl;
-import com.fiap.lanchonete.infrastructure.mysql.adapter.out.PedidoRepositoryImpl;
-import com.fiap.lanchonete.infrastructure.mysql.dao.AlimentoPanacheRepository;
-import com.fiap.lanchonete.infrastructure.mysql.dao.ClientePanacheRepository;
-import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoAlimentoPanacheRepository;
-import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.AlimentoEntityMapper;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.ClienteEntityMapper;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoAlimentoEntityMapper;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
-
+import com.fiap.lanchonete.domain.ports.out.*;
+import com.fiap.lanchonete.infrastructure.mysql.adapter.out.*;
+import com.fiap.lanchonete.infrastructure.mysql.dao.*;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Produces;
 
@@ -29,28 +16,33 @@ public class DAOContext {
 
     @Produces
     public ClienteRepository clienteRepository(ClientePanacheRepository clientePanacheRepository,
-            ClienteEntityMapper clienteEntityMapper) {
+                                               ClienteEntityMapper clienteEntityMapper) {
 
         return new ClienteRepositoryImpl(clientePanacheRepository, clienteEntityMapper);
     }
 
     @Produces
     public PedidoRepository PedidoRepository(PedidoPanacheRepository pedidoPanacheRepository,
-            PedidoEntityMapper pedidoEntityMapper) {
+                                             PedidoEntityMapper pedidoEntityMapper) {
         return new PedidoRepositoryImpl(pedidoPanacheRepository, pedidoEntityMapper);
     }
 
     @Produces
     public PedidoAlimentoRepository PedidoAlimentoRepository(
-            PedidoAlimentoPanacheRepository pedidoAlimentoPanacheRepository,
-            PedidoAlimentoEntityMapper pedidoAlimentoEntityMapper) {
+        PedidoAlimentoPanacheRepository pedidoAlimentoPanacheRepository,
+        PedidoAlimentoEntityMapper pedidoAlimentoEntityMapper) {
         return new PedidoAlimentoRepositoryImpl(pedidoAlimentoPanacheRepository, pedidoAlimentoEntityMapper);
     }
 
     @Produces
     public AlimentoRepository alimentoRepository(AlimentoPanacheRepository alimentoPanacheRepository,
-            AlimentoEntityMapper alimentoEntityMapper) {
+                                                 AlimentoEntityMapper alimentoEntityMapper) {
         return new AlimentoRepositoryImpl(alimentoPanacheRepository, alimentoEntityMapper);
+    }
+
+    @Produces
+    public HistoricoPedidoRepository historicoPedidoRepository(HistoricoPedidoPanacheRepository historicoPedidoPanacheRepository, HistoricoPedidoEntityMapper historicoPedidoEntityMapper) {
+        return new HistoricoPedidoRepositoryImpl(historicoPedidoPanacheRepository, historicoPedidoEntityMapper);
     }
 
 }

@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 public interface HistoricoPedidoDTOMapper extends HistoricoPedidoMapper {
 
     @Override
-    @Mapping(target = "qtdadeAlimentos", ignore = true)
     @Mapping(target = "tsAlter", expression = "java(java.time.Instant.now())")
     HistoricoPedido fromPedido(Pedido pedido);
 

@@ -1,19 +1,19 @@
 package com.fiap.lanchonete.domain.service;
 
-import java.util.List;
-
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
+import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-
 import jakarta.ws.rs.NotAllowedException;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
@@ -25,6 +25,8 @@ public class PedidoServiceImpl implements PedidoService {
     PedidoMapper pedidoMapper;
 
     PedidoAlimentoMapper pedidoAlimentoMapper;
+
+    HistoricoPedidoService historicoPedidoService;
 
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
@@ -49,6 +51,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void modificarEstado(Integer id, EstadoPedido estadoPedido) {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(id);
+        // Adiciona o pedido atual no histórico
+        historicoPedidoService.registrarPedido(pedido);
+
         pedido.setEstadoPedido(estadoPedido);
         pedidoRepository.atualizarPedido(pedido);
     }

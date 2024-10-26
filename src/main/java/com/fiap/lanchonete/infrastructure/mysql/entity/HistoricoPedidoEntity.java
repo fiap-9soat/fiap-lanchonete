@@ -1,7 +1,10 @@
 package com.fiap.lanchonete.infrastructure.mysql.entity;
 
 import com.fiap.lanchonete.domain.model.EstadoPedido;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +22,6 @@ public class HistoricoPedidoEntity {
     @NotNull
     @Column(name = "ts_ultimo_pedido", nullable = false)
     private Instant tsUltimoPedido;
-
-    @MapsId("codigoCliente")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "codigo_cliente", nullable = false)
-    private ClienteEntity codigoCliente;
 
     @NotNull
     @Column(name = "estado_pedido", nullable = false)
