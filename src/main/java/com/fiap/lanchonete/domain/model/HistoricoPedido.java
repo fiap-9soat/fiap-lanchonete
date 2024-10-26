@@ -13,9 +13,7 @@ import java.time.Instant;
 public class HistoricoPedido {
     private Integer codigoPedido;
     private Integer codigoCliente;
-    private Instant tsPedido;
+    private Instant tsUltimoPedido;
     private Instant tsAlter;
     private EstadoPedido estadoPedido;
-    private Short qtdadeAlimentos;
-
 }

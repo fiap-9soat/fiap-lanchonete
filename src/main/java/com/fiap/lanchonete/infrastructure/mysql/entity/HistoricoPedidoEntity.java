@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Entity
@@ -14,24 +16,16 @@ public class HistoricoPedidoEntity {
     @EmbeddedId
     private HistoricoPedidoId id;
 
+    @NotNull
+    @Column(name = "ts_ultimo_pedido", nullable = false)
+    private Instant tsUltimoPedido;
+
     @MapsId("codigoCliente")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "codigo_cliente", nullable = false)
     private ClienteEntity codigoCliente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "codigo_tipo_alimento", referencedColumnName = "codigo_tipo_alimento"),
-            @JoinColumn(name = "codigo_alimento", referencedColumnName = "codigo_alimento")
-    })
-    private AlimentoEntity alimentos;
-
     @NotNull
     @Column(name = "estado_pedido", nullable = false)
     private EstadoPedido estadoPedido;
-
-    @NotNull
-    @Column(name = "qtdade_alimentos", nullable = false)
-    private Short qtdadeAlimentos;
-
 }
