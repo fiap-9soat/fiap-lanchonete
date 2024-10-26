@@ -1,19 +1,30 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.util.List;
+
+import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
+import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
+import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
+
 import jakarta.ws.rs.NotAllowedException;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 @AllArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
 
     PedidoRepository pedidoRepository;
+
+    PedidoAlimentoRepository pedidoAlimentoRepository;
+
+    PedidoMapper pedidoMapper;
+
+    PedidoAlimentoMapper pedidoAlimentoMapper;
 
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
@@ -44,6 +55,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Integer criarPedido(CreatePedidoDto createPedidoDto) {
-        return pedidoRepository.criarPedido(createPedidoDto);
+        Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
+        PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto.pedidoAlimento());
+
+        Integer codigoPedido = pedidoRepository.criarPedido(pedido);
+        pedidoAlimentoRepository.inserirAlimentoPedido(codigoPedido, pedidoAlimento);
+
+        return codigoPedido;
     }
 }

@@ -1,13 +1,24 @@
 package com.fiap.lanchonete.infrastructure.mysql.entity;
 
-import com.fiap.lanchonete.domain.model.EstadoPedido;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import com.fiap.lanchonete.domain.model.EstadoPedido;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Pedidos")
@@ -16,14 +27,14 @@ import java.time.LocalDateTime;
 @IdClass(PedidoEntityId.class)
 public class PedidoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_pedido")
     private Integer codigoPedido;
     @Id
     @Column(name = "codigo_cliente")
     private Integer codigoCliente;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "ts_pedido")
+    @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "ts_ultimo_pedido")
     @CreationTimestamp
     private LocalDateTime tsUltimoPedido;
 
@@ -31,10 +42,12 @@ public class PedidoEntity {
     private EstadoPedido estadoPedido;
 
     @OneToMany
+    @Transient
     @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido")
     private PedidoAlimentoEntity pedidoAlimento;
 
     @ManyToOne
+    @Transient
     @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo_cliente")
     private ClienteEntity cliente;
 

@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "jakarta")
 public interface ClienteDTOMapper extends ClienteMapper {
 
+    @Override
     @Mapping(target = "codigoCliente", ignore = true)
     Cliente toDomain(CreateClienteDto dto);
 }

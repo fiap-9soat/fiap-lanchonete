@@ -22,11 +22,13 @@ public interface AlimentoDTOMapper extends AlimentoMapper {
         return localDateTime.atZone(zone).toInstant();
     }
 
+    @Override
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(target = "codigoAlimento", ignore = true)
     @Mapping(target = "tsAlter", expression = "java(java.time.Instant.now())")
     Alimento toDomain(CreateAlimentoDto dto);
 
+    @Override
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(target = "tsAlter", expression = "java(java.time.Instant.now())")

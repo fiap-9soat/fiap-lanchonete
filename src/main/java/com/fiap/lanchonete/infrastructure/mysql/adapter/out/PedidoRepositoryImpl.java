@@ -1,18 +1,40 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
-import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
-
 import java.util.List;
 
-public class PedidoRepositoryImpl extends PedidoPanacheRepository implements PedidoRepository {
+import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
+import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public class PedidoRepositoryImpl implements PedidoRepository {
 
     PedidoPanacheRepository pedidoPanacheRepository;
 
+    PedidoEntityMapper pedidoEntityMapper;
+
     @Override
-    public void criarPedido(Pedido pedido) {
+    public Integer criarPedido(Pedido pedido) {
+        PedidoEntity entidade = pedidoEntityMapper.toEntity(pedido);
+        List<PedidoEntity> resposta = pedidoPanacheRepository.getEntityManager()
+                .createQuery("""
+                            SELECT pe
+                            FROM PedidoEntity pe
+                            WHERE codigoCliente = :codigoCliente
+                        """, PedidoEntity.class)
+                .setParameter("codigoCliente", entidade.getCodigoCliente())
+                .getResultList();
+        ;
+        if (resposta.isEmpty()) {
+            pedidoPanacheRepository.persist(entidade);
+            return entidade.getCodigoPedido();
+        }
+
+        return resposta.get(0).getCodigoPedido();
     }
 
     @Override
@@ -34,9 +56,4 @@ public class PedidoRepositoryImpl extends PedidoPanacheRepository implements Ped
         return List.of();
     }
 
-    @Override
-    public Integer criarPedido(CreatePedidoDto createPedidoDto) {
-
-        return null;
-    }
 }

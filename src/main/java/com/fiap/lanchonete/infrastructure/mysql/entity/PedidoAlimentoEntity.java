@@ -28,5 +28,5 @@ public class PedidoAlimentoEntity {
     private Short codigoAlimento;
 
     @Column(name = "qtdade_alimento")
-    private Short qtdadeAlimento;
+    private Short quantidadeAlimento;
 }

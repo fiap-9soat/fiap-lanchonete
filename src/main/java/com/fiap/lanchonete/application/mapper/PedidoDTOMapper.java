@@ -21,6 +21,7 @@ public interface PedidoDTOMapper extends PedidoMapper {
         return localDateTime.atZone(zone).toInstant();
     }
 
+    @Override
     @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "codigoCliente", target = "codigoCliente")
     @Mapping(source = "estadoPedido", target = "estadoPedido")

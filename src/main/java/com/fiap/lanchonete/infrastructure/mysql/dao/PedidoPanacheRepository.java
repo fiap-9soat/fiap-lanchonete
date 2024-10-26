@@ -1,9 +1,12 @@
 package com.fiap.lanchonete.infrastructure.mysql.dao;
 
-import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntityId;
+
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import jakarta.enterprise.context.ApplicationScoped;
 
-
-public class PedidoPanacheRepository implements PanacheRepositoryBase<Pedido, Integer> {
+@ApplicationScoped
+public class PedidoPanacheRepository implements PanacheRepositoryBase<PedidoEntity, PedidoEntityId> {
 
 }

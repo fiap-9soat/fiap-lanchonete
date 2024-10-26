@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface PedidoService {
 
+    public Integer criarPedido(CreatePedidoDto createPedidoDto);
+
     Pedido buscarPedidoPorId(Integer id);
 
     List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente);
@@ -16,5 +18,4 @@ public interface PedidoService {
 
     public void modificarEstado(Integer id, EstadoPedido estadoPedido);
 
-    public Integer criarPedido(CreatePedidoDto createPedidoDto);
 }
