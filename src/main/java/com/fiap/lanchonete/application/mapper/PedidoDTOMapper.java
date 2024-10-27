@@ -1,16 +1,15 @@
 package com.fiap.lanchonete.application.mapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
+import com.fiap.lanchonete.domain.mapper.PedidoMapper;
+import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Mapper(componentModel = "jakarta")
 public interface PedidoDTOMapper extends PedidoMapper {
@@ -22,9 +21,7 @@ public interface PedidoDTOMapper extends PedidoMapper {
     }
 
     @Override
-    @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "codigoCliente", target = "codigoCliente")
-    @Mapping(source = "estadoPedido", target = "estadoPedido")
     @Mapping(target = "tsUltimoPedido", expression = "java(java.time.Instant.now())")
     Pedido toDomain(CreatePedidoDto dto);
 }

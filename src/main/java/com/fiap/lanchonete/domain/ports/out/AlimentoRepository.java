@@ -11,7 +11,13 @@ public interface AlimentoRepository {
 
     public void deleteAlimento(Short codigoAlimento, Short codigoTipoAlimento);
 
-    public Short getLastCodigoAlimento(Short codigoTipoAlimento);
+    /**
+     * Recupera o próximo "codigoAlimento" possível para inserção na tabela.
+     *
+     * @param codigoTipoAlimento
+     * @return
+     */
+    public Short getNextCodigoAlimento(Short codigoTipoAlimento);
 
     public Alimento getAlimentoById(Short codigoAlimento, Short codigoTipoAlimento);
 

@@ -1,14 +1,13 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
-import java.util.List;
-
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
-
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 public class PedidoRepositoryImpl implements PedidoRepository {
@@ -19,22 +18,24 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     @Override
     public Integer criarPedido(Pedido pedido) {
-        PedidoEntity entidade = pedidoEntityMapper.toEntity(pedido);
-        List<PedidoEntity> resposta = pedidoPanacheRepository.getEntityManager()
-                .createQuery("""
-                            SELECT pe
-                            FROM PedidoEntity pe
-                            WHERE codigoCliente = :codigoCliente
-                        """, PedidoEntity.class)
-                .setParameter("codigoCliente", entidade.getCodigoCliente())
-                .getResultList();
-        ;
-        if (resposta.isEmpty()) {
-            pedidoPanacheRepository.persist(entidade);
-            return entidade.getCodigoPedido();
-        }
+        Integer proximoId = pedidoPanacheRepository.getEntityManager()
+            .createQuery(
+                """
+                    SELECT IFNULL(MAX() + 1, "1")
+                    FROM PedidoEntity pedido
+                    WHERE pedido.codigoCliente = :codigoCliente
+                    """,
+                Integer.class
+            )
+            .setParameter("codigoCliente", pedido.getCodigoCliente())
+            .getSingleResult();
 
-        return resposta.get(0).getCodigoPedido();
+        PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
+        entity.setCodigoPedido(proximoId);
+
+        pedidoPanacheRepository.persist(entity);
+
+        return proximoId;
     }
 
     @Override

@@ -11,6 +11,7 @@ public interface HistoricoPedidoDTOMapper extends HistoricoPedidoMapper {
 
     @Override
     @Mapping(target = "tsAlter", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "tsUltimoPedido", expression = "java(java.time.Instant.now())")
     HistoricoPedido fromPedido(Pedido pedido);
 
 }

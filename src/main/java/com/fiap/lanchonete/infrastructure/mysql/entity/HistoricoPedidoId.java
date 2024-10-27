@@ -1,7 +1,6 @@
 package com.fiap.lanchonete.infrastructure.mysql.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Embeddable
 public class HistoricoPedidoId implements Serializable {
     @Serial
     private static final long serialVersionUID = -4413322933286485451L;

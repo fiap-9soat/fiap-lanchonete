@@ -22,7 +22,7 @@ public class AlimentoServiceImpl implements AlimentoService {
 
     @Override
     public void cadastrarAlimento(CreateAlimentoDto createAlimentoDto) {
-        Short lastCodigoAlimento = alimentoRepository.getLastCodigoAlimento(createAlimentoDto.codigoTipoAlimento());
+        Short lastCodigoAlimento = alimentoRepository.getNextCodigoAlimento(createAlimentoDto.codigoTipoAlimento());
         Alimento alimento = alimentoMapper.toDomain(createAlimentoDto);
         alimento.setCodigoAlimento(lastCodigoAlimento);
 

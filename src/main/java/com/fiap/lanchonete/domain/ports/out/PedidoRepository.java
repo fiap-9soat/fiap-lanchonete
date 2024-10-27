@@ -1,8 +1,8 @@
 package com.fiap.lanchonete.domain.ports.out;
 
-import java.util.List;
-
 import com.fiap.lanchonete.domain.model.Pedido;
+
+import java.util.List;
 
 public interface PedidoRepository {
     Integer criarPedido(Pedido pedido);

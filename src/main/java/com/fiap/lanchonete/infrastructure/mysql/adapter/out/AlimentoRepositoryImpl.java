@@ -24,7 +24,7 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
     }
 
     @Override
-    public Short getLastCodigoAlimento(Short codigoTipoAlimento) {
+    public Short getNextCodigoAlimento(Short codigoTipoAlimento) {
         Integer proximoCodigoAlimento = alimentoPanacheRepository.getEntityManager()
             .createQuery("""
                 SELECT IFNULL(MAX(codigoAlimento)+1, '1')
@@ -33,7 +33,7 @@ public class AlimentoRepositoryImpl implements AlimentoRepository {
                 """, Integer.class)
             .setParameter("codigoTipoAlimento", codigoTipoAlimento)
             .getSingleResult();
-        
+
         return proximoCodigoAlimento.shortValue();
     }
 

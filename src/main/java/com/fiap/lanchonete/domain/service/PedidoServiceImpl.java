@@ -61,7 +61,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Integer criarPedido(CreatePedidoDto createPedidoDto) {
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
-        PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto.pedidoAlimento());
+        pedido.setEstadoPedido(EstadoPedido.INICIADO);
+        PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
+
 
         Integer codigoPedido = pedidoRepository.criarPedido(pedido);
         pedidoAlimentoRepository.inserirAlimentoPedido(codigoPedido, pedidoAlimento);
