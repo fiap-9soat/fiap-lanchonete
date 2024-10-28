@@ -1,13 +1,16 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
-import lombok.AllArgsConstructor;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class PedidoRepositoryImpl implements PedidoRepository {
@@ -17,25 +20,44 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     PedidoEntityMapper pedidoEntityMapper;
 
     @Override
-    public Integer criarPedido(Pedido pedido) {
-        Integer proximoId = pedidoPanacheRepository.getEntityManager()
-            .createQuery(
-                """
-                    SELECT IFNULL(MAX() + 1, "1")
-                    FROM PedidoEntity pedido
-                    WHERE pedido.codigoCliente = :codigoCliente
-                    """,
-                Integer.class
-            )
-            .setParameter("codigoCliente", pedido.getCodigoCliente())
-            .getSingleResult();
-
+    public void criarPedido(Integer codigoPedido, Pedido pedido) {
         PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
-        entity.setCodigoPedido(proximoId);
-
+        entity.setCodigoPedido(codigoPedido);
         pedidoPanacheRepository.persist(entity);
+    }
 
-        return proximoId;
+    @Override
+    public List<Pedido> checaSeClienteJaTemPedido(Integer codigoCliente) {
+        List<Pedido> listaResposta = new ArrayList<>();
+        pedidoPanacheRepository.find("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoCliente = ?1
+                """, codigoCliente).stream()
+                .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
+        return listaResposta;
+    }
+
+    @Override
+    public Integer retornaMaiorCodigoPedido(Pedido pedido) {
+        return pedidoPanacheRepository.getEntityManager()
+                .createQuery(
+                        """
+                                SELECT MAX(pe.codigoPedido)+1
+                                FROM PedidoEntity pe
+                                    """,
+                        Integer.class)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<PedidoAlimento> listarPedidos() {
+        List<PedidoEntity> listaPedidos = pedidoPanacheRepository.find("""
+                SELECT pe
+                FROM PedidoEntity pe
+                """).list();
+        listaPedidos.stream().forEach(a -> a.getPedidoAlimento());
+        return List.of();
     }
 
     @Override
@@ -54,7 +76,8 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     @Override
     public List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
-        return List.of();
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'buscarPedidosPorCodigoCliente'");
     }
 
 }

@@ -2,6 +2,7 @@ package com.fiap.lanchonete.application.mapper;
 
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.pojo.ClienteDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,7 +22,7 @@ public interface PedidoDTOMapper extends PedidoMapper {
     }
 
     @Override
-    @Mapping(source = "codigoCliente", target = "codigoCliente")
+    @Mapping(source = "clienteDto.codigoCliente", target = "codigoCliente")
     @Mapping(target = "tsUltimoPedido", expression = "java(java.time.Instant.now())")
-    Pedido toDomain(CreatePedidoDto dto);
+    Pedido toDomain(ClienteDto clienteDto, CreatePedidoDto dto);
 }

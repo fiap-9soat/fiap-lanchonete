@@ -17,4 +17,11 @@ public interface PedidoAlimentoEntityMapper {
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
     PedidoAlimentoEntity toEntity(PedidoAlimento domain);
+
+    @Mapping(source = "codigoPedido", target = "codigoPedido")
+    @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
+    @Mapping(source = "codigoAlimento", target = "codigoAlimento")
+    @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
+    PedidoAlimento toDomain(PedidoAlimentoEntity domain);
+
 }

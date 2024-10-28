@@ -18,7 +18,6 @@ public interface PedidoAlimentoDTOMapper extends PedidoAlimentoMapper {
     PedidoAlimento toDomain(PedidoAlimentoDto dto);
 
     @Override
-    @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
