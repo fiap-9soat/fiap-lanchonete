@@ -33,6 +33,8 @@ public interface PedidoEntityMapper {
     @Mapping(target = "cliente", ignore = true)
     PedidoEntity toEntity(Pedido domain);
 
+    @Mapping(source = "codigoCliente", target = "codigoCliente")
+    @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "localDateTimeParaInstant")
     Pedido toDomain(PedidoEntity domain);
 }

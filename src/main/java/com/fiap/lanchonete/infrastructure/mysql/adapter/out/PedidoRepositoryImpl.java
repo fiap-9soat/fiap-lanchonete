@@ -27,13 +27,27 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<Pedido> checaSeClienteJaTemPedido(Integer codigoCliente) {
+    public List<Pedido> checaSeClienteJaTemPedido(Pedido pedido) {
         List<Pedido> listaResposta = new ArrayList<>();
         pedidoPanacheRepository.find("""
                 SELECT pe
                 FROM PedidoEntity pe
                 WHERE codigoCliente = ?1
-                """, codigoCliente).stream()
+                """,
+                pedido.getCodigoCliente()).stream()
+                .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
+        return listaResposta;
+    }
+
+    @Override
+    public List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido) {
+        List<Pedido> listaResposta = new ArrayList<>();
+        pedidoPanacheRepository.find("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoPedido = ?1
+                """,
+                pedido.getCodigoPedido()).stream()
                 .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
         return listaResposta;
     }
@@ -43,7 +57,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         return pedidoPanacheRepository.getEntityManager()
                 .createQuery(
                         """
-                                SELECT MAX(pe.codigoPedido)+1
+                                SELECT IFNULL(MAX(pe.codigoPedido)+1, "1")
                                 FROM PedidoEntity pe
                                     """,
                         Integer.class)

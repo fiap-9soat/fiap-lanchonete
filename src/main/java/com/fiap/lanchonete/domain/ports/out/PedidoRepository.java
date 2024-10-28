@@ -8,11 +8,13 @@ import com.fiap.lanchonete.domain.model.PedidoAlimento;
 public interface PedidoRepository {
     void criarPedido(Integer codigoPedido, Pedido pedido);
 
-    List<Pedido> checaSeClienteJaTemPedido(Integer codigoCliente);
+    List<Pedido> checaSeClienteJaTemPedido(Pedido pedido);
+
+    List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido);
 
     Integer retornaMaiorCodigoPedido(Pedido pedido);
 
-    public List<PedidoAlimento> listarPedidos();
+    List<PedidoAlimento> listarPedidos();
 
     void atualizarPedido(Pedido pedido);
 

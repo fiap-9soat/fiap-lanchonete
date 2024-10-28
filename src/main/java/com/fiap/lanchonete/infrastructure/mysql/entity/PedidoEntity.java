@@ -24,14 +24,13 @@ import lombok.Setter;
 @Table(name = "Pedidos")
 @Getter
 @Setter
-@IdClass(PedidoEntityId.class)
 public class PedidoEntity {
     @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_pedido")
     private Integer codigoPedido;
-    @Id
-    @Column(name = "codigo_cliente")
+
+    @Column(name = "codigo_cliente", nullable = true)
     private Integer codigoCliente;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "ts_ultimo_pedido")

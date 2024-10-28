@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
@@ -7,7 +8,6 @@ import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
-import com.fiap.lanchonete.domain.pojo.ClienteDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -61,15 +61,21 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Integer criarPedido(Integer codigoCliente, CreatePedidoDto createPedidoDto) throws Exception {
+    public Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception {
         Integer codigoPedido = null;
+        List<Pedido> checaPedidoExiste = new ArrayList<>();
 
-        Pedido pedido = mapeiaObjetoPedido(codigoCliente, createPedidoDto);
+        Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);
 
         // Checa se o cliente já possui pedido e retorna o codigoPedido
-        List<Pedido> checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(codigoCliente);
-        if (checaPedidoExiste.isEmpty()) {
+        if (createPedidoDto.getCodigoCliente() != null) {
+            checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
+        } else {
+            checaPedidoExiste = pedidoRepository.checaPedidoDeCLienteAnonimo(pedido);
+        }
+
+        if (checaPedidoExiste == null || checaPedidoExiste.isEmpty()) {
             codigoPedido = pedidoRepository.retornaMaiorCodigoPedido(pedido);
             pedidoRepository.criarPedido(codigoPedido, pedido);
         } else {
@@ -85,8 +91,9 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void editarPedido(Integer codigoCliente, CreatePedidoDto createPedidoDto) throws Exception {
-        List<Pedido> checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(codigoCliente);
+    public void editarPedido(CreatePedidoDto createPedidoDto) throws Exception {
+        Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
+        List<Pedido> checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
         if (checaPedidoExiste.isEmpty()) {
             throw new Exception("Não existe pedido a ser editado");
         }
@@ -99,8 +106,9 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void removerPedido(Integer codigoCliente, CreatePedidoDto createPedidoDto) throws Exception {
-        List<Pedido> checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(codigoCliente);
+    public void removerPedido(CreatePedidoDto createPedidoDto) throws Exception {
+        Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
+        List<Pedido> checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
         if (checaPedidoExiste.isEmpty()) {
             throw new Exception("Não existe pedido a ser editado");
         }
@@ -111,11 +119,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedidoAlimentoRepository.removerPedidoAlimento(pedidoAlimento);
 
-    }
-
-    private Pedido mapeiaObjetoPedido(Integer codigoCliente, CreatePedidoDto createPedidoDto) {
-        ClienteDto clienteDto = new ClienteDto(codigoCliente);
-        return pedidoMapper.toDomain(clienteDto, createPedidoDto);
     }
 
 }
