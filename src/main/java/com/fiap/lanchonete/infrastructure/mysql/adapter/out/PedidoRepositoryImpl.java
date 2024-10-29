@@ -42,13 +42,11 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Override
     public List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido) {
         List<Pedido> listaResposta = new ArrayList<>();
-        pedidoPanacheRepository.find("""
-                SELECT pe
-                FROM PedidoEntity pe
-                WHERE codigoPedido = ?1
-                """,
-                pedido.getCodigoPedido()).stream()
-                .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
+        PedidoEntity resposta = pedidoPanacheRepository.findById(
+                pedido.getCodigoPedido());
+
+        listaResposta.add(pedidoEntityMapper.toDomain(resposta));
+
         return listaResposta;
     }
 
