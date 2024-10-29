@@ -8,8 +8,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HistoricoPedidoId implements Serializable {
-
+public class HistoricoPedidoAlimentoEntityId implements Serializable {
     private Integer codigoPedido;
-    private LocalDateTime tsAlter;
+    private Short codigoTipoAlimento;
+    private Short codigoAlimento;
+    private LocalDateTime tsalter;
 }

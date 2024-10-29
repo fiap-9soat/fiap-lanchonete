@@ -16,11 +16,12 @@ public class ServiceContext {
 
     @Produces
     public PedidoService pedidoService(PedidoRepository pedidoRepository,
-                                       PedidoAlimentoRepository pedidoAlimentoRepository,
-                                       PedidoMapper pedidoMapper,
-                                       PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService) {
+            PedidoAlimentoRepository pedidoAlimentoRepository,
+            PedidoMapper pedidoMapper,
+            PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService,
+            HistoricoPedidoAlimentoService historicoPedidoAlimentoService) {
         return new PedidoServiceImpl(pedidoRepository, pedidoAlimentoRepository,
-            pedidoMapper, pedidoAlimentoMapper, historicoPedidoService);
+                pedidoMapper, pedidoAlimentoMapper, historicoPedidoService, historicoPedidoAlimentoService);
     }
 
     @Produces
@@ -30,7 +31,7 @@ public class ServiceContext {
 
     @Produces
     public ClienteService clienteService(ClienteRepository clienteRepository,
-                                         ClienteMapper clienteMapper) {
+            ClienteMapper clienteMapper) {
         return new ClienteServiceImpl(clienteRepository, clienteMapper);
     }
 
@@ -40,8 +41,16 @@ public class ServiceContext {
     }
 
     @Produces
-    public HistoricoPedidoService historicoPedidoService(HistoricoPedidoRepository historicoPedidoRepository, HistoricoPedidoMapper historicoPedidoMapper) {
+    public HistoricoPedidoService historicoPedidoService(HistoricoPedidoRepository historicoPedidoRepository,
+            HistoricoPedidoMapper historicoPedidoMapper) {
         return new HistoricoPedidoServiceImpl(historicoPedidoRepository, historicoPedidoMapper);
+    }
+
+    @Produces
+    public HistoricoPedidoAlimentoService historicoPedidoAlimentoService(
+            HistoricoPedidoAlimentoRepository historicoPedidoAlimentoRepository,
+            HistoricoPedidoAlimentoMapper historicoPedidoAlimentoMapper) {
+        return new HistoricoPedidoAlimentoServiceImpl(historicoPedidoAlimentoRepository, historicoPedidoAlimentoMapper);
     }
 
 }

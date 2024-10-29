@@ -46,7 +46,7 @@ public class ClienteResource {
     @Operation(summary = "Cadastra o cliente na base de dados")
     @APIResponse(responseCode = "201", description = "Cliente cadastrado com sucesso", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = CreateClienteDto.class)) })
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public Integer cadastrarCliente(@Valid CreateClienteDto dto) {
 
         return clienteService.cadastrarCliente(dto);

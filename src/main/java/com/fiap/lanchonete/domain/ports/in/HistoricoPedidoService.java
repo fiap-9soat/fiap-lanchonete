@@ -11,7 +11,7 @@ public interface HistoricoPedidoService {
      *
      * @param pedido
      */
-    void registrarPedido(Pedido pedido);
+    void registrarPedido(Integer codigoPedido, Pedido pedido);
 
     List<HistoricoPedido> consultarPorCodigoPedido(Integer codigoPedido);
 }

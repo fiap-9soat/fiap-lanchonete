@@ -3,7 +3,6 @@ package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
@@ -21,10 +20,10 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     PedidoEntityMapper pedidoEntityMapper;
 
     @Override
-    public void criarPedido(Integer codigoPedido, Pedido pedido) {
+    public Integer criarPedido(Pedido pedido) {
         PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
-        entity.setCodigoPedido(codigoPedido);
         pedidoPanacheRepository.persist(entity);
+        return entity.getCodigoPedido();
     }
 
     @Override

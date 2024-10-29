@@ -1,14 +1,18 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.model.EstadoPedido;
+import com.fiap.lanchonete.domain.model.HistoricoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidosDto;
+import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
@@ -29,6 +33,14 @@ public class PedidoServiceImpl implements PedidoService {
     PedidoAlimentoMapper pedidoAlimentoMapper;
 
     HistoricoPedidoService historicoPedidoService;
+
+    HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
+
+    @Override
+    public ListaPedidosDto listarPedidos() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listarPedidos'");
+    }
 
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
@@ -54,7 +66,7 @@ public class PedidoServiceImpl implements PedidoService {
     public void modificarEstado(Integer id, EstadoPedido estadoPedido) {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(id);
         // Adiciona o pedido atual no histórico
-        historicoPedidoService.registrarPedido(pedido);
+        historicoPedidoService.registrarPedido(id, pedido);
 
         pedido.setEstadoPedido(estadoPedido);
         pedidoRepository.atualizarPedido(pedido);
@@ -68,24 +80,20 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);
 
-        // Checa se o cliente já possui pedido e retorna o codigoPedido
-        if (createPedidoDto.getCodigoCliente() != null) {
-            checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
-        } else {
-            checaPedidoExiste = pedidoRepository.checaPedidoDeCLienteAnonimo(pedido);
-        }
-
+        checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
         if (checaPedidoExiste == null || checaPedidoExiste.isEmpty()) {
-            codigoPedido = pedidoRepository.retornaMaiorCodigoPedido(pedido);
-            pedidoRepository.criarPedido(codigoPedido, pedido);
+            codigoPedido = pedidoRepository.criarPedido(pedido);
         } else {
             codigoPedido = checaPedidoExiste.getFirst().getCodigoPedido();
         }
+
+        historicoPedidoService.registrarPedido(codigoPedido, pedido);
 
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
         pedidoAlimentoRepository.checarSeTipoAlimentoJáExiste(pedidoAlimento);
         pedidoAlimentoRepository.inserirAlimentoPedido(pedidoAlimento);
+        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento);
 
         return codigoPedido;
     }
@@ -121,4 +129,15 @@ public class PedidoServiceImpl implements PedidoService {
 
     }
 
+    private HistoricoPedido mapeiaHistoricoPedido(Pedido pedido) {
+        HistoricoPedido historico = new HistoricoPedido();
+
+        historico.setCodigoPedido(pedido.getCodigoPedido());
+        historico.setCodigoCliente(pedido.getCodigoCliente());
+        historico.setEstadoPedido(pedido.getEstadoPedido());
+        historico.setTsUltimoPedido(pedido.getTsUltimoPedido());
+        historico.setTsAlter(Instant.now());
+
+        return historico;
+    }
 }

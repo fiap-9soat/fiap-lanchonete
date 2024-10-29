@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.domain.model;
+package com.fiap.lanchonete.domain.enums;
 
 public enum EstadoPedido {
     INICIADO(0),

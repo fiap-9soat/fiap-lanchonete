@@ -17,7 +17,8 @@ public class HistoricoPedidoServiceImpl implements HistoricoPedidoService {
     private final HistoricoPedidoMapper historicoPedidoMapper;
 
     @Override
-    public void registrarPedido(Pedido pedido) {
+    public void registrarPedido(Integer codigoPedido, Pedido pedido) {
+        pedido.setCodigoPedido(codigoPedido);
         HistoricoPedido historicoPedido = historicoPedidoMapper.fromPedido(pedido);
         historicoPedidoRepository.insert(historicoPedido);
     }

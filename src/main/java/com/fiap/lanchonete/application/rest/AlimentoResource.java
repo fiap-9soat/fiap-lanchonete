@@ -41,7 +41,7 @@ public class AlimentoResource {
     @Operation(summary = "Insere um alimento na base de dados")
     @APIResponse(responseCode = "201", description = "Alimento inserido na base de dados", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = CreateAlimentoDto.class)) })
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void cadastrarAlimento(CreateAlimentoDto dto) {
         alimentoService.cadastrarAlimento(dto);
     }
@@ -51,7 +51,7 @@ public class AlimentoResource {
     @Operation(summary = "Edita um alimento da base de dados")
     @APIResponse(responseCode = "200", description = "Alimento editado na base de dados", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = EditAlimentoDto.class)) })
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void editarAlimento(EditAlimentoDto dto) {
         alimentoService.editarAlimento(dto);
     }
@@ -61,7 +61,7 @@ public class AlimentoResource {
     @Operation(summary = "Deleta um alimento da base de dados")
     @APIResponse(responseCode = "200", description = "Alimento deletado na base de dados", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = DeleteAlimentoDto.class)) })
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void deletarAlimento(DeleteAlimentoDto deleteDto) {
         alimentoService.deletarAlimento(deleteDto);
     }

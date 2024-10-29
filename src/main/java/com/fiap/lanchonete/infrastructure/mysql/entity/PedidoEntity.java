@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fiap.lanchonete.domain.model.EstadoPedido;
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 public class PedidoEntity {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_pedido")
     private Integer codigoPedido;
 

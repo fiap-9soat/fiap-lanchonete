@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
+
 @Builder
 @Getter
 @Setter

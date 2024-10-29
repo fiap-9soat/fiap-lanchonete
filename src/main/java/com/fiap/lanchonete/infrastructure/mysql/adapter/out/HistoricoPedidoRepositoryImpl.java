@@ -25,8 +25,8 @@ public class HistoricoPedidoRepositoryImpl implements HistoricoPedidoRepository 
     @Override
     public List<HistoricoPedido> findByCodigoPedido(Integer codigoPedido) {
         return historicoPedidoPanacheRepository.find("codigoPedido", codigoPedido)
-            .stream()
-            .map(historicoPedidoEntityMapper::toDomain)
-            .toList();
+                .stream()
+                .map(historicoPedidoEntityMapper::toDomain)
+                .toList();
     }
 }

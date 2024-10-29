@@ -2,11 +2,14 @@ package com.fiap.lanchonete.domain.ports.in;
 
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.EstadoPedido;
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidosDto;
 
 public interface PedidoService {
+
+    public ListaPedidosDto listarPedidos();
 
     public Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception;
 

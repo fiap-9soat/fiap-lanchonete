@@ -6,7 +6,7 @@ import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 
 public interface PedidoRepository {
-    void criarPedido(Integer codigoPedido, Pedido pedido);
+    Integer criarPedido(Pedido pedido);
 
     List<Pedido> checaSeClienteJaTemPedido(Pedido pedido);
 
