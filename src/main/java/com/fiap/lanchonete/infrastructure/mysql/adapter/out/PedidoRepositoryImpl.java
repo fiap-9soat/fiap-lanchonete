@@ -3,6 +3,7 @@ package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fiap.lanchonete.domain.model.EstadoPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
@@ -33,6 +34,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 SELECT pe
                 FROM PedidoEntity pe
                 WHERE codigoCliente = ?1
+                AND estadoPedido = EstadoPedido.INICIADO
                 """,
                 pedido.getCodigoCliente()).stream()
                 .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
@@ -42,11 +44,14 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Override
     public List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido) {
         List<Pedido> listaResposta = new ArrayList<>();
-        PedidoEntity resposta = pedidoPanacheRepository.findById(
-                pedido.getCodigoPedido());
-
-        listaResposta.add(pedidoEntityMapper.toDomain(resposta));
-
+        pedidoPanacheRepository.find("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoPedido = ?1
+                AND estadoPedido = EstadoPedido.INICIADO
+                """,
+                pedido.getCodigoPedido()).stream()
+                .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
         return listaResposta;
     }
 
