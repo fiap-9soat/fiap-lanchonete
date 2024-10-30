@@ -19,6 +19,7 @@ import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
 import jakarta.ws.rs.NotAllowedException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -65,6 +66,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void modificarEstado(Integer id, EstadoPedido estadoPedido) {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(id);
+        if (pedido == null){
+            throw new NotFoundException("Pedido não foi encontrado na base de dados.");
+        }
         // Adiciona o pedido atual no histórico
         historicoPedidoService.registrarPedido(id, pedido);
 
@@ -75,7 +79,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception {
         Integer codigoPedido = null;
-        List<Pedido> checaPedidoExiste = new ArrayList<>();
+        List<Pedido> checaPedidoExiste;
 
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);

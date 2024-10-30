@@ -52,16 +52,18 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     @Override
     public void atualizarPedido(Pedido pedido) {
-
+        PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
+        pedidoPanacheRepository.persist(entity);
     }
 
     @Override
-    public void removerPedido(Pedido pedido) {
+    public void removerPedido(Integer codigoPedido) {
+        pedidoPanacheRepository.deleteById(codigoPedido);
     }
 
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
-        return null;
+        return pedidoEntityMapper.toDomain(pedidoPanacheRepository.findById(id));
     }
 
     @Override

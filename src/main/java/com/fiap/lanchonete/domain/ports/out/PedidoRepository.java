@@ -14,7 +14,7 @@ public interface PedidoRepository {
 
     void atualizarPedido(Pedido pedido);
 
-    void removerPedido(Pedido pedido);
+    void removerPedido(Integer codigoPedido);
 
     Pedido buscarPedidoPorId(Integer id);
 

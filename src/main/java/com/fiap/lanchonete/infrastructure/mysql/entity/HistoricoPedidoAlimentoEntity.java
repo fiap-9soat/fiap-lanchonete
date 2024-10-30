@@ -38,7 +38,7 @@ public class HistoricoPedidoAlimentoEntity {
     private LocalDateTime tsalter;
 
     @Column(name = "qtdade_alimento")
-    private Integer qtdadeAlimento;
+    private Short qtdadeAlimento;
 
     @Column(name = "tipo_alter")
     @Enumerated(EnumType.STRING)
