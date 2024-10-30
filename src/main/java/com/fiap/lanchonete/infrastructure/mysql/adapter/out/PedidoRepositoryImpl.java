@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
@@ -32,22 +31,26 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         pedidoPanacheRepository.find("""
                 SELECT pe
                 FROM PedidoEntity pe
-                WHERE codigoCliente = ?1
-                AND estadoPedido = EstadoPedido.INICIADO
+                WHERE estadoPedido = EstadoPedido.INICIADO
+                AND (?1 IS NOT NULL OR codigoPedido = ?2)
+                AND (?2 IS NOT NULL OR codigoCliente = ?1)
                 """,
-                pedido.getCodigoCliente()).stream()
+                pedido.getCodigoCliente(),
+                pedido.getCodigoPedido()).stream()
                 .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
         return listaResposta;
     }
 
     @Override
-    public List<PedidoAlimento> listarPedidos() {
-        List<PedidoEntity> listaPedidos = pedidoPanacheRepository.find("""
+    public List<Pedido> listarPedidos() {
+        List<Pedido> listaPedidos = new ArrayList<>();
+        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.find("""
                 SELECT pe
                 FROM PedidoEntity pe
                 """).list();
-        listaPedidos.stream().forEach(a -> a.getPedidoAlimento());
-        return List.of();
+        listaPedidosEntity.stream().forEach(entity -> listaPedidos.add(pedidoEntityMapper.toDomain(entity)));
+
+        return listaPedidos;
     }
 
     @Override

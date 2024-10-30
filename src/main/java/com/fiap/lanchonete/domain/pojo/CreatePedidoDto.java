@@ -9,6 +9,8 @@ import lombok.Setter;
 public class CreatePedidoDto {
     @Nullable
     private Integer codigoCliente;
+    @Nullable
+    private Integer codigoPedido;
     private Short codigoTipoAlimento;
     private Short codigoAlimento;
     private Integer quantidadeAlimento;

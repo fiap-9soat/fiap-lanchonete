@@ -1,5 +1,8 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoAlimentoPanacheRepository;
@@ -60,5 +63,17 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
                 pedidoAlimento.getCodigoPedido(),
                 pedidoAlimento.getCodigoTipoAlimento(),
                 pedidoAlimento.getCodigoAlimento());
+    }
+
+    @Override
+    public List<PedidoAlimento> listarPedidosAlimentos() {
+        List<PedidoAlimento> listaPedidoAlimento = new ArrayList<>();
+        List<PedidoAlimentoEntity> listaPedidoAlimentoEntity = pedidoAlimentoPanacheRepository.find("""
+                SELECT pa
+                FROM PedidoAlimentoEntity pa
+                """).list();
+        listaPedidoAlimentoEntity.stream()
+                .forEach(entity -> listaPedidoAlimento.add(pedidoAlimentoEntityMapper.toDomain(entity)));
+        return listaPedidoAlimento;
     }
 }

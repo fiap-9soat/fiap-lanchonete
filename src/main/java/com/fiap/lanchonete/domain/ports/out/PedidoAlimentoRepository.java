@@ -1,5 +1,7 @@
 package com.fiap.lanchonete.domain.ports.out;
 
+import java.util.List;
+
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 
 public interface PedidoAlimentoRepository {
@@ -10,4 +12,6 @@ public interface PedidoAlimentoRepository {
     public void removerPedidoAlimento(PedidoAlimento pedidoAlimento);
 
     public void editarPedidoAlimento(PedidoAlimento pedidoAlimento);
+
+    List<PedidoAlimento> listarPedidosAlimentos();
 }

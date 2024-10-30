@@ -1,11 +1,12 @@
 package com.fiap.lanchonete.domain.mapper;
 
-import java.util.List;
-
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimento;
+import com.fiap.lanchonete.domain.model.ListaPedido;
+import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
 import com.fiap.lanchonete.domain.pojo.ListaPedidosDto;
+import com.fiap.lanchonete.domain.pojo.PedidoAlimentoListaDto;
 
 public interface ListaPedidoMapper {
-    ListaPedidosDto fromDomain(Pedido pedido, List<PedidoAlimento> dto);
+    ListaPedidosDto fromDomain(ListaPedido dto);
+
+    PedidoAlimentoLista toDomain(PedidoAlimentoListaDto dto);
 }

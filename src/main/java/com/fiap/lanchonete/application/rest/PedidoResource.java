@@ -1,13 +1,15 @@
 package com.fiap.lanchonete.application.rest;
 
+import java.util.List;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
+import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
-import com.fiap.lanchonete.domain.pojo.ListaPedidosDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.EstadoPedidoEmitter;
@@ -39,7 +41,7 @@ public class PedidoResource {
     @Operation(summary = "Lista os pedidos por ordem de checkout")
     @APIResponses(value = { @APIResponse(responseCode = "200"),
             @APIResponse(responseCode = "404") })
-    public ListaPedidosDto listarPedidos() {
+    public List<ListaPedido> listarPedidos() {
         return pedidoService.listarPedidos();
     }
 
