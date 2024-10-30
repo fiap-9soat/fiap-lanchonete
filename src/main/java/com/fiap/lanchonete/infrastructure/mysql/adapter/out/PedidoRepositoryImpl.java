@@ -41,32 +41,6 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido) {
-        List<Pedido> listaResposta = new ArrayList<>();
-        pedidoPanacheRepository.find("""
-                SELECT pe
-                FROM PedidoEntity pe
-                WHERE codigoPedido = ?1
-                AND estadoPedido = EstadoPedido.INICIADO
-                """,
-                pedido.getCodigoPedido()).stream()
-                .forEach(entidade -> listaResposta.add(pedidoEntityMapper.toDomain(entidade)));
-        return listaResposta;
-    }
-
-    @Override
-    public Integer retornaMaiorCodigoPedido(Pedido pedido) {
-        return pedidoPanacheRepository.getEntityManager()
-                .createQuery(
-                        """
-                                SELECT IFNULL(MAX(pe.codigoPedido)+1, "1")
-                                FROM PedidoEntity pe
-                                    """,
-                        Integer.class)
-                .getSingleResult();
-    }
-
-    @Override
     public List<PedidoAlimento> listarPedidos() {
         List<PedidoEntity> listaPedidos = pedidoPanacheRepository.find("""
                 SELECT pe

@@ -10,10 +10,6 @@ public interface PedidoRepository {
 
     List<Pedido> checaSeClienteJaTemPedido(Pedido pedido);
 
-    List<Pedido> checaPedidoDeCLienteAnonimo(Pedido pedido);
-
-    Integer retornaMaiorCodigoPedido(Pedido pedido);
-
     List<PedidoAlimento> listarPedidos();
 
     void atualizarPedido(Pedido pedido);
