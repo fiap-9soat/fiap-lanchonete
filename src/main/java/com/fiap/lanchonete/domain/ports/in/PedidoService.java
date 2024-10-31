@@ -9,20 +9,18 @@ import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 public interface PedidoService {
 
-    public List<ListaPedido> listarPedidos();
+    List<ListaPedido> listarPedidos();
 
-    public Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception;
+    List<ListaPedido> listarPedidosPorCodigoCliente(Integer codigoCliente);
 
-    public void editarPedido(CreatePedidoDto dto) throws Exception;
+    Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception;
 
-    public void removerPedido(CreatePedidoDto dto) throws Exception;
+    void editarPedido(CreatePedidoDto dto) throws Exception;
+
+    void removerPedido(CreatePedidoDto dto) throws Exception;
 
     Pedido buscarPedidoPorId(Integer id);
 
-    List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente);
-
-    public void atualizar(Pedido pedido);
-
-    public void modificarEstado(Integer id, EstadoPedido estadoPedido);
+    void modificarEstado(Integer id, EstadoPedido estadoPedido);
 
 }

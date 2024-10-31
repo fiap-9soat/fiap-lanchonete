@@ -2,6 +2,7 @@ package com.fiap.lanchonete.application.rest;
 
 import java.util.List;
 
+import jakarta.ws.rs.*;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -16,13 +17,6 @@ import com.fiap.lanchonete.domain.ports.out.EstadoPedidoEmitter;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import lombok.AllArgsConstructor;
 
@@ -43,6 +37,15 @@ public class PedidoResource {
             @APIResponse(responseCode = "404") })
     public List<ListaPedido> listarPedidos() {
         return pedidoService.listarPedidos();
+    }
+
+    @GET
+    @Path("{codigoCliente}")
+    @Operation(summary = "Lista os pedidos feitos por um cliente")
+    @APIResponses(value = { @APIResponse(responseCode = "200"),
+            @APIResponse(responseCode = "404") })
+    public List<ListaPedido> listarPedidosPorCliente(@PathParam("codigoCliente") Integer codigoCliente) {
+        return pedidoService.listarPedidosPorCodigoCliente(codigoCliente);
     }
 
     @POST

@@ -9,6 +9,7 @@ import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
+import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
@@ -35,13 +36,23 @@ public class PedidoServiceImpl implements PedidoService {
 
     HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
 
-    @Override
-    public List<ListaPedido> listarPedidos() {
-        List<ListaPedido> listaPedidosFormatada = new ArrayList<>();
-        List<Pedido> listaPedidos = pedidoRepository.listarPedidos();
-        List<PedidoAlimento> listaPedidosAlimento = pedidoAlimentoRepository.listarPedidosAlimentos();
+    private void preencherListaPedido(List<ListaPedido> listaPedidosFormatada, List<Pedido> listaPedidos) {
+        for (Pedido pedido : listaPedidos) {
+            List<PedidoAlimentoLista> pedidoAlimentos = pedidoAlimentoRepository
+                    .listarPorCodigoPedido(pedido.getCodigoPedido())
+                    .stream()
+                    .map(pedidoAlimentoMapper::toDomain)
+                    .toList();
 
-        return listaPedidosFormatada;
+            ListaPedido listaPedido = ListaPedido
+                    .builder()
+                    .tsUltimoPedido(pedido.getTsUltimoPedido())
+                    .listaPedidos(pedidoAlimentos)
+                    .codigoPedido(pedido.getCodigoPedido())
+                    .build();
+
+            listaPedidosFormatada.add(listaPedido);
+        }
     }
 
     @Override
@@ -50,18 +61,22 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
-        return pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
+    public List<ListaPedido> listarPedidos() {
+        List<ListaPedido> listaPedidosFormatada = new ArrayList<>();
+        List<Pedido> listaPedidos = pedidoRepository.listarPedidos();
+        preencherListaPedido(listaPedidosFormatada, listaPedidos);
+
+        return listaPedidosFormatada;
     }
 
     @Override
-    public void atualizar(Pedido pedido) {
-        Pedido pedidoPersistido = pedidoRepository.buscarPedidoPorId(pedido.getCodigoPedido());
-        if (pedido.getEstadoPedido() != pedidoPersistido.getEstadoPedido()) {
-            throw new NotAllowedException("O estado do pedido só pode ser alterado por eventos.");
-        }
+    public List<ListaPedido> listarPedidosPorCodigoCliente(Integer codigoCliente) {
+        List<ListaPedido> listaPedidosFormatada = new ArrayList<>();
+        List<Pedido> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
 
-        pedidoRepository.atualizarPedido(pedido);
+        preencherListaPedido(listaPedidosFormatada, pedidos);
+
+        return listaPedidosFormatada;
     }
 
     @Override
@@ -96,8 +111,8 @@ public class PedidoServiceImpl implements PedidoService {
 
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
-        pedidoAlimentoRepository.checarSeTipoAlimentoJáExiste(pedidoAlimento);
-        pedidoAlimentoRepository.inserirAlimentoPedido(pedidoAlimento);
+        pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
+        pedidoAlimentoRepository.inserir(pedidoAlimento);
         historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento);
 
         return codigoPedido;
@@ -115,7 +130,7 @@ public class PedidoServiceImpl implements PedidoService {
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
 
-        pedidoAlimentoRepository.editarPedidoAlimento(pedidoAlimento);
+        pedidoAlimentoRepository.editar(pedidoAlimento);
     }
 
     @Override
@@ -130,7 +145,7 @@ public class PedidoServiceImpl implements PedidoService {
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
 
-        pedidoAlimentoRepository.removerPedidoAlimento(pedidoAlimento);
+        pedidoAlimentoRepository.remover(pedidoAlimento);
 
     }
 }

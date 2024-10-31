@@ -20,13 +20,13 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
     PedidoAlimentoEntityMapper pedidoAlimentoEntityMapper;
 
     @Override
-    public void inserirAlimentoPedido(PedidoAlimento pedidoAlimento) {
+    public void inserir(PedidoAlimento pedidoAlimento) {
         PedidoAlimentoEntity entity = pedidoAlimentoEntityMapper.toEntity(pedidoAlimento);
         pedidoAlimentoPanacheRepository.persist(entity);
     }
 
     @Override
-    public void checarSeTipoAlimentoJáExiste(PedidoAlimento pedidoAlimento) throws Exception {
+    public void checarSeTipoAlimentoJaExiste(PedidoAlimento pedidoAlimento) throws Exception {
         PedidoAlimentoEntity query = pedidoAlimentoPanacheRepository.findById(new PedidoAlimentoEntityId(
                 pedidoAlimento.getCodigoPedido(),
                 pedidoAlimento.getCodigoTipoAlimento(),
@@ -38,7 +38,7 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
     }
 
     @Override
-    public void removerPedidoAlimento(PedidoAlimento pedidoAlimento) {
+    public void remover(PedidoAlimento pedidoAlimento) {
         pedidoAlimentoPanacheRepository.delete("""
                 FROM PedidoAlimentoEntity pae
                 WHERE codigoPedido = ?1
@@ -51,7 +51,7 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
     }
 
     @Override
-    public void editarPedidoAlimento(PedidoAlimento pedidoAlimento) {
+    public void editar(PedidoAlimento pedidoAlimento) {
         pedidoAlimentoPanacheRepository.update("""
                 UPDATE PedidoAlimentoEntity
                 SET quantidadeAlimento = ?1
@@ -66,7 +66,7 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
     }
 
     @Override
-    public List<PedidoAlimento> listarPedidosAlimentos() {
+    public List<PedidoAlimento> listar() {
         List<PedidoAlimento> listaPedidoAlimento = new ArrayList<>();
         List<PedidoAlimentoEntity> listaPedidoAlimentoEntity = pedidoAlimentoPanacheRepository.find("""
                 SELECT pa
@@ -75,5 +75,14 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
         listaPedidoAlimentoEntity.stream()
                 .forEach(entity -> listaPedidoAlimento.add(pedidoAlimentoEntityMapper.toDomain(entity)));
         return listaPedidoAlimento;
+    }
+
+    @Override
+    public List<PedidoAlimento> listarPorCodigoPedido(Integer codigoPedido) {
+        return pedidoAlimentoPanacheRepository
+                .find("codigoPedido", codigoPedido)
+                .stream()
+                .map(pedidoAlimentoEntityMapper::toDomain)
+                .toList();
     }
 }
