@@ -48,10 +48,10 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Override
     public List<ListaPedido> listarPedidos() {
         ZoneId zone = ZoneId.of("America/Sao_Paulo");
-        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.find("""
+        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
-                """).list();
+                """);
         List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
             return new ListaPedido(
                     entity.getCodigoPedido(),
@@ -83,9 +83,24 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscarPedidosPorCodigoCliente'");
+    public List<ListaPedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoCliente = ?1
+                """, codigoCliente);
+        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
+            return new ListaPedido(
+                    entity.getCodigoPedido(),
+                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
+                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
+                            alimento.getCodigoTipoAlimento(),
+                            alimento.getCodigoAlimento(),
+                            alimento.getQuantidadeAlimento())).toList());
+
+        }).toList();
+        return resposta;
     }
 
     @Override

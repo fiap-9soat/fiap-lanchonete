@@ -36,25 +36,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
 
-    private void preencherListaPedido(List<ListaPedido> listaPedidosFormatada, List<Pedido> listaPedidos) {
-        for (Pedido pedido : listaPedidos) {
-            List<PedidoAlimentoLista> pedidoAlimentos = pedidoAlimentoRepository
-                    .listarPorCodigoPedido(pedido.getCodigoPedido())
-                    .stream()
-                    .map(pedidoAlimentoMapper::toDomain)
-                    .toList();
-
-            ListaPedido listaPedido = ListaPedido
-                    .builder()
-                    .tsUltimoPedido(pedido.getTsUltimoPedido())
-                    .listaPedidos(pedidoAlimentos)
-                    .codigoPedido(pedido.getCodigoPedido())
-                    .build();
-
-            listaPedidosFormatada.add(listaPedido);
-        }
-    }
-
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
         return pedidoRepository.buscarPedidoPorId(id);
@@ -69,12 +50,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<ListaPedido> listarPedidosPorCodigoCliente(Integer codigoCliente) {
-        List<ListaPedido> listaPedidosFormatada = new ArrayList<>();
-        List<Pedido> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
+        List<ListaPedido> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
 
-        preencherListaPedido(listaPedidosFormatada, pedidos);
-
-        return listaPedidosFormatada;
+        return pedidos;
     }
 
     @Override
