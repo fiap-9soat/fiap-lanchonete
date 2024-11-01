@@ -9,9 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
-import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
-import com.fiap.lanchonete.domain.pojo.CheckoutPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -60,41 +58,41 @@ public class PedidoResource {
     }
 
     @PUT
-    @Path("/")
+    @Path("/{codigoPedido}")
     @ResponseStatus(200)
     @Transactional(rollbackOn = Exception.class)
-    @Operation(summary = "Edita um pedido.")
-    public void editarPedido(
-            CreatePedidoDto dto) throws Exception {
-        pedidoService.editarPedido(dto);
+    @Operation(summary = "Edita um pedido. Para alterações de estado, utilizar o recurso /estado.")
+    public void editarPedido(@PathParam("codigoPedido") Integer codigoPedido, CreatePedidoDto dto) throws Exception {
+        pedidoService.editarPedido(codigoPedido, dto);
     }
 
     @DELETE
-    @Path("/")
+    @Path("/{codigoPedido}")
     @ResponseStatus(200)
     @Transactional(rollbackOn = Exception.class)
-    @Operation(summary = "Remove um alimento do pedido.")
+    @Operation(summary = "Cancela e apaga o pedido.")
     public void removerPedido(
-            CreatePedidoDto dto) throws Exception {
-        pedidoService.removerPedido(dto);
+            @PathParam("codigoPedido") Integer codigoPedido) throws Exception {
+        pedidoService.removerPedido(codigoPedido);
     }
 
     @POST
     @Path("/estado")
     @ResponseStatus(200)
-    @Operation(summary = "Registra um evento de alteração de estado do pedido.")
+    @Operation(summary = "Registra um evento de alteração de estado do pedido. Também utilizado para checkout e cancelamento.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
         estadoPedidoEmitter.emitir(dto);
     }
 
-    @PATCH
-    @Path("/checkout")
-    @ResponseStatus(200)
-    @Transactional(rollbackOn = Exception.class)
-    @Operation(summary = "Realiza o checkout do cliente para o início do preparo do pedido")
-    public void checkoutPedido(CheckoutPedidoDto dto) {
-        pedidoService.fazerCheckoutPedido(dto);
-        estadoPedidoEmitter.emitir(new MudancaEstadoPedido(dto.getCodigoPedido(), EstadoPedido.RECEBIDO));
-    }
+    // TODO: Nagano, movi a lógica disso pro PedidoService#modificarEstado, assim tudo vai passar pelo RabbitMQ
+//    @PATCH
+//    @Path("/checkout")
+//    @ResponseStatus(200)
+//    @Transactional(rollbackOn = Exception.class)
+//    @Operation(summary = "Realiza o checkout do cliente para o início do preparo do pedido")
+//    public void checkoutPedido(CheckoutPedidoDto dto) {
+//        pedidoService.fazerCheckoutPedido(dto);
+//        estadoPedidoEmitter.emitir(new MudancaEstadoPedido(dto.getCodigoPedido(), EstadoPedido.RECEBIDO));
+//    }
 
 }

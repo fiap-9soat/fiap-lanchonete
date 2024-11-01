@@ -5,7 +5,6 @@ import java.util.List;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.pojo.CheckoutPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 public interface PedidoService {
@@ -16,14 +15,12 @@ public interface PedidoService {
 
     Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception;
 
-    void editarPedido(CreatePedidoDto dto) throws Exception;
+    void editarPedido(Integer codigoPedido, CreatePedidoDto dto) throws Exception;
 
-    void removerPedido(CreatePedidoDto dto) throws Exception;
+    void removerPedido(Integer codigoPedido) throws Exception;
 
     Pedido buscarPedidoPorId(Integer id);
 
     void modificarEstado(Integer id, EstadoPedido estadoPedido);
-
-    void fazerCheckoutPedido(CheckoutPedidoDto dto);
 
 }
