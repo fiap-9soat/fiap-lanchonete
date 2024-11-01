@@ -84,9 +84,6 @@ public class PedidoResource {
     @ResponseStatus(200)
     @Operation(summary = "Registra um evento de alteração de estado do pedido.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
-        if (dto.estadoPedido().equals(EstadoPedido.FINALIZADO)) {
-            pedidoService.finalizarPedido();
-        }
         estadoPedidoEmitter.emitir(dto);
     }
 

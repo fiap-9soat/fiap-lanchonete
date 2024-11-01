@@ -85,4 +85,13 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
                 .map(pedidoAlimentoEntityMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public void removerPorCodigoPedido(Integer codigoPedido) {
+        pedidoAlimentoPanacheRepository.delete("""
+                FROM PedidoAlimentoEntity pae
+                WHERE codigoPedido = ?1
+                """,
+                codigoPedido);
+    }
 }

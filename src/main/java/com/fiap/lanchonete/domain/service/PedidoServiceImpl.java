@@ -61,11 +61,22 @@ public class PedidoServiceImpl implements PedidoService {
         if (pedido == null) {
             throw new NotFoundException("Pedido não foi encontrado na base de dados.");
         }
-        // Adiciona o pedido atual no histórico
-        historicoPedidoService.registrarPedido(id, pedido);
-
+        Integer codigoPedido = pedido.getCodigoPedido();
         pedido.setEstadoPedido(estadoPedido);
-        pedidoRepository.atualizarPedido(pedido);
+
+        if (estadoPedido.equals(EstadoPedido.FINALIZADO)) {
+            pedidoRepository.removerPedido(codigoPedido);
+            List<PedidoAlimento> listaPedidoAlimentos = pedidoAlimentoRepository.listarPorCodigoPedido(codigoPedido);
+            pedidoAlimentoRepository.removerPorCodigoPedido(codigoPedido);
+
+            listaPedidoAlimentos.stream()
+                    .forEach(alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento));
+        } else {
+            pedido = pedidoRepository.atualizarPedido(pedido);
+        }
+
+        // Adiciona o pedido modificado no histórico
+        historicoPedidoService.registrarPedido(codigoPedido, pedido);
     }
 
     @Override
@@ -125,12 +136,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedidoAlimentoRepository.remover(pedidoAlimento);
         // TODO adicionar no histórico
-    }
-
-    @Override
-    public void finalizarPedido() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finalizarPedido'");
     }
 
     @Override

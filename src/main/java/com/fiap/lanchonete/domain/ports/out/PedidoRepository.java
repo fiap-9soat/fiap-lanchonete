@@ -12,7 +12,7 @@ public interface PedidoRepository {
 
     List<ListaPedido> listarPedidos();
 
-    void atualizarPedido(Pedido pedido);
+    Pedido atualizarPedido(Pedido pedido);
 
     void removerPedido(Integer codigoPedido);
 

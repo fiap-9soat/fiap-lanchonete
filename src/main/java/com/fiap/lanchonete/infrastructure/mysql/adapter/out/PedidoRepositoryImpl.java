@@ -67,9 +67,10 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public void atualizarPedido(Pedido pedido) {
+    public Pedido atualizarPedido(Pedido pedido) {
         PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
         pedidoPanacheRepository.persist(entity);
+        return pedidoEntityMapper.toDomain(entity);
     }
 
     @Override

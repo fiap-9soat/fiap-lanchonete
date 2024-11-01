@@ -16,4 +16,6 @@ public interface PedidoAlimentoRepository {
     List<PedidoAlimento> listar();
 
     List<PedidoAlimento> listarPorCodigoPedido(Integer codigoPedido);
+
+    public void removerPorCodigoPedido(Integer codigoPedido);
 }

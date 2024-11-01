@@ -24,8 +24,6 @@ public interface PedidoService {
 
     void modificarEstado(Integer id, EstadoPedido estadoPedido);
 
-    void finalizarPedido();
-
     void fazerCheckoutPedido(CheckoutPedidoDto dto);
 
 }
