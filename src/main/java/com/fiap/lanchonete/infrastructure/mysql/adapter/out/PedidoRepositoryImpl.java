@@ -1,9 +1,13 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
@@ -42,15 +46,24 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<Pedido> listarPedidos() {
-        List<Pedido> listaPedidos = new ArrayList<>();
+    public List<ListaPedido> listarPedidos() {
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.find("""
                 SELECT pe
                 FROM PedidoEntity pe
                 """).list();
-        listaPedidosEntity.stream().forEach(entity -> listaPedidos.add(pedidoEntityMapper.toDomain(entity)));
+        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
+            return new ListaPedido(
+                    entity.getCodigoPedido(),
+                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
+                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
+                            alimento.getCodigoTipoAlimento(),
+                            alimento.getCodigoAlimento(),
+                            alimento.getQuantidadeAlimento())).toList());
 
-        return listaPedidos;
+        }).toList();
+
+        return resposta;
     }
 
     @Override
@@ -73,6 +86,18 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     public List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'buscarPedidosPorCodigoCliente'");
+    }
+
+    @Override
+    public void fazerCheckoutPedido(Pedido pedido) {
+        pedidoPanacheRepository.update("""
+                UPDATE PedidoEntity
+                SET estadoPedido = EstadoPedido.RECEBIDO,
+                tsUltimoPedido = ?1
+                WHERE codigoPedido = ?2
+                """,
+                LocalDateTime.now(),
+                pedido.getCodigoPedido());
     }
 
 }

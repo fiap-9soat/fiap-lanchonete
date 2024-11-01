@@ -9,7 +9,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
+import com.fiap.lanchonete.domain.pojo.CheckoutPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -50,7 +52,7 @@ public class PedidoResource {
 
     @POST
     @Path("/")
-    @Operation(summary = "Cria um pedido caso não existe e adiciona os itens nesse pedido.")
+    @Operation(summary = "Cria um pedido caso não exista e adiciona os itens nesse pedido.")
     @Transactional(rollbackOn = Exception.class)
     public Integer criarPedido(
             CreatePedidoDto dto) throws Exception {
@@ -60,8 +62,8 @@ public class PedidoResource {
     @PUT
     @Path("/")
     @ResponseStatus(200)
-    @Operation(summary = "Edita um pedido.")
     @Transactional(rollbackOn = Exception.class)
+    @Operation(summary = "Edita um pedido.")
     public void editarPedido(
             CreatePedidoDto dto) throws Exception {
         pedidoService.editarPedido(dto);
@@ -70,8 +72,8 @@ public class PedidoResource {
     @DELETE
     @Path("/")
     @ResponseStatus(200)
-    @Operation(summary = "Remove um alimento do pedido.")
     @Transactional(rollbackOn = Exception.class)
+    @Operation(summary = "Remove um alimento do pedido.")
     public void removerPedido(
             CreatePedidoDto dto) throws Exception {
         pedidoService.removerPedido(dto);
@@ -82,7 +84,20 @@ public class PedidoResource {
     @ResponseStatus(200)
     @Operation(summary = "Registra um evento de alteração de estado do pedido.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
+        if (dto.estadoPedido().equals(EstadoPedido.FINALIZADO)) {
+            pedidoService.finalizarPedido();
+        }
         estadoPedidoEmitter.emitir(dto);
+    }
+
+    @PATCH
+    @Path("/checkout")
+    @ResponseStatus(200)
+    @Transactional(rollbackOn = Exception.class)
+    @Operation(summary = "Realiza o checkout do cliente para o início do preparo do pedido")
+    public void checkoutPedido(CheckoutPedidoDto dto) {
+        pedidoService.fazerCheckoutPedido(dto);
+        estadoPedidoEmitter.emitir(new MudancaEstadoPedido(dto.getCodigoPedido(), EstadoPedido.RECEBIDO));
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.pojo.CheckoutPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 public interface PedidoService {
@@ -22,5 +23,9 @@ public interface PedidoService {
     Pedido buscarPedidoPorId(Integer id);
 
     void modificarEstado(Integer id, EstadoPedido estadoPedido);
+
+    void finalizarPedido();
+
+    void fazerCheckoutPedido(CheckoutPedidoDto dto);
 
 }

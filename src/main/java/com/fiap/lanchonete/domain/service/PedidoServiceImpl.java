@@ -10,6 +10,7 @@ import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
+import com.fiap.lanchonete.domain.pojo.CheckoutPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
@@ -17,7 +18,6 @@ import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
-import jakarta.ws.rs.NotAllowedException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -62,11 +62,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<ListaPedido> listarPedidos() {
-        List<ListaPedido> listaPedidosFormatada = new ArrayList<>();
-        List<Pedido> listaPedidos = pedidoRepository.listarPedidos();
-        preencherListaPedido(listaPedidosFormatada, listaPedidos);
+        List<ListaPedido> listaPedidos = pedidoRepository.listarPedidos();
 
-        return listaPedidosFormatada;
+        return listaPedidos;
     }
 
     @Override
@@ -131,6 +129,8 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoAlimento.setCodigoPedido(codigoPedido);
 
         pedidoAlimentoRepository.editar(pedidoAlimento);
+
+        // TODO adicionar no histórico
     }
 
     @Override
@@ -146,6 +146,21 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoAlimento.setCodigoPedido(codigoPedido);
 
         pedidoAlimentoRepository.remover(pedidoAlimento);
+        // TODO adicionar no histórico
+    }
 
+    @Override
+    public void finalizarPedido() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'finalizarPedido'");
+    }
+
+    @Override
+    public void fazerCheckoutPedido(CheckoutPedidoDto dto) {
+        Pedido pedido = pedidoRepository.buscarPedidoPorId(dto.getCodigoPedido());
+        pedidoRepository.fazerCheckoutPedido(pedido);
+
+        Pedido pedidoAlterado = pedidoRepository.buscarPedidoPorId(dto.getCodigoPedido());
+        historicoPedidoService.registrarPedido(pedidoAlterado.getCodigoPedido(), pedidoAlterado);
     }
 }

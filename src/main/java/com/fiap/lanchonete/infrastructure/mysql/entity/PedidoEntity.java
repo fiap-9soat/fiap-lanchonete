@@ -1,6 +1,8 @@
 package com.fiap.lanchonete.infrastructure.mysql.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -41,13 +43,12 @@ public class PedidoEntity {
     private EstadoPedido estadoPedido;
 
     @OneToMany
-    @Transient
-    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido")
-    private PedidoAlimentoEntity pedidoAlimento;
+    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido", insertable = false, updatable = false)
+    private Set<PedidoAlimentoEntity> pedidoAlimento = new HashSet<>();
 
     @ManyToOne
     @Transient
-    @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo_cliente")
+    @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo_cliente", insertable = false, updatable = false)
     private ClienteEntity cliente;
 
 }

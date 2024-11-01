@@ -2,6 +2,7 @@ package com.fiap.lanchonete.domain.ports.out;
 
 import java.util.List;
 
+import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 
 public interface PedidoRepository {
@@ -9,7 +10,7 @@ public interface PedidoRepository {
 
     List<Pedido> checaSeClienteJaTemPedido(Pedido pedido);
 
-    List<Pedido> listarPedidos();
+    List<ListaPedido> listarPedidos();
 
     void atualizarPedido(Pedido pedido);
 
@@ -18,4 +19,6 @@ public interface PedidoRepository {
     Pedido buscarPedidoPorId(Integer id);
 
     List<Pedido> buscarPedidosPorCodigoCliente(Integer codigoCliente);
+
+    void fazerCheckoutPedido(Pedido pedido);
 }
