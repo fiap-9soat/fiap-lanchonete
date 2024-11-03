@@ -14,5 +14,7 @@ COPY --from=build /app/target/quarkus-app/quarkus/ /deployments/quarkus/
 COPY --from=build /app/target/quarkus-app/* /deployments/
 
 ENV DB_URL=db:3306
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=root
 
 ENTRYPOINT ["java", "-jar", "/deployments/quarkus-run.jar"]
