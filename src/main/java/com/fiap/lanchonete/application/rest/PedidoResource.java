@@ -40,7 +40,7 @@ public class PedidoResource {
     }
 
     @GET
-    @Path("{codigoCliente}")
+    @Path("/cliente/{codigoCliente}")
     @Operation(summary = "Lista os pedidos feitos por um cliente")
     @APIResponses(value = { @APIResponse(responseCode = "200"),
             @APIResponse(responseCode = "404") })
@@ -83,16 +83,4 @@ public class PedidoResource {
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
         estadoPedidoEmitter.emitir(dto);
     }
-
-    // TODO: Nagano, movi a lógica disso pro PedidoService#modificarEstado, assim tudo vai passar pelo RabbitMQ
-//    @PATCH
-//    @Path("/checkout")
-//    @ResponseStatus(200)
-//    @Transactional(rollbackOn = Exception.class)
-//    @Operation(summary = "Realiza o checkout do cliente para o início do preparo do pedido")
-//    public void checkoutPedido(CheckoutPedidoDto dto) {
-//        pedidoService.fazerCheckoutPedido(dto);
-//        estadoPedidoEmitter.emitir(new MudancaEstadoPedido(dto.getCodigoPedido(), EstadoPedido.RECEBIDO));
-//    }
-
 }

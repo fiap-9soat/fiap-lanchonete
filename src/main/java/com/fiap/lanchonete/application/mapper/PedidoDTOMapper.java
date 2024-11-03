@@ -23,7 +23,7 @@ public interface PedidoDTOMapper extends PedidoMapper {
 
     @Override
     @Mapping(source = "codigoCliente", target = "codigoCliente")
-    @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(target = "tsUltimoPedido", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "codigoPedido", ignore = true)
     Pedido toDomain(CreatePedidoDto dto);
 }
