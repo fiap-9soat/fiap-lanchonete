@@ -1,6 +1,17 @@
-
-
 services:
+  app:
+      container_name: lanchonete
+      restart: always
+      build: 
+        dockerfile: Dockerfile
+      ports:
+        - '8080:8080'
+      networks:
+        - lanchonete-network
+      depends_on:
+        db:
+          condition: service_healthy
+
   db:
     image: mysql:8.3
     environment:
@@ -11,10 +22,15 @@ services:
 
     ports:
       - "3306:3306"
+    expose:
+      - "3306"
 
-    restart: no
+    restart: always
     volumes:
       - db:/var/lib/mysql
+
+    networks:
+      - lanchonete-network
 
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
@@ -35,6 +51,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: fiap
       RABBITMQ_DEFAULT_PASS: fiap
+    
+    networks:
+      - lanchonete-network
 
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -45,3 +64,7 @@ services:
 volumes:
   db:
   rabbitmq:
+
+networks:
+  lanchonete-network:
+    driver: bridge
