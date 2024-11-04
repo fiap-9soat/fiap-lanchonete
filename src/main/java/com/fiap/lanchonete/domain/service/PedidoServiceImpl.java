@@ -114,7 +114,7 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
 
         if (!EstadoPedido.INICIADO.equals(pedido.getEstadoPedido())) {
-            throw new NotAcceptableException("Pedido não está no estado correto");
+            throw new NotAcceptableException("Checkout desse pedido já realizado");
         }
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
