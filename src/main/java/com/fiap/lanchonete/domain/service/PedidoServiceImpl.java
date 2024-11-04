@@ -3,6 +3,7 @@ package com.fiap.lanchonete.domain.service;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
+import com.fiap.lanchonete.domain.enums.TipoAlteracao;
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.ListaPedido;
@@ -15,6 +16,7 @@ import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
+import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -68,14 +70,10 @@ public class PedidoServiceImpl implements PedidoService {
 
             // Adiciona alimentos no histórico
             listaPedidoAlimentos
-                    .forEach(alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento));
+                    .forEach(alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento,
+                            TipoAlteracao.D));
 
             pedidoRepository.removerPedido(codigoPedido);
-        } else if (estadoPedido.equals(EstadoPedido.RECEBIDO)) {
-            // Realiza checkout do pedido...
-            pedidoRepository.fazerCheckoutPedido(pedido);
-            // Atualiza variavel com nova versão do pedido
-            pedido = pedidoRepository.buscarPedidoPorId(pedido.getCodigoPedido());
         } else {
             pedido = pedidoRepository.atualizarPedido(pedido);
         }
@@ -105,7 +103,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedidoAlimento.setCodigoPedido(codigoPedido);
         pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
         pedidoAlimentoRepository.inserir(pedidoAlimento);
-        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento);
+        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
 
         return codigoPedido;
     }
@@ -113,17 +111,21 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void editarPedido(Integer codigoPedido, CreatePedidoDto createPedidoDto) throws Exception {
         // Lança exceção caso pedido não exista
-        pedidoRepository.buscarPedidoPorId(codigoPedido);
+        Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
 
+        if (!EstadoPedido.INICIADO.equals(pedido.getEstadoPedido())) {
+            throw new NotAcceptableException("Pedido não está no estado correto");
+        }
         PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
         pedidoAlimento.setCodigoPedido(codigoPedido);
 
         pedidoAlimentoRepository.editar(pedidoAlimento);
-        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento);
+        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.A);
     }
 
     /**
      * Cancela e apaga o pedido.
+     * 
      * @param codigoPedido
      * @throws Exception
      */

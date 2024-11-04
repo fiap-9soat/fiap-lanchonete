@@ -13,6 +13,7 @@ import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -69,7 +70,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Override
     public Pedido atualizarPedido(Pedido pedido) {
         PedidoEntity entity = pedidoEntityMapper.toEntity(pedido);
-        pedidoPanacheRepository.persist(entity);
+        pedidoPanacheRepository.getEntityManager().merge(entity);
         return pedidoEntityMapper.toDomain(entity);
     }
 
@@ -103,17 +104,4 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         }).toList();
         return resposta;
     }
-
-    @Override
-    public void fazerCheckoutPedido(Pedido pedido) {
-        pedidoPanacheRepository.update("""
-                UPDATE PedidoEntity
-                SET estadoPedido = EstadoPedido.RECEBIDO,
-                tsUltimoPedido = ?1
-                WHERE codigoPedido = ?2
-                """,
-                LocalDateTime.now(),
-                pedido.getCodigoPedido());
-    }
-
 }
