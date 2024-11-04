@@ -1,79 +1,105 @@
-# code-with-quarkus
+# fiap-lanchonete
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Projeto para Tech Challenge da turma 9SOAT, simulando a API de uma lanchonete.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Objetivo
 
-## Running the application in dev mode
+Este repositŕório contém uma implementação em Quarkus da Arquitetura Hexagonal em um projeto de API para lanchonete.
 
-You can run your application in dev mode that enables live coding using:
+### Capacidades
 
-```shell script
-./mvnw compile quarkus:dev
+No momento, a API permite:
+
+- Cadastro e edição de clientes
+- Criação e edição de alimentos (que representam as categorias dos pedidos)
+- Criação e edição de pedidos
+
+### Instalação
+
+#### Pré-requisitos
+
+É necessário ter a ferramenta `Docker` e o plugin `docker-compose` instalados para utilizar o projeto.
+
+Para verificar se as ferramentas existem no seu sistema, abra um terminal e utilize:
+
+```shell
+docker --version
+# Docker version 27.2.1, build 9e34c9b
+docker compose version
+# Docker Compose version v2.29.2
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04) tutorial para instalação das ferramentas.
 
-## Packaging and running the application
+#### Em desenvolvimento
 
-The application can be packaged using:
+Para inicializar o projeto em ambiente de desenvolvimento, utilize:
 
-```shell script
-./mvnw package
+```shell
+docker compose -f ./docker-compose.dev.yml up -d
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+As dependências necessárias para funcionamento do projeto serão inicializadas com valores padrão de usuario e senha  
+para autenticação local.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Importante: não disponibilizar essa versão em produção, já que os segredos são facilmente descobríveis.
 
-If you want to build an _über-jar_, execute the following command:
+A API estará disponível na porta padrão `8080` após inicialização.
+Para visualizar a documentação, acesse o endereço no seu navegador:
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+```
+http://localhost:8080/q/docs
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+#### Em produção
 
-## Creating a native executable
+Antes de inicializar o projeto, defina as variaveis de ambiente necessárias para inicialização no seu terminal:
 
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+```shell
+# Adicione valores após o '='
+# Ex.:
+# export DB_USER=fiap
+export DB_USER=
+export DB_PASS=
+export RABBITMQ_USER=
+export RABBITMQ_PASS=
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+Alternativamente, em um Linux servidor controlado, essas variaveis também podem ser adicionadas no arquivo `/etc/environment` do sistema.
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+Em seguida, inicie as imagens de produção utilizando o comando:
+
+```shell
+docker compose -f ./docker-compose.prod.yml up -d
 ```
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+É recomendado excluir o acesso a recursos `/q/` para evitar brechas de segurança no acesso direto a documentação Swagger.
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+### Contribuindo
 
-## Related Guides
+Para contribuir com o desenvolvimento do projeto,
+recomenda-se instalar a versão `21` do `JDK`, além das dependencias padrão `Docker` e `Docker Compose`.
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Flyway ([guide](https://quarkus.io/guides/flyway)): Handle your database schema migrations
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - MySQL ([guide](https://quarkus.io/guides/datasource)): Connect to the MySQL database via JDBC
+Em seguida, execute os containers das dependências do projeto:
 
-## Provided Code
+```shell
+# Executa o arquivo 'docker-compose.yml' que contém
+# a definição do MySQL e RabbitMQ para desenvolvimento local
+docker compose up -d
+```
 
-### Hibernate ORM
+O acesso ao `MySQL` ficará disponível na porta padrão `3306`.
+O acesso ao `RabbitMQ` ficara disponível na porta padrão `5672`.
+Para acessar o `RabbitMQ Dashboard`, utilize a porta `15672`.
 
-Create your first JPA entity
+Para inicializar a API em Java Quarkus, basta executar:
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
+```shell
+./mvnw quarkus:dev
+```
 
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
+A API estará disponível para acesso na porta padrão `8080`, acesse esse endereço para visualizar a documentação:
 
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+```
+http://localhost:8080/q/docs
+```
