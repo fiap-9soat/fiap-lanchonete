@@ -19,6 +19,4 @@ public interface PedidoRepository {
     Pedido buscarPedidoPorId(Integer id);
 
     List<ListaPedido> buscarPedidosPorCodigoCliente(Integer codigoCliente);
-
-    void fazerCheckoutPedido(Pedido pedido);
 }

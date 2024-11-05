@@ -16,10 +16,10 @@ public class HistoricoPedidoAlimentoServiceImpl implements HistoricoPedidoAlimen
     private final HistoricoPedidoAlimentoMapper historicoPedidoAlimentoMapper;
 
     @Override
-    public void registrarPedidoAlimento(PedidoAlimento pedidoAlimento) {
+    public void registrarPedidoAlimento(PedidoAlimento pedidoAlimento, TipoAlteracao tipoAlteracao) {
         HistoricoPedidoAlimento historicoPedidoAlimento = historicoPedidoAlimentoMapper
                 .fromPedidoAlimento(pedidoAlimento);
-        historicoPedidoAlimento.setTipoAlter(TipoAlteracao.I);
+        historicoPedidoAlimento.setTipoAlter(tipoAlteracao);
         historicoPedidoAlimentoRepository.insert(historicoPedidoAlimento);
     }
 }
