@@ -16,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ListaPedido {
     Integer codigoPedido;
+    Integer estadoPedido;
     Instant tsUltimoPedido;
     List<PedidoAlimentoLista> listaPedidos;
 }

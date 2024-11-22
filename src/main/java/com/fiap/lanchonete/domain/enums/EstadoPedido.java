@@ -13,4 +13,8 @@ public enum EstadoPedido {
     EstadoPedido(int codigoEstado) {
         this.codigoEstado = codigoEstado;
     }
+
+    public int getCodigo() {
+        return this.codigoEstado;
+    }
 }

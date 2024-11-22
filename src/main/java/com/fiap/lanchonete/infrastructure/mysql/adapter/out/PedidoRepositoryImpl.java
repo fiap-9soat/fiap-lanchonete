@@ -3,8 +3,10 @@ package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
@@ -52,17 +54,21 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
+                WHERE estadoPedido NOT IN (EstadoPedido.CANCELADO,
+                    EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """);
-        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
-            return new ListaPedido(
-                    entity.getCodigoPedido(),
-                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
-                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
-                            alimento.getCodigoTipoAlimento(),
-                            alimento.getCodigoAlimento(),
-                            alimento.getQuantidadeAlimento())).toList());
+        List<ListaPedido> resposta = listaPedidosEntity.stream()
+                .map(entity -> {
+                    return new ListaPedido(
+                            entity.getCodigoPedido(),
+                            entity.getEstadoPedido().getCodigo(),
+                            entity.getTsUltimoPedido().atZone(zone).toInstant(),
+                            entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
+                                    alimento.getCodigoTipoAlimento(),
+                                    alimento.getCodigoAlimento(),
+                                    alimento.getQuantidadeAlimento())).toList());
 
-        }).toList();
+                }).toList();
 
         return resposta;
     }
@@ -91,10 +97,13 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 SELECT pe
                 FROM PedidoEntity pe
                 WHERE codigoCliente = ?1
+                AND estadoPedido NOT IN (EstadoPedido.CANCELADO,
+                    EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """, codigoCliente);
         List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
             return new ListaPedido(
                     entity.getCodigoPedido(),
+                    entity.getEstadoPedido().getCodigo(),
                     entity.getTsUltimoPedido().atZone(zone).toInstant(),
                     entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
                             alimento.getCodigoTipoAlimento(),

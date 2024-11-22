@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
@@ -15,6 +16,7 @@ import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 
 import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
@@ -43,6 +45,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<ListaPedido> listarPedidos() {
         List<ListaPedido> listaPedidos = pedidoRepository.listarPedidos();
+        listaPedidos = listaPedidos.stream().sorted(Comparator.comparing(ListaPedido::getEstadoPedido, (s1, s2) -> {
+            return s2.compareTo(s1);
+        }).thenComparing(ListaPedido::getTsUltimoPedido)).toList();
 
         return listaPedidos;
     }
@@ -50,6 +55,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<ListaPedido> listarPedidosPorCodigoCliente(Integer codigoCliente) {
         List<ListaPedido> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
+        pedidos = pedidos.stream().sorted(Comparator.comparing(ListaPedido::getEstadoPedido, (s1, s2) -> {
+            return s2.compareTo(s1);
+        }).thenComparing(ListaPedido::getTsUltimoPedido)).toList();
 
         return pedidos;
     }
