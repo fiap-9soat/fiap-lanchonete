@@ -8,13 +8,13 @@ public enum EstadoPedido {
     FINALIZADO(4),
     CANCELADO(-1);
 
-    final int codigoEstado;
+    final Integer codigoEstado;
 
-    EstadoPedido(int codigoEstado) {
+    EstadoPedido(Integer codigoEstado) {
         this.codigoEstado = codigoEstado;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return this.codigoEstado;
     }
 }

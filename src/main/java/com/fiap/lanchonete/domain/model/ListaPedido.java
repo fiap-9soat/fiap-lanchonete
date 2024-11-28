@@ -17,6 +17,7 @@ import lombok.Setter;
 public class ListaPedido {
     Integer codigoPedido;
     Integer estadoPedido;
+    String estadoPagamento;
     Instant tsUltimoPedido;
     List<PedidoAlimentoLista> listaPedidos;
 }

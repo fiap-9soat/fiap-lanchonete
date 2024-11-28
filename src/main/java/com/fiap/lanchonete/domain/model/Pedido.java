@@ -20,4 +20,5 @@ public class Pedido {
     private Integer codigoCliente;
     private Instant tsUltimoPedido;
     private EstadoPedido estadoPedido;
+    private String estadoPagamento;
 }

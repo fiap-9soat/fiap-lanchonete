@@ -22,5 +22,4 @@ public interface PedidoService {
     Pedido buscarPedidoPorId(Integer id);
 
     void modificarEstado(Integer id, EstadoPedido estadoPedido);
-
 }

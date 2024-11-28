@@ -1,12 +1,9 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
@@ -15,7 +12,6 @@ import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -62,6 +58,8 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                     return new ListaPedido(
                             entity.getCodigoPedido(),
                             entity.getEstadoPedido().getCodigo(),
+                            entity.getEstadoPagamento() != null ? entity.getEstadoPagamento().getIndicadorPagamento()
+                                    : null,
                             entity.getTsUltimoPedido().atZone(zone).toInstant(),
                             entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
                                     alimento.getCodigoTipoAlimento(),
@@ -104,6 +102,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             return new ListaPedido(
                     entity.getCodigoPedido(),
                     entity.getEstadoPedido().getCodigo(),
+                    entity.getEstadoPagamento() != null ? entity.getEstadoPagamento().getIndicadorPagamento() : null,
                     entity.getTsUltimoPedido().atZone(zone).toInstant(),
                     entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
                             alimento.getCodigoTipoAlimento(),

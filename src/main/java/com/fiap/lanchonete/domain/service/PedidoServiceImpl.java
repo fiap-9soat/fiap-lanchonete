@@ -3,6 +3,7 @@ package com.fiap.lanchonete.domain.service;
 import java.util.Comparator;
 import java.util.List;
 
+import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.enums.TipoAlteracao;
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
@@ -16,7 +17,6 @@ import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 
 import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
@@ -68,6 +68,15 @@ public class PedidoServiceImpl implements PedidoService {
         if (pedido == null) {
             throw new NotFoundException("Pedido não foi encontrado na base de dados.");
         }
+
+        validarProximoEstado(pedido.getEstadoPedido(), estadoPedido);
+
+        if (estadoPedido.equals(EstadoPedido.EM_PREPARACAO)
+                && (pedido.getEstadoPagamento() == null
+                        || !pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO.getIndicadorPagamento()))) {
+            throw new NotFoundException("O Pagamento precisa ser concluído para que sua preparação se inicie");
+        }
+
         Integer codigoPedido = pedido.getCodigoPedido();
         pedido.setEstadoPedido(estadoPedido);
 
@@ -140,5 +149,11 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void removerPedido(Integer codigoPedido) {
         modificarEstado(codigoPedido, EstadoPedido.CANCELADO);
+    }
+
+    private void validarProximoEstado(EstadoPedido estadoAtual, EstadoPedido estadoRequisitado) {
+        if (estadoRequisitado.getCodigo() != Integer.sum(estadoAtual.getCodigo(), 1)) {
+            throw new NotAcceptableException("Estado requisitado inválido");
+        }
     }
 }

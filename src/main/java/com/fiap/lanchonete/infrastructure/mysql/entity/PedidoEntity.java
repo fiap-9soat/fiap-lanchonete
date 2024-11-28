@@ -6,10 +6,15 @@ import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
+import com.fiap.lanchonete.infrastructure.mysql.utils.EstadoPagamentoConverter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +43,12 @@ public class PedidoEntity {
     private LocalDateTime tsUltimoPedido;
 
     @Column(nullable = false, name = "estado_pedido")
+    @Enumerated(EnumType.ORDINAL)
     private EstadoPedido estadoPedido;
+
+    @Column(name = "estado_pagamento")
+    @Convert(converter = EstadoPagamentoConverter.class)
+    private EstadoPagamento estadoPagamento;
 
     @OneToMany
     @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido", insertable = false, updatable = false)
