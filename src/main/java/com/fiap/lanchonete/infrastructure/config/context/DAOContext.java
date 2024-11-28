@@ -23,8 +23,10 @@ public class DAOContext {
 
     @Produces
     public PedidoRepository PedidoRepository(PedidoPanacheRepository pedidoPanacheRepository,
-            PedidoEntityMapper pedidoEntityMapper) {
-        return new PedidoRepositoryImpl(pedidoPanacheRepository, pedidoEntityMapper);
+            PedidoEntityMapper pedidoEntityMapper, ListaPedidoEntityMapper listaPedidoEntityMapper,
+            PedidoAlimentoListaMapper pedidoAlimentoListaMapper) {
+        return new PedidoRepositoryImpl(pedidoPanacheRepository, pedidoEntityMapper, listaPedidoEntityMapper,
+                pedidoAlimentoListaMapper);
     }
 
     @Produces

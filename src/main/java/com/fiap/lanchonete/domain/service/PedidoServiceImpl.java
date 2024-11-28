@@ -73,7 +73,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         if (estadoPedido.equals(EstadoPedido.EM_PREPARACAO)
                 && (pedido.getEstadoPagamento() == null
-                        || !pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO.getIndicadorPagamento()))) {
+                        || !pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO))) {
             throw new NotFoundException("O Pagamento precisa ser concluído para que sua preparação se inicie");
         }
 
@@ -149,6 +149,15 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void removerPedido(Integer codigoPedido) {
         modificarEstado(codigoPedido, EstadoPedido.CANCELADO);
+    }
+
+    @Override
+    public Boolean consultarEstadoPagamento(Integer codigoPedido) {
+        Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
+        if (pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO)) {
+            return true;
+        }
+        return false;
     }
 
     private void validarProximoEstado(EstadoPedido estadoAtual, EstadoPedido estadoRequisitado) {

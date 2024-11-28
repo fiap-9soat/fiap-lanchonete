@@ -1,21 +1,20 @@
 package com.fiap.lanchonete.infrastructure.mysql.mapper;
 
-import com.fiap.lanchonete.domain.enums.EstadoPagamento;
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import com.fiap.lanchonete.domain.model.ListaPedido;
+import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 
 @Mapper(componentModel = "jakarta")
-public interface PedidoEntityMapper {
-
-    PedidoEntityMapper INSTANCE = Mappers.getMapper(PedidoEntityMapper.class);
+public interface ListaPedidoEntityMapper {
+    ListaPedidoEntityMapper INSTANCE = Mappers.getMapper(ListaPedidoEntityMapper.class);
 
     @Named("instantParaLocalDateTime")
     default LocalDateTime instantParaLocalDateTime(Instant instant) {
@@ -29,16 +28,14 @@ public interface PedidoEntityMapper {
         return localDateTime.atZone(zone).toInstant();
     }
 
-    @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
-    @Mapping(target = "pedidoAlimento", ignore = true)
-    @Mapping(source = "estadoPagamento", target = "estadoPagamento")
-    @Mapping(target = "cliente", ignore = true)
-    PedidoEntity toEntity(Pedido domain);
-
-    @Mapping(source = "codigoCliente", target = "codigoCliente")
     @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "estadoPedido", target = "estadoPedido")
-    @Mapping(source = "estadoPagamento", target = "estadoPagamento")
+    @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
+    PedidoEntity toEntity(ListaPedido domain);
+
+    @Mapping(source = "codigoPedido", target = "codigoPedido")
+    @Mapping(source = "estadoPedido", target = "estadoPedido")
     @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "localDateTimeParaInstant")
-    Pedido toDomain(PedidoEntity domain);
+    @Mapping(target = "listaPedidos", ignore = true)
+    ListaPedido toDomain(PedidoEntity domain);
 }

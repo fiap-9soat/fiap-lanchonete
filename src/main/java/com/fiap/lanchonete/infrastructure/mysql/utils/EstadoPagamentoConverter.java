@@ -21,7 +21,7 @@ public class EstadoPagamentoConverter implements AttributeConverter<EstadoPagame
 
     @Override
     public EstadoPagamento convertToEntityAttribute(Character dbData) {
-        if (dbData == 'A') {
+        if (dbData != null && dbData == 'A') {
             return EstadoPagamento.APROVADO;
         }
         return EstadoPagamento.RECUSADO;

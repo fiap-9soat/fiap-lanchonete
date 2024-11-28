@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
+import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
@@ -96,5 +97,12 @@ public class PedidoResource {
     @Operation(summary = "Registra um evento de alteração de estado do pedido. Também utilizado para checkout e cancelamento.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
         estadoPedidoEmitter.emitir(dto);
+    }
+
+    @GET
+    @Path("/estado/pagamento/{codigoPedido}")
+    @Operation(summary = "Consulta o estado do pagamento do pedido")
+    public Boolean consultaEstadoPagamento(@PathParam("codigoPedido") Integer codigoPedido) {
+        return pedidoService.consultarEstadoPagamento(codigoPedido);
     }
 }

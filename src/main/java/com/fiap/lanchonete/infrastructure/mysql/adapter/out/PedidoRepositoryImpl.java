@@ -6,10 +6,11 @@ import java.util.List;
 
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.ListaPedidoEntityMapper;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoAlimentoListaMapper;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,10 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     PedidoPanacheRepository pedidoPanacheRepository;
 
     PedidoEntityMapper pedidoEntityMapper;
+
+    ListaPedidoEntityMapper listaPedidoEntityMapper;
+
+    PedidoAlimentoListaMapper pedidoAlimentoListaMapper;
 
     @Override
     public Integer criarPedido(Pedido pedido) {
@@ -46,27 +51,19 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     @Override
     public List<ListaPedido> listarPedidos() {
-        ZoneId zone = ZoneId.of("America/Sao_Paulo");
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
                 WHERE estadoPedido NOT IN (EstadoPedido.CANCELADO,
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """);
-        List<ListaPedido> resposta = listaPedidosEntity.stream()
-                .map(entity -> {
-                    return new ListaPedido(
-                            entity.getCodigoPedido(),
-                            entity.getEstadoPedido().getCodigo(),
-                            entity.getEstadoPagamento() != null ? entity.getEstadoPagamento().getIndicadorPagamento()
-                                    : null,
-                            entity.getTsUltimoPedido().atZone(zone).toInstant(),
-                            entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
-                                    alimento.getCodigoTipoAlimento(),
-                                    alimento.getCodigoAlimento(),
-                                    alimento.getQuantidadeAlimento())).toList());
-
-                }).toList();
+        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
+            ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
+                return pedidoAlimentoListaMapper.toDomain(alimento);
+            }).toList());
+            return pedido;
+        }).toList();
 
         return resposta;
     }
@@ -99,16 +96,11 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """, codigoCliente);
         List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
-            return new ListaPedido(
-                    entity.getCodigoPedido(),
-                    entity.getEstadoPedido().getCodigo(),
-                    entity.getEstadoPagamento() != null ? entity.getEstadoPagamento().getIndicadorPagamento() : null,
-                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
-                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
-                            alimento.getCodigoTipoAlimento(),
-                            alimento.getCodigoAlimento(),
-                            alimento.getQuantidadeAlimento())).toList());
-
+            ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
+                return pedidoAlimentoListaMapper.toDomain(alimento);
+            }).toList());
+            return pedido;
         }).toList();
         return resposta;
     }
