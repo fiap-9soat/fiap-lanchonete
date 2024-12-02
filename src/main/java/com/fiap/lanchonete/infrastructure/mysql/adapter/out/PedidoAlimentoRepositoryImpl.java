@@ -10,6 +10,7 @@ import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoAlimentoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoAlimentoEntityId;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoAlimentoEntityMapper;
 
+import jakarta.ws.rs.BadRequestException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -26,14 +27,15 @@ public class PedidoAlimentoRepositoryImpl implements PedidoAlimentoRepository {
     }
 
     @Override
-    public void checarSeTipoAlimentoJaExiste(PedidoAlimento pedidoAlimento) throws Exception {
+    public void checarSeTipoAlimentoJaExiste(PedidoAlimento pedidoAlimento) throws BadRequestException {
         PedidoAlimentoEntity query = pedidoAlimentoPanacheRepository.findById(new PedidoAlimentoEntityId(
                 pedidoAlimento.getCodigoPedido(),
                 pedidoAlimento.getCodigoTipoAlimento(),
                 pedidoAlimento.getCodigoAlimento()));
 
         if (query != null) {
-            throw new Exception("Esse tipo de alimento já foi incluido no sistema. Remova ou edite seu pedido.");
+            throw new BadRequestException(
+                    "Esse tipo de alimento já foi incluido no sistema. Remova ou edite seu pedido.");
         }
     }
 

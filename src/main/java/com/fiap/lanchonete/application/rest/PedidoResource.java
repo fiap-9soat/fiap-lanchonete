@@ -10,7 +10,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 
-import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
@@ -19,6 +18,7 @@ import com.fiap.lanchonete.domain.ports.out.EstadoPedidoEmitter;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -66,7 +66,7 @@ public class PedidoResource {
     @APIResponse(responseCode = "200", description = "Pedido criado com sucesso!")
     @Transactional(rollbackOn = Exception.class)
     public Integer criarPedido(
-            CreatePedidoDto dto) throws Exception {
+            CreatePedidoDto dto) throws BadRequestException {
         return pedidoService.criarPedido(dto);
     }
 

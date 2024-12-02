@@ -18,6 +18,7 @@ import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -100,7 +101,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Integer criarPedido(CreatePedidoDto createPedidoDto) throws Exception {
+    public Integer criarPedido(CreatePedidoDto createPedidoDto) throws BadRequestException {
         Integer codigoPedido = null;
         List<Pedido> checaPedidoExiste;
 
@@ -114,13 +115,21 @@ public class PedidoServiceImpl implements PedidoService {
             codigoPedido = checaPedidoExiste.getFirst().getCodigoPedido();
         }
 
+        final Integer codigoPedidoFinal = codigoPedido;
         historicoPedidoService.registrarPedido(codigoPedido, pedido);
 
-        PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
-        pedidoAlimento.setCodigoPedido(codigoPedido);
-        pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
-        pedidoAlimentoRepository.inserir(pedidoAlimento);
-        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+        createPedidoDto.getListaAlimentos().forEach(alimento -> {
+            try {
+                PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
+                pedidoAlimento.setCodigoPedido(codigoPedidoFinal);
+                pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
+                pedidoAlimentoRepository.inserir(pedidoAlimento);
+                historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+            } catch (BadRequestException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        });
 
         return codigoPedido;
     }
@@ -133,11 +142,14 @@ public class PedidoServiceImpl implements PedidoService {
         if (!EstadoPedido.INICIADO.equals(pedido.getEstadoPedido())) {
             throw new NotAcceptableException("Checkout desse pedido já realizado");
         }
-        PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(createPedidoDto);
-        pedidoAlimento.setCodigoPedido(codigoPedido);
 
-        pedidoAlimentoRepository.editar(pedidoAlimento);
-        historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.A);
+        createPedidoDto.getListaAlimentos().forEach(alimento -> {
+            PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
+            pedidoAlimento.setCodigoPedido(codigoPedido);
+
+            pedidoAlimentoRepository.editar(pedidoAlimento);
+            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.A);
+        });
     }
 
     /**
@@ -165,4 +177,5 @@ public class PedidoServiceImpl implements PedidoService {
             throw new NotAcceptableException("Estado requisitado inválido");
         }
     }
+
 }
