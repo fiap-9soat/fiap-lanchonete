@@ -1,5 +1,7 @@
 package com.fiap.lanchonete.domain.pojo;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +10,8 @@ import lombok.Setter;
 public class ListaItemExternoDto {
     private String titulo;
     private String categoria;
-    private Double valorUnitario;
+    private BigDecimal valorUnitario;
     private Integer quantidade;
     private String medida;
-    private Double valorAgregado;
+    private BigDecimal valorAgregado;
 }

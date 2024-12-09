@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.domain.pojo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.Getter;
@@ -12,6 +13,6 @@ public class PedidoExternoDto {
     private String titulo;
     private String descricao;
     private String urlNotificacao;
-    private Double total;
+    private BigDecimal total;
     private List<ListaItemExternoDto> items;
 }

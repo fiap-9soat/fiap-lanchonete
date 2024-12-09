@@ -1,11 +1,13 @@
 package com.fiap.lanchonete.infrastructure.quarkusrest.dto;
 
+import java.math.BigDecimal;
+
 public record ExternalItemsDto(
         String title,
         String category,
-        Double unit_price,
+        BigDecimal unit_price,
         Integer quantity,
         String unit_measure,
-        Double total_amount) {
+        BigDecimal total_amount) {
 
 }
