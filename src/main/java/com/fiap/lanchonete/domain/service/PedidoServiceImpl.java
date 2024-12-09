@@ -22,9 +22,12 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.jboss.logging.Logger;
 
 @AllArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
+
+    private final Logger logger = Logger.getLogger(PedidoServiceImpl.class);
 
     PedidoRepository pedidoRepository;
 
@@ -37,6 +40,7 @@ public class PedidoServiceImpl implements PedidoService {
     HistoricoPedidoService historicoPedidoService;
 
     HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
+
 
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
@@ -65,6 +69,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void modificarEstado(Integer id, EstadoPedido estadoPedido) {
+        logger.infof("Solicitação de mudança de estado recebida: id: %d - estado: %s", id, estadoPedido);
         Pedido pedido = pedidoRepository.buscarPedidoPorId(id);
         if (pedido == null) {
             throw new NotFoundException("Pedido não foi encontrado na base de dados.");

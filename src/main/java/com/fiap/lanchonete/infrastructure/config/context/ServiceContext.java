@@ -25,11 +25,6 @@ public class ServiceContext {
     }
 
     @Produces
-    public EstadoPedidoListener EstadoPedidoListener(PedidoService pedidoService) {
-        return new EstadoPedidoListenerImpl(pedidoService);
-    }
-
-    @Produces
     public ClienteService clienteService(ClienteRepository clienteRepository,
             ClienteMapper clienteMapper) {
         return new ClienteServiceImpl(clienteRepository, clienteMapper);

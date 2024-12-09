@@ -22,26 +22,6 @@ services:
       timeout: 20s
       retries: 10
 
-  rabbitmq:
-    image: rabbitmq:3.12-management
-    ports:
-      # These will be available at your localhost:
-      - "5672:5672"
-      - "25672:25672" # (erlang) communication between the nodes and CLI tool
-      - "15672:15672" # communication with the web management API
-
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq/
-
-    environment:
-      RABBITMQ_DEFAULT_USER: fiap
-      RABBITMQ_DEFAULT_PASS: fiap
-
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 3
 
 volumes:
   db:

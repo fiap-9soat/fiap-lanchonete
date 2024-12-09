@@ -14,7 +14,6 @@ import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
-import com.fiap.lanchonete.domain.ports.out.EstadoPedidoEmitter;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -38,8 +37,6 @@ import lombok.AllArgsConstructor;
 public class PedidoResource {
 
     PedidoService pedidoService;
-
-    EstadoPedidoEmitter estadoPedidoEmitter;
 
     @GET
     @Operation(summary = "Lista os pedidos por ordem de checkout")
@@ -96,7 +93,7 @@ public class PedidoResource {
     @ResponseStatus(200)
     @Operation(summary = "Registra um evento de alteração de estado do pedido. Também utilizado para checkout e cancelamento.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
-        estadoPedidoEmitter.emitir(dto);
+        pedidoService.modificarEstado(dto.codigoPedido(), dto.estadoPedido());
     }
 
     @GET
