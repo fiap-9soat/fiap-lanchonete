@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.application.rest;
+package com.fiap.lanchonete.application.rest.in;
 
 import java.util.List;
 
@@ -9,11 +9,13 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
+import org.jboss.resteasy.reactive.RestQuery;
 
 import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
+import com.fiap.lanchonete.domain.ports.in.WebhookService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 
 @Path("/pedidos")
@@ -37,6 +40,8 @@ import lombok.AllArgsConstructor;
 public class PedidoResource {
 
     PedidoService pedidoService;
+
+    WebhookService webhookService;
 
     @GET
     @Operation(summary = "Lista os pedidos por ordem de checkout")
@@ -101,5 +106,13 @@ public class PedidoResource {
     @Operation(summary = "Consulta o estado do pagamento do pedido")
     public Boolean consultaEstadoPagamento(@PathParam("codigoPedido") Integer codigoPedido) {
         return pedidoService.consultarEstadoPagamento(codigoPedido);
+    }
+
+    @GET
+    @Path("/notificacao-pagamento")
+    @Operation(summary = "Webhook de inscrição")
+    public Response registraWebhook(@RestQuery String topic, @RestQuery Integer id) {
+        webhookService.registrarNotificacao(topic, id);
+        return Response.ok("Webhook registrado com sucesso").build();
     }
 }

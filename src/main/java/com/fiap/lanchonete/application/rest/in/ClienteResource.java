@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.application.rest;
+package com.fiap.lanchonete.application.rest.in;
 
 import com.fiap.lanchonete.domain.model.Cliente;
 import com.fiap.lanchonete.domain.pojo.CreateClienteDto;

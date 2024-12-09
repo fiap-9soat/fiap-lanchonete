@@ -48,4 +48,9 @@ public class ServiceContext {
         return new HistoricoPedidoAlimentoServiceImpl(historicoPedidoAlimentoRepository, historicoPedidoAlimentoMapper);
     }
 
+    @Produces
+    public WebhookService webhookService() {
+        return new WebhookServiceImpl();
+    }
+
 }

@@ -41,7 +41,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
 
-
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
         return pedidoRepository.buscarPedidoPorId(id);

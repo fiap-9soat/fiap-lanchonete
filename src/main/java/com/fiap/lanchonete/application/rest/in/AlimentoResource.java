@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.application.rest;
+package com.fiap.lanchonete.application.rest.in;
 
 import com.fiap.lanchonete.domain.model.Alimento;
 import com.fiap.lanchonete.domain.pojo.CreateAlimentoDto;
