@@ -22,4 +22,5 @@ public class Pedido {
     private Instant tsUltimoPedido;
     private EstadoPedido estadoPedido;
     private EstadoPagamento estadoPagamento;
+    private String codigoIdExterno;
 }

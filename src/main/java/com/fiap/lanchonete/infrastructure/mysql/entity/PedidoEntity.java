@@ -50,6 +50,9 @@ public class PedidoEntity {
     @Convert(converter = EstadoPagamentoConverter.class)
     private EstadoPagamento estadoPagamento;
 
+    @Column(name = "codigo_id_externo", columnDefinition = "CHAR(255)")
+    private String codigoIdExterno;
+
     @OneToMany
     @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido", insertable = false, updatable = false)
     private Set<PedidoAlimentoEntity> pedidoAlimento = new HashSet<>();

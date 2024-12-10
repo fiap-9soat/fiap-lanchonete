@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.domain.model;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
@@ -18,5 +19,6 @@ public class Alimento {
     private Short codigoAlimento;
     private String nomeAlimento;
     private String nomeFunciAlter;
+    private BigDecimal precoAlimento;
     private Instant tsAlter;
 }

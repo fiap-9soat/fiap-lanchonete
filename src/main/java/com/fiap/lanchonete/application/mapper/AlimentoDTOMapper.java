@@ -25,6 +25,7 @@ public interface AlimentoDTOMapper extends AlimentoMapper {
     @Override
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(target = "codigoAlimento", ignore = true)
+    @Mapping(source = "precoAlimento", target = "precoAlimento")
     @Mapping(target = "tsAlter", expression = "java(java.time.Instant.now())")
     Alimento toDomain(CreateAlimentoDto dto);
 

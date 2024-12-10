@@ -20,6 +20,12 @@ public class AlimentoServiceImpl implements AlimentoService {
 
     private AlimentoMapper alimentoMapper;
 
+
+    @Override
+    public Alimento buscarAlimentoPorId(Short codigoAlimento, Short codigoTipoAlimento) {
+        return alimentoRepository.getAlimentoById(codigoAlimento, codigoTipoAlimento);
+    }
+
     @Override
     public void cadastrarAlimento(CreateAlimentoDto createAlimentoDto) {
         Short lastCodigoAlimento = alimentoRepository.getNextCodigoAlimento(createAlimentoDto.codigoTipoAlimento());

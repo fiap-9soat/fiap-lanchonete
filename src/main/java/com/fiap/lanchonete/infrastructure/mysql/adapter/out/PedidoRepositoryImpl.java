@@ -57,15 +57,13 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 WHERE estadoPedido NOT IN (EstadoPedido.CANCELADO,
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """);
-        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
+        return listaPedidosEntity.stream().map(entity -> {
             ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
             pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());
             return pedido;
         }).toList();
-
-        return resposta;
     }
 
     @Override
@@ -87,7 +85,6 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     @Override
     public List<ListaPedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
-        ZoneId zone = ZoneId.of("America/Sao_Paulo");
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
@@ -95,13 +92,12 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 AND estadoPedido NOT IN (EstadoPedido.CANCELADO,
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """, codigoCliente);
-        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
+        return listaPedidosEntity.stream().map(entity -> {
             ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
             pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());
             return pedido;
         }).toList();
-        return resposta;
     }
 }
