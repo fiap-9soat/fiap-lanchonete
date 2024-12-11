@@ -18,10 +18,11 @@ public class ServiceContext {
     public PedidoService pedidoService(PedidoRepository pedidoRepository,
             PedidoAlimentoRepository pedidoAlimentoRepository,
             PedidoMapper pedidoMapper,
+            AlimentoService alimentoService,
             PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService,
             HistoricoPedidoAlimentoService historicoPedidoAlimentoService) {
         return new PedidoServiceImpl(pedidoRepository, pedidoAlimentoRepository,
-                pedidoMapper, pedidoAlimentoMapper, historicoPedidoService, historicoPedidoAlimentoService);
+                pedidoMapper, pedidoAlimentoMapper, historicoPedidoService, historicoPedidoAlimentoService, alimentoService);
     }
 
     @Produces

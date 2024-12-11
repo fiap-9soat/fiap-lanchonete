@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
 import com.fiap.lanchonete.domain.pojo.AlimentoDto;
 import com.fiap.lanchonete.domain.pojo.PedidoAlimentoDto;
 
@@ -26,5 +26,5 @@ public interface PedidoAlimentoDTOMapper extends PedidoAlimentoMapper {
     PedidoAlimento toDomain(AlimentoDto createPedidoDto);
 
     @Override
-    PedidoAlimentoLista toDomain(PedidoAlimento pedidoAlimento);
+    ListaPedidoAlimentoDto toDomain(PedidoAlimento pedidoAlimento);
 }

@@ -11,7 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
 import org.jboss.resteasy.reactive.RestQuery;
 
-import com.fiap.lanchonete.domain.model.ListaPedido;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -46,9 +46,9 @@ public class PedidoResource {
     @GET
     @Operation(summary = "Lista os pedidos por ordem de checkout")
     @APIResponses(value = { @APIResponse(responseCode = "200", description = "Lista gerada com sucesso!", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = ListaPedido.class)) }),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ListaPedidoDto.class)) }),
             @APIResponse(responseCode = "404") })
-    public List<ListaPedido> listarPedidos() {
+    public List<ListaPedidoDto> listarPedidos() {
         return pedidoService.listarPedidos();
     }
 
@@ -56,9 +56,9 @@ public class PedidoResource {
     @Path("/cliente/{codigoCliente}")
     @Operation(summary = "Lista os pedidos feitos por um cliente")
     @APIResponses(value = { @APIResponse(responseCode = "200", description = "Lista gerada com sucesso!", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = ListaPedido.class)) }),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ListaPedidoDto.class)) }),
             @APIResponse(responseCode = "404") })
-    public List<ListaPedido> listarPedidosPorCliente(@PathParam("codigoCliente") Integer codigoCliente) {
+    public List<ListaPedidoDto> listarPedidosPorCliente(@PathParam("codigoCliente") Integer codigoCliente) {
         return pedidoService.listarPedidosPorCodigoCliente(codigoCliente);
     }
 

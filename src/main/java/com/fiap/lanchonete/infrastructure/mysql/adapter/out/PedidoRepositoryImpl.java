@@ -1,10 +1,9 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.ListaPedido;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
@@ -50,7 +49,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<ListaPedido> listarPedidos() {
+    public List<ListaPedidoDto> listarPedidos() {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
@@ -58,7 +57,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """);
         return listaPedidosEntity.stream().map(entity -> {
-            ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
             pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());
@@ -84,7 +83,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<ListaPedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
+    public List<ListaPedidoDto> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
@@ -93,7 +92,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                     EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """, codigoCliente);
         return listaPedidosEntity.stream().map(entity -> {
-            ListaPedido pedido = listaPedidoEntityMapper.toDomain(entity);
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
             pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());

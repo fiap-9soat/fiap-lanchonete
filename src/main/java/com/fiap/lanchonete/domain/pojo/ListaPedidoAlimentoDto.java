@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.domain.model;
+package com.fiap.lanchonete.domain.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PedidoAlimentoLista {
+public class ListaPedidoAlimentoDto {
     Short codigoTipoAlimento;
     Short codigoAlimento;
     Short quantidadeAlimento;

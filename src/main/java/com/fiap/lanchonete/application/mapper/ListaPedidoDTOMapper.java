@@ -8,8 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
 import com.fiap.lanchonete.domain.mapper.ListaPedidoMapper;
-import com.fiap.lanchonete.domain.model.ListaPedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidosDto;
 import com.fiap.lanchonete.domain.pojo.PedidoAlimentoListaDto;
 
@@ -23,9 +23,9 @@ public interface ListaPedidoDTOMapper extends ListaPedidoMapper {
     }
 
     @Override
-    ListaPedidosDto fromDomain(ListaPedido dto);
+    ListaPedidosDto fromDomain(ListaPedidoDto dto);
 
     @Override
-    PedidoAlimentoLista toDomain(PedidoAlimentoListaDto dto);
+    ListaPedidoAlimentoDto toDomain(PedidoAlimentoListaDto dto);
 
 }

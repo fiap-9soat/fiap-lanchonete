@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.domain.model;
+package com.fiap.lanchonete.domain.pojo;
 
 import java.time.Instant;
 import java.util.List;
@@ -17,10 +17,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListaPedido {
+public class ListaPedidoDto {
     Integer codigoPedido;
     EstadoPedido estadoPedido;
     EstadoPagamento estadoPagamento;
     Instant tsUltimoPedido;
-    List<PedidoAlimentoLista> listaPedidos;
+    List<ListaPedidoAlimentoDto> listaPedidos;
 }

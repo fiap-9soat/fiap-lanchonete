@@ -1,17 +1,20 @@
 package com.fiap.lanchonete.domain.service;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.enums.TipoAlteracao;
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.model.ListaPedido;
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimento;
+import com.fiap.lanchonete.domain.model.*;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
+import com.fiap.lanchonete.domain.ports.in.AlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -41,27 +44,38 @@ public class PedidoServiceImpl implements PedidoService {
 
     HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
 
+    AlimentoService alimentoService;
+
     @Override
     public Pedido buscarPedidoPorId(Integer id) {
         return pedidoRepository.buscarPedidoPorId(id);
     }
 
-    @Override
-    public List<ListaPedido> listarPedidos() {
-        List<ListaPedido> listaPedidos = pedidoRepository.listarPedidos();
-        listaPedidos = listaPedidos.stream().sorted(Comparator.comparing(ListaPedido::getEstadoPedido, (s1, s2) -> {
-            return s2.compareTo(s1);
-        }).thenComparing(ListaPedido::getTsUltimoPedido)).toList();
+    private ListaPedidoAlimentoDto preencherValorPedido(ListaPedidoAlimentoDto pedidoAlimento) {
+        Alimento alimentoRelacionado = alimentoService.buscarAlimentoPorId(pedidoAlimento.getCodigoAlimento(), pedidoAlimento.getCodigoTipoAlimento());
+        BigDecimal valorAlimento = Objects.requireNonNullElse(alimentoRelacionado.getPrecoAlimento(), BigDecimal.ZERO);
+        BigDecimal valorTotal = valorAlimento.multiply(BigDecimal.valueOf(pedidoAlimento.getQuantidadeAlimento()));
+        pedidoAlimento.setValorTotal(valorTotal);
 
-        return listaPedidos;
+        return pedidoAlimento;
     }
 
     @Override
-    public List<ListaPedido> listarPedidosPorCodigoCliente(Integer codigoCliente) {
-        List<ListaPedido> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
-        pedidos = pedidos.stream().sorted(Comparator.comparing(ListaPedido::getEstadoPedido, (s1, s2) -> {
-            return s2.compareTo(s1);
-        }).thenComparing(ListaPedido::getTsUltimoPedido)).toList();
+    public List<ListaPedidoDto> listarPedidos() {
+        List<ListaPedidoDto> listaPedidoDtos = pedidoRepository.listarPedidos();
+        listaPedidoDtos = listaPedidoDtos.stream().peek(listaPedidoDto -> {
+            listaPedidoDto.setListaPedidos(listaPedidoDto.getListaPedidos().stream().map(this::preencherValorPedido).toList());
+        }).sorted(Comparator.comparing(ListaPedidoDto::getEstadoPedido, Comparator.reverseOrder()).thenComparing(ListaPedidoDto::getTsUltimoPedido)).toList();
+
+        return listaPedidoDtos;
+    }
+
+    @Override
+    public List<ListaPedidoDto> listarPedidosPorCodigoCliente(Integer codigoCliente) {
+        List<ListaPedidoDto> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
+        pedidos = pedidos.stream().peek(listaPedidoDto -> {
+            listaPedidoDto.setListaPedidos(listaPedidoDto.getListaPedidos().stream().map(this::preencherValorPedido).toList());
+        }).sorted(Comparator.comparing(ListaPedidoDto::getEstadoPedido, Comparator.reverseOrder()).thenComparing(ListaPedidoDto::getTsUltimoPedido)).toList();
 
         return pedidos;
     }
@@ -76,9 +90,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         validarProximoEstado(pedido.getEstadoPedido(), estadoPedido);
 
-        if (estadoPedido.equals(EstadoPedido.EM_PREPARACAO)
-                && (pedido.getEstadoPagamento() == null
-                        || !pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO))) {
+        if (estadoPedido.equals(EstadoPedido.EM_PREPARACAO) && (pedido.getEstadoPagamento() == null || !pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO))) {
             throw new NotFoundException("O Pagamento precisa ser concluído para que sua preparação se inicie");
         }
 
@@ -91,9 +103,7 @@ public class PedidoServiceImpl implements PedidoService {
             pedidoAlimentoRepository.removerPorCodigoPedido(codigoPedido);
 
             // Adiciona alimentos no histórico
-            listaPedidoAlimentos
-                    .forEach(alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento,
-                            TipoAlteracao.D));
+            listaPedidoAlimentos.forEach(alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento, TipoAlteracao.D));
 
             pedidoRepository.removerPedido(codigoPedido);
         } else {
@@ -158,7 +168,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     /**
      * Cancela e apaga o pedido.
-     * 
+     *
      * @param codigoPedido
      * @throws Exception
      */
@@ -170,10 +180,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Boolean consultarEstadoPagamento(Integer codigoPedido) {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
-        if (pedido.getEstadoPagamento().equals(EstadoPagamento.APROVADO)) {
-            return true;
-        }
-        return false;
+        return Objects.equals(pedido.getEstadoPagamento(), EstadoPagamento.APROVADO);
     }
 
     private void validarProximoEstado(EstadoPedido estadoAtual, EstadoPedido estadoRequisitado) {

@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoAlimentoEntity;
 
 @Mapper(componentModel = "jakarta")
@@ -33,10 +33,10 @@ public interface PedidoAlimentoListaMapper {
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
     @Mapping(target = "codigoPedido", ignore = true)
-    PedidoAlimentoEntity toEntity(PedidoAlimentoLista domain);
+    PedidoAlimentoEntity toEntity(ListaPedidoAlimentoDto domain);
 
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
-    PedidoAlimentoLista toDomain(PedidoAlimentoEntity domain);
+    ListaPedidoAlimentoDto toDomain(PedidoAlimentoEntity domain);
 }
