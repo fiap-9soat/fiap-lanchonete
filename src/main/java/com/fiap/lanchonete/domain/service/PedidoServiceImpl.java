@@ -187,7 +187,10 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
 
         if (!EstadoPedido.INICIADO.equals(pedido.getEstadoPedido())) {
-            throw new NotAcceptableException("Checkout desse pedido já realizado");
+            throw new BadRequestException("Checkout desse pedido já realizado");
+        }
+        if (Objects.isNull(createPedidoDto.getListaAlimentos()) || createPedidoDto.getListaAlimentos().isEmpty()){
+            throw new BadRequestException("Pedido deve ter pelo menos um alimento relacionado.");
         }
 
         /*
@@ -202,8 +205,6 @@ public class PedidoServiceImpl implements PedidoService {
             pedidoAlimentoRepository.inserir(pedidoAlimento);
             historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
         }
-
-
     }
 
     /**
