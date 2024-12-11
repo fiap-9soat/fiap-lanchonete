@@ -1,18 +1,15 @@
 package com.fiap.lanchonete.domain.pojo;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
 import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,5 +19,6 @@ public class ListaPedidoDto {
     EstadoPedido estadoPedido;
     EstadoPagamento estadoPagamento;
     Instant tsUltimoPedido;
-    List<ListaPedidoAlimentoDto> listaPedidos;
+    BigDecimal valorTotal;
+    List<ListaPedidoAlimentoDto> listaPedidoAlimentos;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @AllArgsConstructor

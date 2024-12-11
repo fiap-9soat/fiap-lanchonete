@@ -1,6 +1,7 @@
 package com.fiap.lanchonete.domain.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.buscarPedidoPorId(id);
     }
 
-    private ListaPedidoAlimentoDto preencherValorPedido(ListaPedidoAlimentoDto pedidoAlimento) {
+    private ListaPedidoAlimentoDto calcularValorPedidoAlimento(ListaPedidoAlimentoDto pedidoAlimento) {
         Alimento alimentoRelacionado = alimentoService.buscarAlimentoPorId(pedidoAlimento.getCodigoAlimento(), pedidoAlimento.getCodigoTipoAlimento());
         BigDecimal valorAlimento = Objects.requireNonNullElse(alimentoRelacionado.getPrecoAlimento(), BigDecimal.ZERO);
         BigDecimal valorTotal = valorAlimento.multiply(BigDecimal.valueOf(pedidoAlimento.getQuantidadeAlimento()));
@@ -60,24 +61,54 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoAlimento;
     }
 
+    /**
+     * Retorna a soma de todos os 'valores totais' para cada conjunto de alimentos no pedido.
+     *
+     * @see ListaPedidoAlimentoDto#valorTotal
+     */
+    private BigDecimal calcularValorTotalPedido(ListaPedidoDto pedidoDto) {
+        List<BigDecimal> listaValoresTotais = pedidoDto.getListaPedidoAlimentos().stream().map(ListaPedidoAlimentoDto::getValorTotal).toList();
+
+        return listaValoresTotais.stream().reduce(BigDecimal.valueOf(0), BigDecimal::add);
+    }
+
+    /**
+     * TODO: extrair isso para uma classe de utilidade (?)
+     * @param listaPedidoDtos
+     * @return
+     */
+    private List<ListaPedidoDto> preencherListaPedidos(List<ListaPedidoDto> listaPedidoDtos){
+        List<ListaPedidoDto> listaPedidoFinal = new ArrayList<>();
+        for (ListaPedidoDto listaPedidoDto : listaPedidoDtos) {
+            List<ListaPedidoAlimentoDto> pedidoAlimentosComValor = listaPedidoDto.getListaPedidoAlimentos()
+                .stream()
+                .map(this::calcularValorPedidoAlimento)
+                .toList();
+
+            listaPedidoDto.setListaPedidoAlimentos(pedidoAlimentosComValor);
+
+            listaPedidoDto.setValorTotal(calcularValorTotalPedido(listaPedidoDto));
+
+            listaPedidoFinal.add(listaPedidoDto);
+        }
+        listaPedidoFinal.sort(Comparator.comparing(ListaPedidoDto::getEstadoPedido, Comparator.reverseOrder())
+            .thenComparing(ListaPedidoDto::getTsUltimoPedido));
+
+        return listaPedidoFinal;
+    }
+
     @Override
     public List<ListaPedidoDto> listarPedidos() {
-        List<ListaPedidoDto> listaPedidoDtos = pedidoRepository.listarPedidos();
-        listaPedidoDtos = listaPedidoDtos.stream().peek(listaPedidoDto -> {
-            listaPedidoDto.setListaPedidos(listaPedidoDto.getListaPedidos().stream().map(this::preencherValorPedido).toList());
-        }).sorted(Comparator.comparing(ListaPedidoDto::getEstadoPedido, Comparator.reverseOrder()).thenComparing(ListaPedidoDto::getTsUltimoPedido)).toList();
+        List<ListaPedidoDto> pedidos = pedidoRepository.listarPedidos();
 
-        return listaPedidoDtos;
+        return preencherListaPedidos(pedidos);
     }
 
     @Override
     public List<ListaPedidoDto> listarPedidosPorCodigoCliente(Integer codigoCliente) {
-        List<ListaPedidoDto> pedidos = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
-        pedidos = pedidos.stream().peek(listaPedidoDto -> {
-            listaPedidoDto.setListaPedidos(listaPedidoDto.getListaPedidos().stream().map(this::preencherValorPedido).toList());
-        }).sorted(Comparator.comparing(ListaPedidoDto::getEstadoPedido, Comparator.reverseOrder()).thenComparing(ListaPedidoDto::getTsUltimoPedido)).toList();
+        List<ListaPedidoDto> pedidosPorCliente = pedidoRepository.buscarPedidosPorCodigoCliente(codigoCliente);
 
-        return pedidos;
+        return preencherListaPedidos(pedidosPorCliente);
     }
 
     @Override

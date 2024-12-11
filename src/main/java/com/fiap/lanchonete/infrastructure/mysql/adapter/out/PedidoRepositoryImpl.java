@@ -58,7 +58,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 """);
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
-            pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());
             return pedido;
@@ -93,7 +93,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 """, codigoCliente);
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
-            pedido.setListaPedidos(entity.getPedidoAlimento().stream().map(alimento -> {
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
                 return pedidoAlimentoListaMapper.toDomain(alimento);
             }).toList());
             return pedido;
