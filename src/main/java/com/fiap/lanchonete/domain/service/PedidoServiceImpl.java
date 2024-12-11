@@ -12,6 +12,7 @@ import com.fiap.lanchonete.domain.enums.TipoAlteracao;
 import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
 import com.fiap.lanchonete.domain.model.*;
+import com.fiap.lanchonete.domain.pojo.AlimentoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
@@ -74,10 +75,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     /**
      * TODO: extrair isso para uma classe de utilidade (?)
+     *
      * @param listaPedidoDtos
      * @return
      */
-    private List<ListaPedidoDto> preencherListaPedidos(List<ListaPedidoDto> listaPedidoDtos){
+    private List<ListaPedidoDto> preencherListaPedidos(List<ListaPedidoDto> listaPedidoDtos) {
         List<ListaPedidoDto> listaPedidoFinal = new ArrayList<>();
         for (ListaPedidoDto listaPedidoDto : listaPedidoDtos) {
             List<ListaPedidoAlimentoDto> pedidoAlimentosComValor = listaPedidoDto.getListaPedidoAlimentos()
@@ -188,13 +190,20 @@ public class PedidoServiceImpl implements PedidoService {
             throw new NotAcceptableException("Checkout desse pedido já realizado");
         }
 
-        createPedidoDto.getListaAlimentos().forEach(alimento -> {
+        /*
+         * Exclui pedidoAlimento relacionados
+         */
+        pedidoAlimentoRepository.removerPorCodigoPedido(codigoPedido);
+
+        for (AlimentoDto alimento : createPedidoDto.getListaAlimentos()) {
             PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
             pedidoAlimento.setCodigoPedido(codigoPedido);
 
-            pedidoAlimentoRepository.editar(pedidoAlimento);
-            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.A);
-        });
+            pedidoAlimentoRepository.inserir(pedidoAlimento);
+            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+        }
+
+
     }
 
     /**
