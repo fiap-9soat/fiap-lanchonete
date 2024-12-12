@@ -193,10 +193,12 @@ public class PedidoServiceImpl implements PedidoService {
             throw new BadRequestException("Pedido deve ter pelo menos um alimento relacionado.");
         }
 
-        /*
-         * Exclui pedidoAlimento relacionados
-         */
-        pedidoAlimentoRepository.removerPorCodigoPedido(codigoPedido);
+        List<PedidoAlimento> pedidoAlimentosExistentes = pedidoAlimentoRepository.listarPorCodigoPedido(codigoPedido);
+
+        for (PedidoAlimento pedidoAlimento : pedidoAlimentosExistentes){
+            pedidoAlimentoRepository.remover(pedidoAlimento);
+            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.D);
+        }
 
         for (AlimentoDto alimento : createPedidoDto.getListaAlimentos()) {
             PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
