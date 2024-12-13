@@ -15,8 +15,6 @@ import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalItemsDto;
 import com.fiap.lanchonete.infrastructure.quarkusrest.mapper.QrCodeDTOMapper;
 
 import jakarta.inject.Inject;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
@@ -30,17 +28,17 @@ public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
     @Inject
     QrCodeDTOMapper qrCodeDTOMapper;
 
-    @ConfigProperty(name = "id-conta")
+    @ConfigProperty(name = "mercado-pago-api.id-conta")
     Integer idConta;
 
-    @ConfigProperty(name = "id-loja")
+    @ConfigProperty(name = "mercado-pago-api.id-loja")
     String idLoja;
 
     private static final String TITULO = "LANCHONETE";
     private static final String DESCRICAO = "Pedido feito na lanchonete FIAP";
     private static final String MEDIDA = "unit";
 
-    @ConfigProperty(name = "url-notificacao")
+    @ConfigProperty(name = "mercado-pago-api.url-notificacao")
     String urlNotificacao;
 
     public QrCodeDto gerarQrCode(String idExterno, Integer codigoPedido) {
