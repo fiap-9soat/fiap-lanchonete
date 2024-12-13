@@ -1,10 +1,11 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
@@ -111,7 +112,12 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
             pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
-                return pedidoAlimentoListaMapper.toDomain(alimento);
+                var pedidoAlimento = pedidoAlimentoListaMapper.toDomain(alimento);
+                pedidoAlimento.setValorAlimento(alimento.getAlimento().getPrecoAlimento());
+                pedidoAlimento.setValorTotal(
+                        alimento.getAlimento().getPrecoAlimento()
+                                .multiply(new BigDecimal(alimento.getQuantidadeAlimento().intValue())));
+                return pedidoAlimento;
             }).toList());
             return pedido;
         }).toList();

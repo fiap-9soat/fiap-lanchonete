@@ -3,6 +3,8 @@ package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.tool.schema.spi.SqlScriptException;
+
 import com.fiap.lanchonete.domain.model.PedidoAlimento;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoAlimentoPanacheRepository;

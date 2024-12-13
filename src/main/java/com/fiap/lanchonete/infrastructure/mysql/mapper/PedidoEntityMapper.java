@@ -29,9 +29,12 @@ public interface PedidoEntityMapper {
         return localDateTime.atZone(zone).toInstant();
     }
 
-    @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
-    @Mapping(target = "pedidoAlimento", ignore = true)
+    @Mapping(source = "codigoCliente", target = "codigoCliente")
+    @Mapping(source = "estadoPedido", target = "estadoPedido")
     @Mapping(source = "estadoPagamento", target = "estadoPagamento")
+    @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
+    @Mapping(target = "codigoIdExterno", ignore = true)
+    @Mapping(target = "pedidoAlimento", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     PedidoEntity toEntity(Pedido domain);
 

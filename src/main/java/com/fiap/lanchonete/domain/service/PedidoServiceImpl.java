@@ -180,6 +180,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         final Integer codigoPedidoFinal = codigoPedido;
+        List<ListaPedidoAlimentoDto> listaPedidoAlimento = new ArrayList<>();
 
         createPedidoDto.getListaAlimentos().forEach(alimento -> {
             try {
@@ -188,17 +189,18 @@ public class PedidoServiceImpl implements PedidoService {
                 pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
                 pedidoAlimentoRepository.inserir(pedidoAlimento);
                 historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+                listaPedidoAlimento.add(pedidoAlimentoMapper.toDomain(pedidoAlimento));
             } catch (BadRequestException e) {
                 e.printStackTrace();
                 throw e;
             }
         });
 
-        metodoPagamentoService.gerarQrCode(idExterno, codigoPedido);
+        var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, listaPedidoAlimento);
 
         historicoPedidoService.registrarPedido(codigoPedido, pedido);
 
-        return new PedidoQrCodeDto(codigoPedidoFinal, null);
+        return new PedidoQrCodeDto(codigoPedidoFinal, qrCode.getQrCode());
     }
 
     @Override
