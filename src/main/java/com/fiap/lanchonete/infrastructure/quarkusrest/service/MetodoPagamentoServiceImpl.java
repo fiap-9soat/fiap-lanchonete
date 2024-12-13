@@ -2,6 +2,7 @@ package com.fiap.lanchonete.infrastructure.quarkusrest.service;
 
 import java.math.BigDecimal;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -17,17 +18,16 @@ import jakarta.inject.Inject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@ApplicationScoped
 public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
 
-    @Inject
     @RestClient
     MercadoPagoConsumer mercadoPagoConsumer;
 
-    @NonNull
+    @Inject
     PedidoRepository pedidoRepository;
 
-    @NonNull
+    @Inject
     QrCodeDTOMapper qrCodeDTOMapper;
 
     @ConfigProperty(name = "id-conta")

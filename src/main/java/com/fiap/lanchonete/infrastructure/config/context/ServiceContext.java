@@ -80,10 +80,4 @@ public class ServiceContext {
         return new WebhookServiceImpl();
     }
 
-    @Produces
-    public MetodoPagamentoService metodoPagamentoService(
-            PedidoRepository pedidoRepository, QrCodeDTOMapper qrCodeDTOMapper) {
-        return new MetodoPagamentoServiceImpl(pedidoRepository, qrCodeDTOMapper);
-    }
-
 }

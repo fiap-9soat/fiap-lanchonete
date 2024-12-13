@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.application.rest.out;
 
+import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestQuery;
@@ -14,6 +15,7 @@ import jakarta.ws.rs.Path;
 
 @Path("/")
 @RegisterRestClient(configKey = "mercado-pago-api")
+@ClientHeaderParam(name = "Authorization", value = "Bearer {mercado-pago-api.api-key}")
 public interface MercadoPagoConsumer {
 
     @GET
