@@ -4,6 +4,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalInfoPedidoDto;
 import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalQrCodeDto;
 import com.mercadopago.resources.merchantorder.MerchantOrder;
 
@@ -13,7 +14,7 @@ import jakarta.ws.rs.Path;
 
 @Path("/")
 @RegisterRestClient(configKey = "mercado-pago-api")
-public interface MercadoPagoConsumidor {
+public interface MercadoPagoConsumer {
 
     @GET
     @Path("merchant_orders/search")
@@ -21,5 +22,6 @@ public interface MercadoPagoConsumidor {
 
     @POST
     @Path("instore/orders/qr/seller/collectors/{idConta}/pos/{idLoja}/qrs")
-    ExternalQrCodeDto gerarQrCodePagamento(@RestPath Integer idConta, @RestPath String idLoja);
+    ExternalQrCodeDto gerarQrCodePagamento(@RestPath Integer idConta, @RestPath String idLoja,
+            ExternalInfoPedidoDto dto);
 }

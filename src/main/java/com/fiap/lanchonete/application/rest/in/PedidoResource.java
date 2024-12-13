@@ -12,6 +12,7 @@ import org.jboss.resteasy.reactive.ResponseStatus;
 import org.jboss.resteasy.reactive.RestQuery;
 
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
+import com.fiap.lanchonete.domain.model.PedidoQrCodeDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.MudancaEstadoPedido;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
@@ -67,7 +68,7 @@ public class PedidoResource {
     @Operation(summary = "Cria um pedido caso não exista e adiciona os itens nesse pedido.")
     @APIResponse(responseCode = "200", description = "Pedido criado com sucesso!")
     @Transactional(rollbackOn = Exception.class)
-    public Integer criarPedido(
+    public PedidoQrCodeDto criarPedido(
             CreatePedidoDto dto) throws BadRequestException {
         return pedidoService.criarPedido(dto);
     }

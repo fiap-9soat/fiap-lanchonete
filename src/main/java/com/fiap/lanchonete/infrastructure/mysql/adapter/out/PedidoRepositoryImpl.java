@@ -99,4 +99,26 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             return pedido;
         }).toList();
     }
+
+    @Override
+    public List<ListaPedidoDto> buscarPedidosPorCodigoPedido(Integer codigoPedido) {
+        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoPedido = ?1
+                AND estadoPedido = EstadoPedido.INICIADO
+                """, codigoPedido);
+        return listaPedidosEntity.stream().map(entity -> {
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
+                return pedidoAlimentoListaMapper.toDomain(alimento);
+            }).toList());
+            return pedido;
+        }).toList();
+    }
+
+    @Override
+    public void registrarIdPedidoExterno(Integer id, String idPedidoExterno) {
+        pedidoPanacheRepository.update("codigoIdExterno = ?1 WHERE codigoPedido = ?2", idPedidoExterno, id);
+    }
 }

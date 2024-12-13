@@ -5,6 +5,7 @@ import java.util.List;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.model.Pedido;
+import com.fiap.lanchonete.domain.model.PedidoQrCodeDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 import jakarta.ws.rs.BadRequestException;
@@ -15,7 +16,7 @@ public interface PedidoService {
 
     List<ListaPedidoDto> listarPedidosPorCodigoCliente(Integer codigoCliente);
 
-    Integer criarPedido(CreatePedidoDto createPedidoDto) throws BadRequestException;
+    PedidoQrCodeDto criarPedido(CreatePedidoDto createPedidoDto) throws BadRequestException;
 
     void editarPedido(Integer codigoPedido, CreatePedidoDto dto) throws Exception;
 

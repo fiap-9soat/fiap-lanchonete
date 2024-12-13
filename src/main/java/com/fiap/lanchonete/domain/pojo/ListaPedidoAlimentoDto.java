@@ -15,6 +15,7 @@ public class ListaPedidoAlimentoDto {
     Short codigoTipoAlimento;
     Short codigoAlimento;
     Short quantidadeAlimento;
+    BigDecimal valorAlimento;
     /**
      * quantidadeAlimento * precoAlimento
      */
