@@ -1,6 +1,5 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
-import com.fiap.lanchonete.application.rest.out.MercadoPagoConsumer;
 import com.fiap.lanchonete.domain.mapper.AlimentoMapper;
 import com.fiap.lanchonete.domain.mapper.ClienteMapper;
 import com.fiap.lanchonete.domain.mapper.HistoricoPedidoAlimentoMapper;
@@ -23,7 +22,7 @@ import com.fiap.lanchonete.domain.service.AlimentoServiceImpl;
 import com.fiap.lanchonete.domain.service.ClienteServiceImpl;
 import com.fiap.lanchonete.domain.service.HistoricoPedidoAlimentoServiceImpl;
 import com.fiap.lanchonete.domain.service.HistoricoPedidoServiceImpl;
-import com.fiap.lanchonete.domain.service.MetodoPagamentoService;
+import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.service.PedidoServiceImpl;
 import com.fiap.lanchonete.domain.service.WebhookServiceImpl;
 import com.fiap.lanchonete.infrastructure.quarkusrest.mapper.QrCodeDTOMapper;

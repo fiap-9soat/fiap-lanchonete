@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.domain.service;
+package com.fiap.lanchonete.domain.ports.in;
 
 import com.fiap.lanchonete.domain.model.QrCodeDto;
 

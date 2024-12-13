@@ -8,7 +8,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import com.fiap.lanchonete.application.rest.out.MercadoPagoConsumer;
 import com.fiap.lanchonete.domain.model.QrCodeDto;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.domain.service.MetodoPagamentoService;
+import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalInfoPedidoDto;
 import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalItemsDto;
 import com.fiap.lanchonete.infrastructure.quarkusrest.mapper.QrCodeDTOMapper;

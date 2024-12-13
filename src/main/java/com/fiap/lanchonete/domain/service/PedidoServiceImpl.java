@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import com.fiap.lanchonete.domain.ports.in.*;
 import org.jboss.logging.Logger;
 
 import com.fiap.lanchonete.domain.enums.EstadoPagamento;
@@ -22,10 +23,6 @@ import com.fiap.lanchonete.domain.pojo.AlimentoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
-import com.fiap.lanchonete.domain.ports.in.AlimentoService;
-import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
-import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
-import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
