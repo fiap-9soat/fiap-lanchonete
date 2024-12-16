@@ -1,5 +1,5 @@
 package com.fiap.lanchonete.domain.ports.in;
 
 public interface WebhookService {
-    void registrarNotificacao(String topic, Integer id);
+    void registrarNotificacao(String topic, String id);
 }

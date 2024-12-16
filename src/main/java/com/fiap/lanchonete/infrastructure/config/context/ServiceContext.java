@@ -10,8 +10,8 @@ import com.fiap.lanchonete.domain.ports.in.AlimentoService;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
+import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
-import com.fiap.lanchonete.domain.ports.in.WebhookService;
 import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
 import com.fiap.lanchonete.domain.ports.out.HistoricoPedidoAlimentoRepository;
@@ -22,11 +22,7 @@ import com.fiap.lanchonete.domain.service.AlimentoServiceImpl;
 import com.fiap.lanchonete.domain.service.ClienteServiceImpl;
 import com.fiap.lanchonete.domain.service.HistoricoPedidoAlimentoServiceImpl;
 import com.fiap.lanchonete.domain.service.HistoricoPedidoServiceImpl;
-import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.service.PedidoServiceImpl;
-import com.fiap.lanchonete.domain.service.WebhookServiceImpl;
-import com.fiap.lanchonete.infrastructure.quarkusrest.mapper.QrCodeDTOMapper;
-import com.fiap.lanchonete.infrastructure.quarkusrest.service.MetodoPagamentoServiceImpl;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Produces;
@@ -74,10 +70,4 @@ public class ServiceContext {
             HistoricoPedidoAlimentoMapper historicoPedidoAlimentoMapper) {
         return new HistoricoPedidoAlimentoServiceImpl(historicoPedidoAlimentoRepository, historicoPedidoAlimentoMapper);
     }
-
-    @Produces
-    public WebhookService webhookService() {
-        return new WebhookServiceImpl();
-    }
-
 }

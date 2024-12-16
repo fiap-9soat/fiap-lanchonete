@@ -32,8 +32,8 @@ public interface MercadoPagoConsumer {
     }
 
     @GET
-    @Path("merchant_orders/search")
-    MerchantOrder consultarOrdemPagamento(@RestQuery String external_reference);
+    @Path("merchant_orders/{id}")
+    MerchantOrder consultarOrdemPagamento(@RestQuery String idExterno);
 
     @POST
     @Path("instore/orders/qr/seller/collectors/{idConta}/pos/{idLoja}/qrs")

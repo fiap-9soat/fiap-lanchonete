@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.fiap.lanchonete.domain.ports.in.*;
 import org.jboss.logging.Logger;
@@ -164,6 +165,7 @@ public class PedidoServiceImpl implements PedidoService {
         Integer codigoPedido = null;
         List<Pedido> checaPedidoExiste;
         String idExterno;
+        String uuid = UUID.randomUUID().toString();
 
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);
@@ -171,16 +173,15 @@ public class PedidoServiceImpl implements PedidoService {
         checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
         if (checaPedidoExiste == null || checaPedidoExiste.isEmpty()) {
             codigoPedido = pedidoRepository.criarPedido(pedido);
-            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + codigoPedido;
+            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + "-" + uuid;
             pedidoRepository.registrarIdPedidoExterno(codigoPedido, idExterno);
         } else {
             codigoPedido = checaPedidoExiste.getFirst().getCodigoPedido();
-            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + codigoPedido;
+            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + "-" + uuid;
             pedidoRepository.registrarIdPedidoExterno(codigoPedido, idExterno);
         }
 
         final Integer codigoPedidoFinal = codigoPedido;
-        List<ListaPedidoAlimentoDto> listaPedidoAlimento = new ArrayList<>();
 
         createPedidoDto.getListaAlimentos().forEach(alimento -> {
             try {
@@ -189,14 +190,13 @@ public class PedidoServiceImpl implements PedidoService {
                 pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
                 pedidoAlimentoRepository.inserir(pedidoAlimento);
                 historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
-                listaPedidoAlimento.add(pedidoAlimentoMapper.toDomain(pedidoAlimento));
             } catch (BadRequestException e) {
                 e.printStackTrace();
                 throw e;
             }
         });
 
-        var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, listaPedidoAlimento);
+        var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, createPedidoDto.getListaAlimentos());
 
         historicoPedidoService.registrarPedido(codigoPedido, pedido);
 
