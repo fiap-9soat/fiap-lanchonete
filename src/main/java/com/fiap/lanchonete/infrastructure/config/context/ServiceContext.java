@@ -12,6 +12,7 @@ import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
+import com.fiap.lanchonete.domain.ports.in.WebhookService;
 import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
 import com.fiap.lanchonete.domain.ports.out.HistoricoPedidoAlimentoRepository;
@@ -41,7 +42,7 @@ public class ServiceContext {
             AlimentoService alimentoService,
             PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService,
             HistoricoPedidoAlimentoService historicoPedidoAlimentoService,
-            MetodoPagamentoService metodoPagamentoService) {
+            MetodoPagamentoService metodoPagamentoService, WebhookService webhookService) {
         return new PedidoServiceImpl(pedidoRepository, pedidoAlimentoRepository,
                 pedidoMapper, alimentoService, pedidoAlimentoMapper, historicoPedidoService,
                 historicoPedidoAlimentoService, metodoPagamentoService);

@@ -18,6 +18,8 @@ public interface PedidoRepository {
 
     Pedido buscarPedidoPorId(Integer id);
 
+    Pedido buscarPedidoPorIdExterno(Integer idExterno);
+
     void registrarIdPedidoExterno(Integer id, String idPedidoExterno);
 
     List<ListaPedidoDto> buscarPedidosPorCodigoCliente(Integer codigoCliente);

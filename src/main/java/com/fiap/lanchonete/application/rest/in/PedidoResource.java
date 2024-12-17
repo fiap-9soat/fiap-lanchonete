@@ -112,7 +112,7 @@ public class PedidoResource {
     @GET
     @Path("/notificacao-pagamento")
     @Operation(summary = "Webhook de inscrição")
-    public Response registraWebhook(@RestQuery String topic, @RestQuery Integer id) {
+    public Response registraWebhook(@RestQuery String topic, @RestQuery String id) {
         webhookService.registrarNotificacao(topic, id);
         return Response.ok("Webhook registrado com sucesso").build();
     }

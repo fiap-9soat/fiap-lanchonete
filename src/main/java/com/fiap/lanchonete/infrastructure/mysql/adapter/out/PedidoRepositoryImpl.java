@@ -84,6 +84,14 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
+    public Pedido buscarPedidoPorIdExterno(Integer idExterno) {
+        var pedido = pedidoPanacheRepository.find("""
+                codigoIdExterno = ?1
+                """, idExterno).singleResult();
+        return pedidoEntityMapper.toDomain(pedido);
+    }
+
+    @Override
     public List<ListaPedidoDto> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
