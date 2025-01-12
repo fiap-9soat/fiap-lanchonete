@@ -1,0 +1,598 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "lanchonete API",
+    "version" : "1.0.2"
+  },
+  "tags" : [ {
+    "name" : "Alimentos"
+  }, {
+    "name" : "Clientes"
+  }, {
+    "name" : "Pedidos"
+  } ],
+  "paths" : {
+    "/alimentos" : {
+      "post" : {
+        "tags" : [ "Alimentos" ],
+        "summary" : "Insere um alimento na base de dados",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateAlimentoDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Alimento inserido na base de dados",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateAlimentoDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Alimentos" ],
+        "summary" : "Deleta um alimento da base de dados",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteAlimentoDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Alimento deletado na base de dados",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteAlimentoDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Alimentos" ],
+        "summary" : "Edita um alimento da base de dados",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EditAlimentoDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Alimento editado na base de dados",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EditAlimentoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alimentos/tipo/{codigoTipoAlimento}" : {
+      "get" : {
+        "tags" : [ "Alimentos" ],
+        "summary" : "Lista alimentos por tipo",
+        "parameters" : [ {
+          "name" : "codigoTipoAlimento",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Alimento"
+                  }
+                }
+              }
+            }
+          },
+          "404" : { }
+        }
+      }
+    },
+    "/clientes" : {
+      "get" : {
+        "tags" : [ "Clientes" ],
+        "summary" : "Lista todos os clientes cadastrados",
+        "responses" : {
+          "200" : {
+            "description" : "Clientes recuperados com sucesso",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateClienteDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Clientes" ],
+        "summary" : "Cadastra o cliente na base de dados",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateClienteDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Cliente cadastrado com sucesso",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateClienteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{cpf}" : {
+      "get" : {
+        "tags" : [ "Clientes" ],
+        "summary" : "Encontra o cliente por cpf",
+        "parameters" : [ {
+          "name" : "cpf",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Cliente encontrado",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateClienteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos" : {
+      "get" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Lista os pedidos por ordem de checkout",
+        "responses" : {
+          "200" : {
+            "description" : "Lista gerada com sucesso!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListaPedidoDto"
+                }
+              }
+            }
+          },
+          "404" : { }
+        }
+      },
+      "post" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Cria um pedido caso não exista e adiciona os itens nesse pedido.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePedidoDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Pedido criado com sucesso!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PedidoQrCodeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/cliente/{codigoCliente}" : {
+      "get" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Lista os pedidos feitos por um cliente",
+        "parameters" : [ {
+          "name" : "codigoCliente",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Lista gerada com sucesso!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListaPedidoDto"
+                }
+              }
+            }
+          },
+          "404" : { }
+        }
+      }
+    },
+    "/pedidos/estado" : {
+      "post" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Registra um evento de alteração de estado do pedido. Também utilizado para checkout e cancelamento.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MudancaEstadoPedido"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/pedidos/estado/pagamento/{codigoPedido}" : {
+      "get" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Consulta o estado do pagamento do pedido",
+        "parameters" : [ {
+          "name" : "codigoPedido",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/notificacao-pagamento" : {
+      "get" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Webhook de inscrição",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "topic",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/pedidos/{codigoPedido}" : {
+      "put" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Edita um pedido. Para alterações de estado, utilizar o recurso /estado.",
+        "parameters" : [ {
+          "name" : "codigoPedido",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePedidoDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Pedido editado com sucesso!"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Pedidos" ],
+        "summary" : "Cancela e apaga o pedido.",
+        "parameters" : [ {
+          "name" : "codigoPedido",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Pedido deletado com sucesso!"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Alimento" : {
+        "type" : "object",
+        "properties" : {
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          },
+          "codigoAlimento" : {
+            "type" : "integer"
+          },
+          "nomeAlimento" : {
+            "type" : "string"
+          },
+          "nomeFunciAlter" : {
+            "type" : "string"
+          },
+          "precoAlimento" : {
+            "type" : "number"
+          },
+          "tsAlter" : {
+            "$ref" : "#/components/schemas/Instant"
+          }
+        }
+      },
+      "AlimentoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          },
+          "codigoAlimento" : {
+            "type" : "integer"
+          },
+          "quantidadeAlimento" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }
+      },
+      "CreateAlimentoDto" : {
+        "required" : [ "nomeAlimento", "nomeFunciAlter" ],
+        "type" : "object",
+        "properties" : {
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          },
+          "nomeAlimento" : {
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "nomeFunciAlter" : {
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "precoAlimento" : {
+            "minimum" : 0,
+            "exclusiveMinimum" : true,
+            "type" : "number"
+          }
+        }
+      },
+      "CreateClienteDto" : {
+        "required" : [ "nome", "sobrenome", "cpf", "email" ],
+        "type" : "object",
+        "properties" : {
+          "nome" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          },
+          "sobrenome" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          },
+          "cpf" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          },
+          "email" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          }
+        }
+      },
+      "CreatePedidoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoCliente" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "listaAlimentos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AlimentoDto"
+            }
+          }
+        }
+      },
+      "DeleteAlimentoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoAlimento" : {
+            "type" : "integer"
+          },
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "EditAlimentoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          },
+          "codigoAlimento" : {
+            "type" : "integer"
+          },
+          "nomeAlimento" : {
+            "type" : "string"
+          },
+          "nomeFunciAlter" : {
+            "type" : "string"
+          },
+          "precoAlimento" : {
+            "type" : "number"
+          }
+        }
+      },
+      "EstadoPagamento" : {
+        "enum" : [ "RECUSADO", "APROVADO" ],
+        "type" : "string"
+      },
+      "EstadoPedido" : {
+        "enum" : [ "INICIADO", "RECEBIDO", "EM_PREPARACAO", "PRONTO", "FINALIZADO", "CANCELADO" ],
+        "type" : "string"
+      },
+      "Instant" : {
+        "format" : "date-time",
+        "type" : "string",
+        "example" : "2022-03-10T16:15:50Z"
+      },
+      "ListaPedidoAlimentoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoTipoAlimento" : {
+            "type" : "integer"
+          },
+          "codigoAlimento" : {
+            "type" : "integer"
+          },
+          "quantidadeAlimento" : {
+            "type" : "integer"
+          },
+          "valorAlimento" : {
+            "type" : "number"
+          },
+          "valorTotal" : {
+            "type" : "number"
+          }
+        }
+      },
+      "ListaPedidoDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoPedido" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "estadoPedido" : {
+            "$ref" : "#/components/schemas/EstadoPedido"
+          },
+          "estadoPagamento" : {
+            "$ref" : "#/components/schemas/EstadoPagamento"
+          },
+          "tsUltimoPedido" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "valorTotal" : {
+            "type" : "number"
+          },
+          "listaPedidoAlimentos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ListaPedidoAlimentoDto"
+            }
+          }
+        }
+      },
+      "MudancaEstadoPedido" : {
+        "type" : "object",
+        "properties" : {
+          "codigoPedido" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "estadoPedido" : {
+            "$ref" : "#/components/schemas/EstadoPedido"
+          }
+        }
+      },
+      "PedidoQrCodeDto" : {
+        "type" : "object",
+        "properties" : {
+          "codigoPedido" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "qrCode" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
