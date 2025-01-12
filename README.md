@@ -117,5 +117,14 @@ Fizemos um vídeo detalhando a arquitetura do projeto, acessível [aqui](https:/
 Nele também tem um guia da ordem de chamada dos endpoints.
 
 ### Guia completo
+O fluxo das chamadas segue basicamente a ordem de:
+1. Cadastrar alimentos
+2. Cadastrar cliente (opcional, pode ser nulo)
+3. Criar Pedido
+4. Webhook de confirmação de pagamento
+5. Alterar estado do pedido (checkout) 
+6. Alterar estado do pedido (em preparação)
+7. Alterar estado do pedido (pronto)
+   
+#### Cadastrar alimentos
 
-#### teste 
