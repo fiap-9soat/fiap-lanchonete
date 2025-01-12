@@ -44,4 +44,13 @@ public class WebhookServiceImpl implements WebhookService {
             pedidoService.modificarEstado(pedido.getCodigoPedido(), EstadoPedido.CANCELADO);
         }
     }
+
+    @Override
+    public void registrarNotificacaoMOCK(Integer codigoPedido) {
+        Pedido pedido = pedidoRepository.buscarPedidoPorId(codigoPedido);
+        pedido.setEstadoPagamento(EstadoPagamento.APROVADO);
+        pedidoRepository.atualizarPedido(pedido);
+
+        pedidoService.modificarEstado(pedido.getCodigoPedido(), EstadoPedido.EM_PREPARACAO);
+    }
 }

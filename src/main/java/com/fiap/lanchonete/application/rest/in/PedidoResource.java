@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
+import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestQuery;
 
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
@@ -97,6 +98,7 @@ public class PedidoResource {
     @POST
     @Path("/estado")
     @ResponseStatus(200)
+    @Transactional(rollbackOn = Exception.class)
     @Operation(summary = "Registra um evento de alteração de estado do pedido. Também utilizado para checkout e cancelamento.")
     public void alteraEstadoPedido(@Valid MudancaEstadoPedido dto) {
         pedidoService.modificarEstado(dto.codigoPedido(), dto.estadoPedido());
@@ -111,9 +113,19 @@ public class PedidoResource {
 
     @GET
     @Path("/notificacao-pagamento")
+    @Transactional(rollbackOn = Exception.class)
     @Operation(summary = "Webhook de inscrição")
     public Response registraWebhook(@RestQuery String topic, @RestQuery String id) {
         webhookService.registrarNotificacao(topic, id);
         return Response.ok("Webhook registrado com sucesso").build();
+    }
+
+    @GET
+    @Path("/notificacao-pagamento/{codigoPedido}")
+    @Transactional(rollbackOn = Exception.class)
+    @Operation(summary = "Webhook de inscrição MOCKADO")
+    public Response registraWebhookMOCK(@RestPath Integer codigoPedido) {
+        webhookService.registrarNotificacaoMOCK(codigoPedido);
+        return Response.ok("Webhook MOCK registrado com sucesso").build();
     }
 }
