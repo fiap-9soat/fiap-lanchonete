@@ -125,6 +125,4 @@ O fluxo das chamadas segue basicamente a ordem de:
 5. Alterar estado do pedido (checkout) 
 6. Alterar estado do pedido (em preparação)
 7. Alterar estado do pedido (pronto)
-   
-#### Cadastrar alimentos
 
