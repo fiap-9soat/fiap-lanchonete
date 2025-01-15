@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 
 @Builder
@@ -20,4 +21,6 @@ public class Pedido {
     private Integer codigoCliente;
     private Instant tsUltimoPedido;
     private EstadoPedido estadoPedido;
+    private EstadoPagamento estadoPagamento;
+    private String codigoIdExterno;
 }

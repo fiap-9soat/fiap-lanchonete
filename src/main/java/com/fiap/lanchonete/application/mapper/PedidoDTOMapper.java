@@ -25,5 +25,8 @@ public interface PedidoDTOMapper extends PedidoMapper {
     @Mapping(source = "codigoCliente", target = "codigoCliente")
     @Mapping(target = "tsUltimoPedido", expression = "java(java.time.Instant.now())")
     @Mapping(target = "codigoPedido", ignore = true)
+    @Mapping(target = "estadoPedido", ignore = true)
+    @Mapping(target = "estadoPagamento", ignore = true)
+    @Mapping(target = "codigoIdExterno", ignore = true)
     Pedido toDomain(CreatePedidoDto dto);
 }

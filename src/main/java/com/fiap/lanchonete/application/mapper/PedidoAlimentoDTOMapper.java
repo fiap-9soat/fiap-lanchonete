@@ -1,12 +1,13 @@
 package com.fiap.lanchonete.application.mapper;
 
-import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
-import com.fiap.lanchonete.domain.model.PedidoAlimento;
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
-import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
-import com.fiap.lanchonete.domain.pojo.PedidoAlimentoDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
+import com.fiap.lanchonete.domain.model.PedidoAlimento;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
+import com.fiap.lanchonete.domain.pojo.AlimentoDto;
+import com.fiap.lanchonete.domain.pojo.PedidoAlimentoDto;
 
 @Mapper(componentModel = "jakarta")
 public interface PedidoAlimentoDTOMapper extends PedidoAlimentoMapper {
@@ -22,8 +23,8 @@ public interface PedidoAlimentoDTOMapper extends PedidoAlimentoMapper {
     @Mapping(source = "codigoAlimento", target = "codigoAlimento")
     @Mapping(source = "codigoTipoAlimento", target = "codigoTipoAlimento")
     @Mapping(source = "quantidadeAlimento", target = "quantidadeAlimento")
-    PedidoAlimento toDomain(CreatePedidoDto createPedidoDto);
+    PedidoAlimento toDomain(AlimentoDto createPedidoDto);
 
     @Override
-    PedidoAlimentoLista toDomain(PedidoAlimento pedidoAlimento);
+    ListaPedidoAlimentoDto toDomain(PedidoAlimento pedidoAlimento);
 }

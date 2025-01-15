@@ -101,3 +101,28 @@ A API estará disponível para acesso na porta padrão `8080`, acesse esse ender
 ```
 http://localhost:8080/q/docs
 ```
+
+## Fase 2
+### Desenho de arquitetura da aplicação
+![](/public/img/desenho_aplicacao_fase_2.png)  
+Clique [aqui](https://excalidraw.com/#json=1p_ph-W69GxI4F9MZgRvu,eWeftMENraZ0MDIHP8lLTg) para visualizar em tela cheia.
+
+### Documentação dos endpoints
+É recomendável utilizar a documentação Swagger acessível após subir a aplicação (`/q/docs`), ou você pode baixar 
+[esse](/public/static/openapi.json) arquivo JSON contendo a especificação OpenAPI 3.0 da API. Basta abrir o arquivo em algum 
+editor com suporte a leitura do formato.
+
+### Video de apresentação do projeto
+Fizemos um vídeo detalhando a arquitetura do projeto, acessível [aqui](https://youtu.be/3f4BSngvKEE).  
+Nele também tem um guia da ordem de chamada dos endpoints.
+
+### Guia completo
+O fluxo das chamadas segue basicamente a ordem de:
+1. Cadastrar alimentos
+2. Cadastrar cliente (opcional, pode ser nulo)
+3. Criar Pedido
+4. Webhook de confirmação de pagamento
+5. Alterar estado do pedido (checkout) 
+6. Alterar estado do pedido (em preparação)
+7. Alterar estado do pedido (pronto)
+

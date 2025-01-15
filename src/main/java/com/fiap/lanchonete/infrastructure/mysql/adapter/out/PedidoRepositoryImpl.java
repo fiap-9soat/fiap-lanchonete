@@ -1,19 +1,18 @@
 package com.fiap.lanchonete.infrastructure.mysql.adapter.out;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fiap.lanchonete.domain.model.ListaPedido;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimentoLista;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.ListaPedidoEntityMapper;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoAlimentoListaMapper;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,6 +21,10 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     PedidoPanacheRepository pedidoPanacheRepository;
 
     PedidoEntityMapper pedidoEntityMapper;
+
+    ListaPedidoEntityMapper listaPedidoEntityMapper;
+
+    PedidoAlimentoListaMapper pedidoAlimentoListaMapper;
 
     @Override
     public Integer criarPedido(Pedido pedido) {
@@ -47,24 +50,20 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<ListaPedido> listarPedidos() {
-        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+    public List<ListaPedidoDto> listarPedidos() {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
+                WHERE estadoPedido NOT IN (EstadoPedido.CANCELADO,
+                    EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """);
-        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
-            return new ListaPedido(
-                    entity.getCodigoPedido(),
-                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
-                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
-                            alimento.getCodigoTipoAlimento(),
-                            alimento.getCodigoAlimento(),
-                            alimento.getQuantidadeAlimento())).toList());
-
+        return listaPedidosEntity.stream().map(entity -> {
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
+                return pedidoAlimentoListaMapper.toDomain(alimento);
+            }).toList());
+            return pedido;
         }).toList();
-
-        return resposta;
     }
 
     @Override
@@ -85,23 +84,55 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     }
 
     @Override
-    public List<ListaPedido> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
-        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+    public Pedido buscarPedidoPorIdExterno(Integer idExterno) {
+        var pedido = pedidoPanacheRepository.find("""
+                codigoIdExterno = ?1
+                """, idExterno).singleResult();
+        return pedidoEntityMapper.toDomain(pedido);
+    }
+
+    @Override
+    public List<ListaPedidoDto> buscarPedidosPorCodigoCliente(Integer codigoCliente) {
         List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
                 SELECT pe
                 FROM PedidoEntity pe
                 WHERE codigoCliente = ?1
+                AND estadoPedido NOT IN (EstadoPedido.CANCELADO,
+                    EstadoPedido.INICIADO, EstadoPedido.FINALIZADO)
                 """, codigoCliente);
-        List<ListaPedido> resposta = listaPedidosEntity.stream().map(entity -> {
-            return new ListaPedido(
-                    entity.getCodigoPedido(),
-                    entity.getTsUltimoPedido().atZone(zone).toInstant(),
-                    entity.getPedidoAlimento().stream().map(alimento -> new PedidoAlimentoLista(
-                            alimento.getCodigoTipoAlimento(),
-                            alimento.getCodigoAlimento(),
-                            alimento.getQuantidadeAlimento())).toList());
-
+        return listaPedidosEntity.stream().map(entity -> {
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
+                return pedidoAlimentoListaMapper.toDomain(alimento);
+            }).toList());
+            return pedido;
         }).toList();
-        return resposta;
+    }
+
+    @Override
+    public List<ListaPedidoDto> buscarPedidosPorCodigoPedido(Integer codigoPedido) {
+        List<PedidoEntity> listaPedidosEntity = pedidoPanacheRepository.list("""
+                SELECT pe
+                FROM PedidoEntity pe
+                WHERE codigoPedido = ?1
+                AND estadoPedido = EstadoPedido.INICIADO
+                """, codigoPedido);
+        return listaPedidosEntity.stream().map(entity -> {
+            ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
+            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
+                var pedidoAlimento = pedidoAlimentoListaMapper.toDomain(alimento);
+                pedidoAlimento.setValorAlimento(alimento.getAlimento().getPrecoAlimento());
+                pedidoAlimento.setValorTotal(
+                        alimento.getAlimento().getPrecoAlimento()
+                                .multiply(new BigDecimal(alimento.getQuantidadeAlimento().intValue())));
+                return pedidoAlimento;
+            }).toList());
+            return pedido;
+        }).toList();
+    }
+
+    @Override
+    public void registrarIdPedidoExterno(Integer id, String idPedidoExterno) {
+        pedidoPanacheRepository.update("codigoIdExterno = ?1 WHERE codigoPedido = ?2", idPedidoExterno, id);
     }
 }

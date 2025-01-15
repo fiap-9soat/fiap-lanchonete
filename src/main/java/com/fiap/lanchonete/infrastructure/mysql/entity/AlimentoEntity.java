@@ -1,5 +1,6 @@
 package com.fiap.lanchonete.infrastructure.mysql.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -30,6 +31,9 @@ public class AlimentoEntity {
 
     @Column(name = "nome_funci_alter")
     private String nomeFunciAlter;
+
+    @Column(name = "preco_alimento", columnDefinition = "DECIMAL(16, 2) DEFAULT 0.0")
+    private BigDecimal precoAlimento;
 
     @Column(name = "ts_alter")
     private LocalDateTime tsAlter;
