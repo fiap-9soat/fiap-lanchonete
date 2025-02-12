@@ -131,13 +131,6 @@ Basta adicionar um `/q/docs` ao final dessa URL para ter acesso aos recursos dis
 ![image](https://github.com/user-attachments/assets/1a3d1556-dced-4605-a261-ea69ed67437e)
 
 
-##### Em produção
-
-É recomendado excluir o acesso a recursos `/q/` para evitar brechas de segurança no acesso direto a documentação Swagger.
-
-Também é recomendado construir uma definição do `compose` secreta, com varieis de ambientes seguras, além de servir
-a aplicação principal atráves de um proxy reverso (como nginx, traefik e caddy).
-
 ### AWS
 
 #### Pré-requisitos
@@ -160,6 +153,13 @@ Server Version: v1.31.0
 minikube version --short
 v1.34.0
 ```
+
+##### Em produção
+
+É recomendado excluir o acesso a recursos `/q/` para evitar brechas de segurança no acesso direto a documentação Swagger.
+
+Também é recomendado construir uma definição do `compose` secreta, com varieis de ambientes seguras, além de servir
+a aplicação principal atráves de um proxy reverso (como nginx, traefik e caddy).
 
 
 ### Contribuindo
