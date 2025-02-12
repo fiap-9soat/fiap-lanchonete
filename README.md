@@ -31,6 +31,8 @@ o time de desenvolvimento a manter um padrão de estrutura e qualidade de códig
 
 ### Instalação
 
+### Docker - Em desenvolvimento
+
 #### Pré-requisitos
 
 É necessário ter a ferramenta `Docker` e o plugin `docker-compose` instalados para utilizar o projeto.
@@ -46,9 +48,19 @@ docker compose version
 
 Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04) tutorial para instalação das ferramentas.
 
-#### Em desenvolvimento
+#### Inicialização do projeto
 
-Para inicializar o projeto em ambiente de desenvolvimento, utilize:
+Crie um arquivo .env e coloque essas variáveis de ambiente:
+
+```shell
+MERCADO_PAGO_URL=https://api.mercadopago.com/
+ID_CONTA=662144664
+ID_LOJA=1B2D92F23
+URL_NOTIFICACAO=https://www.yourserver.com/notifications
+MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff39-662144664
+```
+
+Para inicializar o projeto:
 
 ```shell
 docker compose -f ./docker-compose.yml up -d
@@ -66,12 +78,89 @@ Para visualizar a documentação, acesse o endereço no seu navegador:
 http://localhost:8080/q/docs
 ```
 
-#### Em produção
+### Minikube - Em Desenvolvimento
+
+#### Pré-requisitos
+
+É necessário ter a ferramenta `Docker`, `Kubectl` e `Minikube` instalados para utilizar o projeto.
+
+Para verificar se as ferramentas existem no seu sistema, abra um terminal e utilize:
+
+```shell
+docker --version
+# Docker version 27.2.1, build 9e34c9b
+docker compose version
+# Docker Compose version v2.29.2
+
+kubectl version
+Client Version: v1.32.0
+Kustomize Version: v5.5.0
+Server Version: v1.31.0
+
+minikube version --short
+v1.34.0
+```
+
+Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04) tutorial para instalação das ferramentas.
+
+#### Inicialização do projeto
+
+Instancie o minikube:
+```shell
+minikube start
+```
+
+Aplique as configurações do yaml:
+```shell
+kubectl apply -f .kube/fiap.yml
+kubectl apply -f .kube/mysql.yml
+kubectl apply -f .kube/secret.yml
+```
+
+Pegue a url do projeto fiap-lanchonete:
+```shell
+minikube service fiap-lanchonete --url
+```
+
+A sua `URL` será essa, conforme a imagem:
+
+![image](https://github.com/user-attachments/assets/7963a575-8944-4a1f-ba42-8883ae1abf34)
+
+Basta adicionar um `/q/docs` ao final dessa URL para ter acesso aos recursos disponibilizados:
+
+![image](https://github.com/user-attachments/assets/1a3d1556-dced-4605-a261-ea69ed67437e)
+
+
+##### Em produção
 
 É recomendado excluir o acesso a recursos `/q/` para evitar brechas de segurança no acesso direto a documentação Swagger.
 
 Também é recomendado construir uma definição do `compose` secreta, com varieis de ambientes seguras, além de servir
 a aplicação principal atráves de um proxy reverso (como nginx, traefik e caddy).
+
+### AWS
+
+#### Pré-requisitos
+
+É necessário ter a ferramenta `AWS CLI` e `Kubectl` instalados e uma conta na AWS para utilizar o projeto.
+
+Para verificar se as ferramentas existem no seu sistema, abra um terminal e utilize:
+
+```shell
+docker --version
+# Docker version 27.2.1, build 9e34c9b
+docker compose version
+# Docker Compose version v2.29.2
+
+kubectl version
+Client Version: v1.32.0
+Kustomize Version: v5.5.0
+Server Version: v1.31.0
+
+minikube version --short
+v1.34.0
+```
+
 
 ### Contribuindo
 
