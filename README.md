@@ -1,6 +1,6 @@
 # fiap-lanchonete
 
-Projeto para Tech Challenge da turma 9SOAT, simulando a API de uma lanchonete.
+Projeto para Tech Challenge da turma 9SOAT, simulando a API de uma lanchonete.a
 
 ## Objetivo
 
