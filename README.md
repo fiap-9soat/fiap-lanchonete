@@ -24,7 +24,7 @@ Crie um arquivo .env e coloque essas variáveis de ambiente:
 
 ```shell
 DB_URL=localhost:3306
-DB_USER=fiap
+MYSQL_USER=fiap
 MYSQL_PASSWORD=fiap
 MERCADO_PAGO_URL=https://api.mercadopago.com/
 ID_CONTA=662144664
@@ -59,8 +59,7 @@ Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.
 Crie um arquivo .env e coloque essas variáveis de ambiente:
 
 ```shell
-DB_URL=localhost:3306
-DB_USER=fiap
+MYSQL_USER=fiap
 MYSQL_PASSWORD=fiap
 MERCADO_PAGO_URL=https://api.mercadopago.com/
 ID_CONTA=662144664
