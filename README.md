@@ -16,6 +16,26 @@ No momento, a API permite:
 
 ## Instalação
 
+### Local
+Essa configuração é somente para rodar localmente em desenvolvimento.
+
+#### Inicialização do projeto
+Crie um arquivo .env e coloque essas variáveis de ambiente:
+
+```shell
+DB_URL=localhost:3306
+DB_USER=fiap
+MYSQL_PASSWORD=fiap
+MERCADO_PAGO_URL=https://api.mercadopago.com/
+ID_CONTA=662144664
+ID_LOJA=1B2D92F23
+URL_NOTIFICACAO=https://www.yourserver.com/notifications
+MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff39-662144664
+```
+
+Rode o comando
+```./mvnw quarkus:dev```
+
 ### Docker
 Essa configuração é recomendada somente para ambientes de desenvolvimento.
 
@@ -35,19 +55,6 @@ docker compose version
 Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04) tutorial para instalação das ferramentas.
 
 #### Inicialização do projeto
-
-Crie um arquivo .env e coloque essas variáveis de ambiente:
-
-```shell
-DB_URL=localhost:3306
-DB_USER=fiap
-MYSQL_PASSWORD=fiap
-MERCADO_PAGO_URL=https://api.mercadopago.com/
-ID_CONTA=662144664
-ID_LOJA=1B2D92F23
-URL_NOTIFICACAO=https://www.yourserver.com/notifications
-MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff39-662144664
-```
 
 Para inicializar o projeto:
 
