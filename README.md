@@ -36,6 +36,11 @@ MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff
 Rode o comando
 ```./mvnw quarkus:dev```
 
+A API estará disponível na porta padrão 8080 após inicialização. Para visualizar a documentação, acesse o endereço no seu navegador:
+
+http://localhost:8080/q/docs
+
+
 ### Docker
 Essa configuração é recomendada somente para ambientes de desenvolvimento.
 
