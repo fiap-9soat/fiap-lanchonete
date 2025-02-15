@@ -11,15 +11,17 @@ Este repositório contém uma implementação em Quarkus de uma API de lanchonet
 No momento, a API permite:
 
 - Cadastro e edição de clientes
-- Criação e edição de alimentos (que representam as categorias dos pedidos)
+- Criação e edição de produtos (que representam as categorias dos pedidos)
 - Criação e edição de pedidos
 
 ## Instalação
 
 ### Local
+
 Essa configuração é somente para rodar localmente em desenvolvimento.
 
 #### Inicialização do projeto
+
 Crie um arquivo .env e coloque essas variáveis de ambiente:
 
 ```shell
@@ -34,7 +36,7 @@ MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff
 ```
 
 Rode o comando
-```./mvnw quarkus:dev```
+`./mvnw quarkus:dev`
 
 A API estará disponível na porta padrão 8080 após inicialização. Para visualizar a documentação, acesse o endereço no seu navegador:
 
@@ -42,6 +44,7 @@ http://localhost:8080/q/docs
 
 
 ### Docker
+
 Essa configuração é recomendada somente para ambientes de desenvolvimento.
 
 #### Pré-requisitos
@@ -92,13 +95,15 @@ http://localhost:8080/q/docs
 ```
 
 ### Kubernetes
+
 Essa é a configuração recomendada para ambientes produtivos.
 
 #### Pré-requisitos
+
 É necessário ter a ferramenta `Docker`, `kubectl` instalados para utilizar o projeto.  
 Também é necessário providenciar um cluster Kubernetes funcional para realizar a configuração com `kubectl`.  
 Para ambientes de desenvolvimento/local, o [Minikube](https://minikube.sigs.k8s.io/docs/start/).  
-Para ambientes produtivos, uma ferramenta gerenciada, como o [AWS EKS](https://aws.amazon.com/pt/eks/) é recomendada.  
+Para ambientes produtivos, uma ferramenta gerenciada, como o [AWS EKS](https://aws.amazon.com/pt/eks/) é recomendada.
 
 Para verificar se as ferramentas existem no seu sistema, abra um terminal e utilize:
 
@@ -119,10 +124,12 @@ minikube version --short
 ```
 
 #### Inicialização do projeto
+
 Essa parte do guia assume que o `kubectl` já está disponível e apontando para um cluster Kubernetes funcional.
 Para testes locais, pode-se utilizar o guia do [Minikube](#minikube)
 
 Na pasta raiz do projeto, aplique as configurações do yaml:
+
 ```shell
 kubectl apply -f .kube/fiap.yml
 kubectl apply -f .kube/mysql.yml
@@ -133,7 +140,9 @@ Após alguns minutos, o Kubernetes finalizará o pull e deploy das imagens `mysq
 utilizados pela aplicação.
 
 ##### Minikube
+
 Caso esteja utilizando o `Minikube`, verifique a URL do projeto fiap-lanchonete:
+
 ```shell
 minikube service fiap-lanchonete --url
 ```
@@ -147,17 +156,20 @@ Basta adicionar `/q/docs` ao final dessa URL para ter acesso aos recursos dispon
 ![image](https://github.com/user-attachments/assets/1a3d1556-dced-4605-a261-ea69ed67437e)
 
 #### HPA
-A configuração do [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) pode variar um 
+
+A configuração do [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) pode variar um
 pouco dependendo do ambiente.  
-É necessário que o cluster possua alguma instância do [metrics-server](https://github.com/kubernetes-sigs/metrics-server#readme) 
+É necessário que o cluster possua alguma instância do [metrics-server](https://github.com/kubernetes-sigs/metrics-server#readme)
 funcionando.
 
 Para o `Minikube`, execute esse comando para habilitar o `metrics-server`:
+
 ```shell
 minikube addons enable metrics-server
 ```
 
 Com o `metrics-server` habilitado, basta executar esse comando para fazer o escalamento automatico da API principal:
+
 ```shell
 kubectl autoscale deployment fiap-lanchonete --cpu-percent=50 --min=2 --max=10
 ```
@@ -166,16 +178,18 @@ Essa configuração instrui o Kubernetes a manter pelo menos 2 replicas da aplic
 de uso de CPU. Existem outras maneiras de realizar esse escalonamento, como por uso de memória ou requisições.
 
 #### Escalonamento de Dependencias
-Para dependencias externas que não são 'stateless', como o banco de dados `MySQL`, é recomendado 
-utilizar as configurações de clusterização da propria dependencia, já que simplesmente adicionar 
+
+Para dependencias externas que não são 'stateless', como o banco de dados `MySQL`, é recomendado
+utilizar as configurações de clusterização da propria dependencia, já que simplesmente adicionar
 mais replicas/pods não é o suficiente para garantir a tolerância a falhas.
 
-Em ambientes produtivos, é recomendado utilizar um serviço gerenciado, como o 
+Em ambientes produtivos, é recomendado utilizar um serviço gerenciado, como o
 [Amazon RDS para MySQL](https://aws.amazon.com/pt/rds/mysql/).
 
-
 ### AWS EKS
+
 #### Importante
+
 Não é necessário utilizar `AWS EKS` para viabilizar o deploy do projeto, ele é apenas um dos diversos serviços
 de cluster Kubernetes gerenciados. Essa seção do guia contém algumas dicas para facilitar a configuração, mas não cobre
 todo o fluxo de configuração dos Clusters e NodeGroups da AWS.
@@ -190,8 +204,8 @@ da `AWS CLI` e do `AWS EKS CLI`.
 Siga [este](https://docs.aws.amazon.com/eks/latest/userguide/setting-up.html) guia oficial para realizar a instalação dos requisitos.
 
 Alternativamente, também é possível criar uma instância do `AWS EC2` associada ao cluster para realizar a configuração diretamente
-nos servidores da AWS. A instância vem pré-configurada com as ferramentas necessárias e 
-(em alguns casos) com a conexão ao cluster, além de ser possível realizar comandos diretamente do navegador com o 
+nos servidores da AWS. A instância vem pré-configurada com as ferramentas necessárias e
+(em alguns casos) com a conexão ao cluster, além de ser possível realizar comandos diretamente do navegador com o
 `AWS CloudShell` ou via conexão `SSH`.
 Essa é uma alternativa segura para configuração e testes, já que as credenciais serão gerenciadas automaticamente
 pela `AWS`.
@@ -203,23 +217,24 @@ Esse passo é importante, já que o NodeGroup é responsável por delegar 'onde'
 Verifique se ambos o Cluster e NodeGroup estejam com status de `Created` e sem nenhum problema de healthcheck antes de prosseguir.
 
 #### Configuração
+
 Para realizar o deploy da aplicação, basta seguir o [guia](#inicialização-do-projeto-1) padrão de inicialização, presente neste repositório.  
-O `AWS EKS` possui algumas ferramentas proprietarias que podem ser configuradas separadamente, 
+O `AWS EKS` possui algumas ferramentas proprietarias que podem ser configuradas separadamente,
 como o [AWS LoadBalancer Controller](https://docs.aws.amazon.com/pt_br/eks/latest/userguide/aws-load-balancer-controller.html),
 mas estes não são obrigatórios para a configuração da aplicação.
 
 #### AWS EC2
-Uma instância do `AWS EC2` pode ser utilizada tanto para configurar o cluster gerenciado do `AWS EKS`, quanto para executar 
+
+Uma instância do `AWS EC2` pode ser utilizada tanto para configurar o cluster gerenciado do `AWS EKS`, quanto para executar
 uma instância do `Minikube` para testes. A segunda opção não é recomendada para ambientes produtivos.
 [Este](https://crishantha.medium.com/running-minikube-on-aws-ec2-e845337a956) guia pode ser utilizado como base para configuração.
-
 
 ### Contribuindo
 
 Para contribuir com o desenvolvimento do projeto,
 recomenda-se instalar a versão `21` do `JDK`, além das dependencias padrão `Docker` e `Docker Compose`.
 
-Também é necessário configurar o arquivo `.env` localmente, seguindo o [exemplo](#docker) 
+Também é necessário configurar o arquivo `.env` localmente, seguindo o [exemplo](#docker)
 da seção de instalação deste guia.
 
 Em seguida, execute os containers das dependências do projeto:
@@ -245,26 +260,31 @@ http://localhost:8080/q/docs
 ```
 
 ## Fase 2
+
 ### Desenho de arquitetura da aplicação
+
 ![](/public/img/desenho_aplicacao_fase_2.png)  
 Clique [aqui](https://excalidraw.com/#json=1p_ph-W69GxI4F9MZgRvu,eWeftMENraZ0MDIHP8lLTg) para visualizar em tela cheia.
 
 ### Documentação dos endpoints
-É recomendável utilizar a documentação Swagger acessível após subir a aplicação (`/q/docs`), ou você pode baixar 
-[esse](/public/static/openapi.json) arquivo JSON contendo a especificação OpenAPI 3.0 da API. Basta abrir o arquivo em algum 
+
+É recomendável utilizar a documentação Swagger acessível após subir a aplicação (`/q/docs`), ou você pode baixar
+[esse](/public/static/openapi.json) arquivo JSON contendo a especificação OpenAPI 3.0 da API. Basta abrir o arquivo em algum
 editor com suporte a leitura do formato.
 
 ### Video de apresentação do projeto
+
 Fizemos um vídeo detalhando a arquitetura do projeto, acessível [aqui](https://youtu.be/3f4BSngvKEE).  
 Nele também tem um guia da ordem de chamada dos endpoints.
 
 ### Guia completo
+
 O fluxo das chamadas segue basicamente a ordem de:
-1. Cadastrar alimentos
+
+1. Cadastrar produtos
 2. Cadastrar cliente (opcional, pode ser nulo)
 3. Criar Pedido
 4. Webhook de confirmação de pagamento
-5. Alterar estado do pedido (checkout) 
+5. Alterar estado do pedido (checkout)
 6. Alterar estado do pedido (em preparação)
 7. Alterar estado do pedido (pronto)
-

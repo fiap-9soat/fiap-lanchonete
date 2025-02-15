@@ -36,6 +36,6 @@ public interface ListaPedidoEntityMapper {
     @Mapping(source = "codigoPedido", target = "codigoPedido")
     @Mapping(source = "estadoPedido", target = "estadoPedido")
     @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "localDateTimeParaInstant")
-    @Mapping(target = "listaPedidoAlimentos", ignore = true)
+    @Mapping(target = "listaPedidoProdutos", ignore = true)
     ListaPedidoDto toDomain(PedidoEntity domain);
 }

@@ -10,7 +10,7 @@ import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.mysql.dao.PedidoPanacheRepository;
 import com.fiap.lanchonete.infrastructure.mysql.entity.PedidoEntity;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.ListaPedidoEntityMapper;
-import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoAlimentoListaMapper;
+import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoProdutoListaMapper;
 import com.fiap.lanchonete.infrastructure.mysql.mapper.PedidoEntityMapper;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 
     ListaPedidoEntityMapper listaPedidoEntityMapper;
 
-    PedidoAlimentoListaMapper pedidoAlimentoListaMapper;
+    PedidoProdutoListaMapper pedidoProdutoListaMapper;
 
     @Override
     public Integer criarPedido(Pedido pedido) {
@@ -59,8 +59,8 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 """);
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
-            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
-                return pedidoAlimentoListaMapper.toDomain(alimento);
+            pedido.setListaPedidoProdutos(entity.getPedidoProduto().stream().map(produto -> {
+                return pedidoProdutoListaMapper.toDomain(produto);
             }).toList());
             return pedido;
         }).toList();
@@ -102,8 +102,8 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 """, codigoCliente);
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
-            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
-                return pedidoAlimentoListaMapper.toDomain(alimento);
+            pedido.setListaPedidoProdutos(entity.getPedidoProduto().stream().map(produto -> {
+                return pedidoProdutoListaMapper.toDomain(produto);
             }).toList());
             return pedido;
         }).toList();
@@ -119,13 +119,13 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 """, codigoPedido);
         return listaPedidosEntity.stream().map(entity -> {
             ListaPedidoDto pedido = listaPedidoEntityMapper.toDomain(entity);
-            pedido.setListaPedidoAlimentos(entity.getPedidoAlimento().stream().map(alimento -> {
-                var pedidoAlimento = pedidoAlimentoListaMapper.toDomain(alimento);
-                pedidoAlimento.setValorAlimento(alimento.getAlimento().getPrecoAlimento());
-                pedidoAlimento.setValorTotal(
-                        alimento.getAlimento().getPrecoAlimento()
-                                .multiply(new BigDecimal(alimento.getQuantidadeAlimento().intValue())));
-                return pedidoAlimento;
+            pedido.setListaPedidoProdutos(entity.getPedidoProduto().stream().map(produto -> {
+                var pedidoProduto = pedidoProdutoListaMapper.toDomain(produto);
+                pedidoProduto.setValorProduto(produto.getProduto().getPrecoProduto());
+                pedidoProduto.setValorTotal(
+                        produto.getProduto().getPrecoProduto()
+                                .multiply(new BigDecimal(produto.getQuantidadeProduto().intValue())));
+                return pedidoProduto;
             }).toList());
             return pedido;
         }).toList();

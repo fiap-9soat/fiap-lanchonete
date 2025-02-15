@@ -24,22 +24,22 @@ public class DAOContext {
     @Produces
     public PedidoRepository PedidoRepository(PedidoPanacheRepository pedidoPanacheRepository,
             PedidoEntityMapper pedidoEntityMapper, ListaPedidoEntityMapper listaPedidoEntityMapper,
-            PedidoAlimentoListaMapper pedidoAlimentoListaMapper) {
+            PedidoProdutoListaMapper pedidoProdutoListaMapper) {
         return new PedidoRepositoryImpl(pedidoPanacheRepository, pedidoEntityMapper, listaPedidoEntityMapper,
-                pedidoAlimentoListaMapper);
+                pedidoProdutoListaMapper);
     }
 
     @Produces
-    public PedidoAlimentoRepository PedidoAlimentoRepository(
-            PedidoAlimentoPanacheRepository pedidoAlimentoPanacheRepository,
-            PedidoAlimentoEntityMapper pedidoAlimentoEntityMapper) {
-        return new PedidoAlimentoRepositoryImpl(pedidoAlimentoPanacheRepository, pedidoAlimentoEntityMapper);
+    public PedidoProdutoRepository PedidoProdutoRepository(
+            PedidoProdutoPanacheRepository pedidoProdutoPanacheRepository,
+            PedidoProdutoEntityMapper pedidoProdutoEntityMapper) {
+        return new PedidoProdutoRepositoryImpl(pedidoProdutoPanacheRepository, pedidoProdutoEntityMapper);
     }
 
     @Produces
-    public AlimentoRepository alimentoRepository(AlimentoPanacheRepository alimentoPanacheRepository,
-            AlimentoEntityMapper alimentoEntityMapper) {
-        return new AlimentoRepositoryImpl(alimentoPanacheRepository, alimentoEntityMapper);
+    public ProdutoRepository produtoRepository(ProdutoPanacheRepository produtoPanacheRepository,
+            ProdutoEntityMapper produtoEntityMapper) {
+        return new ProdutoRepositoryImpl(produtoPanacheRepository, produtoEntityMapper);
     }
 
     @Produces
@@ -50,11 +50,11 @@ public class DAOContext {
     }
 
     @Produces
-    public HistoricoPedidoAlimentoRepository historicoPedidoAlimentoRepository(
-            HistoricoPedidoAlimentoPanacheRepository historicoPedidoAlimentoPanacheRepository,
-            HistoricoPedidoAlimentoEntityMapper historicoPedidoAlimentoEntityMapper) {
-        return new HistoricoPedidoAlimentoRepositoryImpl(historicoPedidoAlimentoPanacheRepository,
-                historicoPedidoAlimentoEntityMapper);
+    public HistoricoPedidoProdutoRepository historicoPedidoProdutoRepository(
+            HistoricoPedidoProdutoPanacheRepository historicoPedidoProdutoPanacheRepository,
+            HistoricoPedidoProdutoEntityMapper historicoPedidoProdutoEntityMapper) {
+        return new HistoricoPedidoProdutoRepositoryImpl(historicoPedidoProdutoPanacheRepository,
+                historicoPedidoProdutoEntityMapper);
     }
 
 }

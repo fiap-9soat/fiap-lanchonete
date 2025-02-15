@@ -20,5 +20,5 @@ public class ListaPedidoDto {
     EstadoPagamento estadoPagamento;
     Instant tsUltimoPedido;
     BigDecimal valorTotal;
-    List<ListaPedidoAlimentoDto> listaPedidoAlimentos;
+    List<ListaPedidoProdutoDto> listaPedidoProdutos;
 }

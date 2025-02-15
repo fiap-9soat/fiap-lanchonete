@@ -34,7 +34,7 @@ public interface PedidoEntityMapper {
     @Mapping(source = "estadoPagamento", target = "estadoPagamento")
     @Mapping(source = "tsUltimoPedido", target = "tsUltimoPedido", qualifiedByName = "instantParaLocalDateTime")
     @Mapping(target = "codigoIdExterno", ignore = true)
-    @Mapping(target = "pedidoAlimento", ignore = true)
+    @Mapping(target = "pedidoProduto", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     PedidoEntity toEntity(Pedido domain);
 

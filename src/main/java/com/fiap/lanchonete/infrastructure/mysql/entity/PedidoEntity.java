@@ -56,7 +56,7 @@ public class PedidoEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido", insertable = false, updatable = false)
-    private Set<PedidoAlimentoEntity> pedidoAlimento = new HashSet<>();
+    private Set<PedidoProdutoEntity> pedidoProduto = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo_cliente", insertable = false, updatable = false)

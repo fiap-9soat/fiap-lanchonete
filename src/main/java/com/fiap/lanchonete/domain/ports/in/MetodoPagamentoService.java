@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.QrCodeDto;
-import com.fiap.lanchonete.domain.pojo.AlimentoDto;
+import com.fiap.lanchonete.domain.pojo.ProdutoDto;
 
 public interface MetodoPagamentoService {
-    QrCodeDto gerarQrCode(String idExterno, Pedido pedido, List<AlimentoDto> listaPedidoAlimento);
+    QrCodeDto gerarQrCode(String idExterno, Pedido pedido, List<ProdutoDto> listaPedidoProduto);
 }
