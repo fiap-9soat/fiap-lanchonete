@@ -1,27 +1,27 @@
 package com.fiap.lanchonete.infrastructure.config.context;
 
-import com.fiap.lanchonete.domain.mapper.AlimentoMapper;
+import com.fiap.lanchonete.domain.mapper.ProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.ClienteMapper;
-import com.fiap.lanchonete.domain.mapper.HistoricoPedidoAlimentoMapper;
+import com.fiap.lanchonete.domain.mapper.HistoricoPedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.HistoricoPedidoMapper;
-import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
+import com.fiap.lanchonete.domain.mapper.PedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.ports.in.AlimentoService;
+import com.fiap.lanchonete.domain.ports.in.ProdutoService;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
-import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoAlimentoService;
+import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoProdutoService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoService;
 import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.ports.in.PedidoService;
 import com.fiap.lanchonete.domain.ports.in.WebhookService;
-import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
+import com.fiap.lanchonete.domain.ports.out.ProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.ClienteRepository;
-import com.fiap.lanchonete.domain.ports.out.HistoricoPedidoAlimentoRepository;
+import com.fiap.lanchonete.domain.ports.out.HistoricoPedidoProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.HistoricoPedidoRepository;
-import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
+import com.fiap.lanchonete.domain.ports.out.PedidoProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.domain.service.AlimentoServiceImpl;
+import com.fiap.lanchonete.domain.service.ProdutoServiceImpl;
 import com.fiap.lanchonete.domain.service.ClienteServiceImpl;
-import com.fiap.lanchonete.domain.service.HistoricoPedidoAlimentoServiceImpl;
+import com.fiap.lanchonete.domain.service.HistoricoPedidoProdutoServiceImpl;
 import com.fiap.lanchonete.domain.service.HistoricoPedidoServiceImpl;
 import com.fiap.lanchonete.domain.service.PedidoServiceImpl;
 
@@ -37,15 +37,15 @@ public class ServiceContext {
 
     @Produces
     public PedidoService pedidoService(PedidoRepository pedidoRepository,
-            PedidoAlimentoRepository pedidoAlimentoRepository,
+            PedidoProdutoRepository pedidoProdutoRepository,
             PedidoMapper pedidoMapper,
-            AlimentoService alimentoService,
-            PedidoAlimentoMapper pedidoAlimentoMapper, HistoricoPedidoService historicoPedidoService,
-            HistoricoPedidoAlimentoService historicoPedidoAlimentoService,
+            ProdutoService produtoService,
+            PedidoProdutoMapper pedidoProdutoMapper, HistoricoPedidoService historicoPedidoService,
+            HistoricoPedidoProdutoService historicoPedidoProdutoService,
             MetodoPagamentoService metodoPagamentoService, WebhookService webhookService) {
-        return new PedidoServiceImpl(pedidoRepository, pedidoAlimentoRepository,
-                pedidoMapper, alimentoService, pedidoAlimentoMapper, historicoPedidoService,
-                historicoPedidoAlimentoService, metodoPagamentoService);
+        return new PedidoServiceImpl(pedidoRepository, pedidoProdutoRepository,
+                pedidoMapper, produtoService, pedidoProdutoMapper, historicoPedidoService,
+                historicoPedidoProdutoService, metodoPagamentoService);
     }
 
     @Produces
@@ -55,8 +55,8 @@ public class ServiceContext {
     }
 
     @Produces
-    public AlimentoService alimentoService(AlimentoRepository alimentoRepository, AlimentoMapper alimentoMapper) {
-        return new AlimentoServiceImpl(alimentoRepository, alimentoMapper);
+    public ProdutoService produtoService(ProdutoRepository produtoRepository, ProdutoMapper produtoMapper) {
+        return new ProdutoServiceImpl(produtoRepository, produtoMapper);
     }
 
     @Produces
@@ -66,9 +66,9 @@ public class ServiceContext {
     }
 
     @Produces
-    public HistoricoPedidoAlimentoService historicoPedidoAlimentoService(
-            HistoricoPedidoAlimentoRepository historicoPedidoAlimentoRepository,
-            HistoricoPedidoAlimentoMapper historicoPedidoAlimentoMapper) {
-        return new HistoricoPedidoAlimentoServiceImpl(historicoPedidoAlimentoRepository, historicoPedidoAlimentoMapper);
+    public HistoricoPedidoProdutoService historicoPedidoProdutoService(
+            HistoricoPedidoProdutoRepository historicoPedidoProdutoRepository,
+            HistoricoPedidoProdutoMapper historicoPedidoProdutoMapper) {
+        return new HistoricoPedidoProdutoServiceImpl(historicoPedidoProdutoRepository, historicoPedidoProdutoMapper);
     }
 }

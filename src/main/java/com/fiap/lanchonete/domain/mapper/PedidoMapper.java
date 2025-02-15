@@ -4,5 +4,5 @@ import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 
 public interface PedidoMapper {
-    Pedido toDomain(CreatePedidoDto createAlimentoDto);
+    Pedido toDomain(CreatePedidoDto createProdutoDto);
 }

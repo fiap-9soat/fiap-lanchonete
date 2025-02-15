@@ -11,5 +11,5 @@ import lombok.Setter;
 public class CreatePedidoDto {
     @Nullable
     private Integer codigoCliente;
-    List<AlimentoDto> listaAlimentos;
+    List<ProdutoDto> listaProdutos;
 }

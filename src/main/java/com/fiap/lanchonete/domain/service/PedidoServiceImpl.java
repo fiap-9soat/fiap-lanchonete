@@ -14,19 +14,20 @@ import org.jboss.logging.Logger;
 import com.fiap.lanchonete.domain.enums.EstadoPagamento;
 import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.enums.TipoAlteracao;
-import com.fiap.lanchonete.domain.mapper.PedidoAlimentoMapper;
+import com.fiap.lanchonete.domain.mapper.PedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.model.Alimento;
+import com.fiap.lanchonete.domain.model.Produto;
 import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoAlimento;
+import com.fiap.lanchonete.domain.model.PedidoProduto;
 import com.fiap.lanchonete.domain.model.PedidoQrCodeDto;
-import com.fiap.lanchonete.domain.pojo.AlimentoDto;
+import com.fiap.lanchonete.domain.pojo.ProdutoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
-import com.fiap.lanchonete.domain.pojo.ListaPedidoAlimentoDto;
+import com.fiap.lanchonete.domain.pojo.ListaPedidoProdutoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoDto;
-import com.fiap.lanchonete.domain.ports.out.PedidoAlimentoRepository;
+import com.fiap.lanchonete.domain.ports.out.PedidoProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 
+import io.quarkus.logging.Log;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotAcceptableException;
 import jakarta.ws.rs.NotFoundException;
@@ -39,17 +40,17 @@ public class PedidoServiceImpl implements PedidoService {
 
     PedidoRepository pedidoRepository;
 
-    PedidoAlimentoRepository pedidoAlimentoRepository;
+    PedidoProdutoRepository pedidoProdutoRepository;
 
     PedidoMapper pedidoMapper;
 
-    AlimentoService alimentoService;
+    ProdutoService produtoService;
 
-    PedidoAlimentoMapper pedidoAlimentoMapper;
+    PedidoProdutoMapper pedidoProdutoMapper;
 
     HistoricoPedidoService historicoPedidoService;
 
-    HistoricoPedidoAlimentoService historicoPedidoAlimentoService;
+    HistoricoPedidoProdutoService historicoPedidoProdutoService;
 
     MetodoPagamentoService metodoPagamentoService;
 
@@ -60,26 +61,26 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.buscarPedidoPorId(id);
     }
 
-    private ListaPedidoAlimentoDto calcularValorPedidoAlimento(ListaPedidoAlimentoDto pedidoAlimento) {
-        Alimento alimentoRelacionado = alimentoService.buscarAlimentoPorId(pedidoAlimento.getCodigoAlimento(),
-                pedidoAlimento.getCodigoTipoAlimento());
-        BigDecimal valorAlimento = Objects.requireNonNullElse(alimentoRelacionado.getPrecoAlimento(), BigDecimal.ZERO);
-        BigDecimal valorTotal = valorAlimento.multiply(BigDecimal.valueOf(pedidoAlimento.getQuantidadeAlimento()));
-        pedidoAlimento.setValorAlimento(valorAlimento);
-        pedidoAlimento.setValorTotal(valorTotal);
+    private ListaPedidoProdutoDto calcularValorPedidoProduto(ListaPedidoProdutoDto pedidoProduto) {
+        Produto produtoRelacionado = produtoService.buscarProdutoPorId(pedidoProduto.getCodigoProduto(),
+                pedidoProduto.getCodigoTipoProduto());
+        BigDecimal valorProduto = Objects.requireNonNullElse(produtoRelacionado.getPrecoProduto(), BigDecimal.ZERO);
+        BigDecimal valorTotal = valorProduto.multiply(BigDecimal.valueOf(pedidoProduto.getQuantidadeProduto()));
+        pedidoProduto.setValorProduto(valorProduto);
+        pedidoProduto.setValorTotal(valorTotal);
 
-        return pedidoAlimento;
+        return pedidoProduto;
     }
 
     /**
-     * Retorna a soma de todos os 'valores totais' para cada conjunto de alimentos
+     * Retorna a soma de todos os 'valores totais' para cada conjunto de produtos
      * no pedido.
      *
-     * @see ListaPedidoAlimentoDto#valorTotal
+     * @see ListaPedidoProdutoDto#valorTotal
      */
     private BigDecimal calcularValorTotalPedido(ListaPedidoDto pedidoDto) {
-        List<BigDecimal> listaValoresTotais = pedidoDto.getListaPedidoAlimentos().stream()
-                .map(ListaPedidoAlimentoDto::getValorTotal).toList();
+        List<BigDecimal> listaValoresTotais = pedidoDto.getListaPedidoProdutos().stream()
+                .map(ListaPedidoProdutoDto::getValorTotal).toList();
 
         return listaValoresTotais.stream().reduce(BigDecimal.valueOf(0), BigDecimal::add);
     }
@@ -93,12 +94,12 @@ public class PedidoServiceImpl implements PedidoService {
     private List<ListaPedidoDto> preencherListaPedidos(List<ListaPedidoDto> listaPedidoDtos) {
         List<ListaPedidoDto> listaPedidoFinal = new ArrayList<>();
         for (ListaPedidoDto listaPedidoDto : listaPedidoDtos) {
-            List<ListaPedidoAlimentoDto> pedidoAlimentosComValor = listaPedidoDto.getListaPedidoAlimentos()
+            List<ListaPedidoProdutoDto> pedidoProdutosComValor = listaPedidoDto.getListaPedidoProdutos()
                     .stream()
-                    .map(this::calcularValorPedidoAlimento)
+                    .map(this::calcularValorPedidoProduto)
                     .toList();
 
-            listaPedidoDto.setListaPedidoAlimentos(pedidoAlimentosComValor);
+            listaPedidoDto.setListaPedidoProdutos(pedidoProdutosComValor);
 
             listaPedidoDto.setValorTotal(calcularValorTotalPedido(listaPedidoDto));
 
@@ -144,12 +145,12 @@ public class PedidoServiceImpl implements PedidoService {
 
         // Processa e apaga o pedido caso seja FINALIZADO ou CANCELADO
         if (estadoPedido.equals(EstadoPedido.FINALIZADO) || estadoPedido.equals(EstadoPedido.CANCELADO)) {
-            List<PedidoAlimento> listaPedidoAlimentos = pedidoAlimentoRepository.listarPorCodigoPedido(codigoPedido);
-            pedidoAlimentoRepository.removerPorCodigoPedido(codigoPedido);
+            List<PedidoProduto> listaPedidoProdutos = pedidoProdutoRepository.listarPorCodigoPedido(codigoPedido);
+            pedidoProdutoRepository.removerPorCodigoPedido(codigoPedido);
 
-            // Adiciona alimentos no histórico
-            listaPedidoAlimentos.forEach(
-                    alimento -> historicoPedidoAlimentoService.registrarPedidoAlimento(alimento, TipoAlteracao.D));
+            // Adiciona produtos no histórico
+            listaPedidoProdutos.forEach(
+                    produto -> historicoPedidoProdutoService.registrarPedidoProduto(produto, TipoAlteracao.D));
 
             pedidoRepository.removerPedido(codigoPedido);
         } else {
@@ -183,20 +184,20 @@ public class PedidoServiceImpl implements PedidoService {
 
         final Integer codigoPedidoFinal = codigoPedido;
 
-        createPedidoDto.getListaAlimentos().forEach(alimento -> {
+        createPedidoDto.getListaProdutos().forEach(produto -> {
             try {
-                PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
-                pedidoAlimento.setCodigoPedido(codigoPedidoFinal);
-                pedidoAlimentoRepository.checarSeTipoAlimentoJaExiste(pedidoAlimento);
-                pedidoAlimentoRepository.inserir(pedidoAlimento);
-                historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+                PedidoProduto pedidoProduto = pedidoProdutoMapper.toDomain(produto);
+                pedidoProduto.setCodigoPedido(codigoPedidoFinal);
+                pedidoProdutoRepository.checarSeTipoProdutoJaExiste(pedidoProduto);
+                pedidoProdutoRepository.inserir(pedidoProduto);
+                historicoPedidoProdutoService.registrarPedidoProduto(pedidoProduto, TipoAlteracao.I);
             } catch (BadRequestException e) {
                 e.printStackTrace();
                 throw e;
             }
         });
 
-        var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, createPedidoDto.getListaAlimentos());
+        var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, createPedidoDto.getListaProdutos());
 
         historicoPedidoService.registrarPedido(codigoPedido, pedido);
 
@@ -211,23 +212,16 @@ public class PedidoServiceImpl implements PedidoService {
         if (!EstadoPedido.INICIADO.equals(pedido.getEstadoPedido())) {
             throw new BadRequestException("Checkout desse pedido já realizado");
         }
-        if (Objects.isNull(createPedidoDto.getListaAlimentos()) || createPedidoDto.getListaAlimentos().isEmpty()) {
-            throw new BadRequestException("Pedido deve ter pelo menos um alimento relacionado.");
+        if (Objects.isNull(createPedidoDto.getListaProdutos()) || createPedidoDto.getListaProdutos().isEmpty()) {
+            throw new BadRequestException("Pedido deve ter pelo menos um produto relacionado.");
         }
 
-        List<PedidoAlimento> pedidoAlimentosExistentes = pedidoAlimentoRepository.listarPorCodigoPedido(codigoPedido);
+        for (ProdutoDto produto : createPedidoDto.getListaProdutos()) {
+            PedidoProduto pedidoProduto = pedidoProdutoMapper.toDomain(produto);
+            pedidoProduto.setCodigoPedido(codigoPedido);
 
-        for (PedidoAlimento pedidoAlimento : pedidoAlimentosExistentes) {
-            pedidoAlimentoRepository.remover(pedidoAlimento);
-            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.D);
-        }
-
-        for (AlimentoDto alimento : createPedidoDto.getListaAlimentos()) {
-            PedidoAlimento pedidoAlimento = pedidoAlimentoMapper.toDomain(alimento);
-            pedidoAlimento.setCodigoPedido(codigoPedido);
-
-            pedidoAlimentoRepository.inserir(pedidoAlimento);
-            historicoPedidoAlimentoService.registrarPedidoAlimento(pedidoAlimento, TipoAlteracao.I);
+            pedidoProdutoRepository.atualizarPedido(pedidoProduto);
+            historicoPedidoProdutoService.registrarPedidoProduto(pedidoProduto, TipoAlteracao.A);
         }
     }
 

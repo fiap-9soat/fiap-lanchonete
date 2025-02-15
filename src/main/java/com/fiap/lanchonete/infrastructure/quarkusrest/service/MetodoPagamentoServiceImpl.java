@@ -11,9 +11,9 @@ import org.jboss.logging.Logger;
 import com.fiap.lanchonete.application.rest.out.MercadoPagoConsumer;
 import com.fiap.lanchonete.domain.model.Pedido;
 import com.fiap.lanchonete.domain.model.QrCodeDto;
-import com.fiap.lanchonete.domain.pojo.AlimentoDto;
+import com.fiap.lanchonete.domain.pojo.ProdutoDto;
 import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
-import com.fiap.lanchonete.domain.ports.out.AlimentoRepository;
+import com.fiap.lanchonete.domain.ports.out.ProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
 import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalInfoPedidoDto;
 import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalItemsDto;
@@ -35,7 +35,7 @@ public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
     QrCodeDTOMapper qrCodeDTOMapper;
 
     @Inject
-    AlimentoRepository alimentoRepository;
+    ProdutoRepository produtoRepository;
 
     @ConfigProperty(name = "mercado-pago-api.id-conta")
     Integer idConta;
@@ -53,23 +53,23 @@ public class MetodoPagamentoServiceImpl implements MetodoPagamentoService {
     @ConfigProperty(name = "mercado-pago-api.url-notificacao")
     String urlNotificacao;
 
-    public QrCodeDto gerarQrCode(String idExterno, Pedido pedido, List<AlimentoDto> listaAlimento) {
+    public QrCodeDto gerarQrCode(String idExterno, Pedido pedido, List<ProdutoDto> listaProduto) {
 
         List<ExternalItemsDto> listaPedidosExterno = new ArrayList<>();
-        listaAlimento.forEach(pedidoAlimento -> {
-            var alimento = alimentoRepository.getAlimentoById(pedidoAlimento.getCodigoAlimento(),
-                    pedidoAlimento.getCodigoTipoAlimento());
+        listaProduto.forEach(pedidoProduto -> {
+            var produto = produtoRepository.getProdutoById(pedidoProduto.getCodigoProduto(),
+                    pedidoProduto.getCodigoTipoProduto());
             listaPedidosExterno
-                    .add(new ExternalItemsDto(pedidoAlimento.getCodigoTipoAlimento().toString(),
-                            alimento.getPrecoAlimento(),
-                            pedidoAlimento.getQuantidadeAlimento().intValue(),
-                            MEDIDA, alimento.getPrecoAlimento()
-                                    .multiply(new BigDecimal(pedidoAlimento
-                                            .getQuantidadeAlimento()))));
+                    .add(new ExternalItemsDto(pedidoProduto.getCodigoTipoProduto().toString(),
+                            produto.getPrecoProduto(),
+                            pedidoProduto.getQuantidadeProduto().intValue(),
+                            MEDIDA, produto.getPrecoProduto()
+                                    .multiply(new BigDecimal(pedidoProduto
+                                            .getQuantidadeProduto()))));
         });
 
         BigDecimal valorTotal = listaPedidosExterno.stream()
-                .map(valorAlimento -> valorAlimento.total_amount())
+                .map(valorProduto -> valorProduto.total_amount())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         var req = new ExternalInfoPedidoDto(idExterno, TITULO, DESCRICAO, urlNotificacao,

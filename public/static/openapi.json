@@ -5,33 +5,33 @@
     "version" : "1.0.2"
   },
   "tags" : [ {
-    "name" : "Alimentos"
+    "name" : "Produtos"
   }, {
     "name" : "Clientes"
   }, {
     "name" : "Pedidos"
   } ],
   "paths" : {
-    "/alimentos" : {
+    "/Produtos" : {
       "post" : {
-        "tags" : [ "Alimentos" ],
-        "summary" : "Insere um alimento na base de dados",
+        "tags" : [ "Produtos" ],
+        "summary" : "Insere um produto na base de dados",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/CreateAlimentoDto"
+                "$ref" : "#/components/schemas/CreateProdutoDto"
               }
             }
           }
         },
         "responses" : {
           "201" : {
-            "description" : "Alimento inserido na base de dados",
+            "description" : "Produto inserido na base de dados",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CreateAlimentoDto"
+                  "$ref" : "#/components/schemas/CreateProdutoDto"
                 }
               }
             }
@@ -39,24 +39,24 @@
         }
       },
       "delete" : {
-        "tags" : [ "Alimentos" ],
-        "summary" : "Deleta um alimento da base de dados",
+        "tags" : [ "Produtos" ],
+        "summary" : "Deleta um produto da base de dados",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/DeleteAlimentoDto"
+                "$ref" : "#/components/schemas/DeleteProdutoDto"
               }
             }
           }
         },
         "responses" : {
           "200" : {
-            "description" : "Alimento deletado na base de dados",
+            "description" : "Produto deletado na base de dados",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/DeleteAlimentoDto"
+                  "$ref" : "#/components/schemas/DeleteProdutoDto"
                 }
               }
             }
@@ -64,24 +64,24 @@
         }
       },
       "patch" : {
-        "tags" : [ "Alimentos" ],
-        "summary" : "Edita um alimento da base de dados",
+        "tags" : [ "Produtos" ],
+        "summary" : "Edita um produto da base de dados",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/EditAlimentoDto"
+                "$ref" : "#/components/schemas/EditProdutoDto"
               }
             }
           }
         },
         "responses" : {
           "200" : {
-            "description" : "Alimento editado na base de dados",
+            "description" : "Produto editado na base de dados",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/EditAlimentoDto"
+                  "$ref" : "#/components/schemas/EditProdutoDto"
                 }
               }
             }
@@ -89,12 +89,12 @@
         }
       }
     },
-    "/alimentos/tipo/{codigoTipoAlimento}" : {
+    "/produtos/tipo/{codigoTipoProduto}" : {
       "get" : {
-        "tags" : [ "Alimentos" ],
-        "summary" : "Lista alimentos por tipo",
+        "tags" : [ "Produtos" ],
+        "summary" : "Lista produtos por tipo",
         "parameters" : [ {
-          "name" : "codigoTipoAlimento",
+          "name" : "codigoTipoProduto",
           "in" : "path",
           "required" : true,
           "schema" : {
@@ -109,7 +109,7 @@
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/Alimento"
+                    "$ref" : "#/components/schemas/Produto"
                   }
                 }
               }
@@ -381,22 +381,22 @@
   },
   "components" : {
     "schemas" : {
-      "Alimento" : {
+      "Produto" : {
         "type" : "object",
         "properties" : {
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           },
-          "codigoAlimento" : {
+          "codigoProduto" : {
             "type" : "integer"
           },
-          "nomeAlimento" : {
+          "nomeProduto" : {
             "type" : "string"
           },
           "nomeFunciAlter" : {
             "type" : "string"
           },
-          "precoAlimento" : {
+          "precoProduto" : {
             "type" : "number"
           },
           "tsAlter" : {
@@ -404,29 +404,29 @@
           }
         }
       },
-      "AlimentoDto" : {
+      "ProdutoDto" : {
         "type" : "object",
         "properties" : {
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           },
-          "codigoAlimento" : {
+          "codigoProduto" : {
             "type" : "integer"
           },
-          "quantidadeAlimento" : {
+          "quantidadeProduto" : {
             "format" : "int32",
             "type" : "integer"
           }
         }
       },
-      "CreateAlimentoDto" : {
-        "required" : [ "nomeAlimento", "nomeFunciAlter" ],
+      "CreateProdutoDto" : {
+        "required" : [ "nomeProduto", "nomeFunciAlter" ],
         "type" : "object",
         "properties" : {
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           },
-          "nomeAlimento" : {
+          "nomeProduto" : {
             "minLength" : 1,
             "type" : "string"
           },
@@ -434,7 +434,7 @@
             "minLength" : 1,
             "type" : "string"
           },
-          "precoAlimento" : {
+          "precoProduto" : {
             "minimum" : 0,
             "exclusiveMinimum" : true,
             "type" : "number"
@@ -470,41 +470,41 @@
             "format" : "int32",
             "type" : "integer"
           },
-          "listaAlimentos" : {
+          "listaProdutos" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/AlimentoDto"
+              "$ref" : "#/components/schemas/ProdutoDto"
             }
           }
         }
       },
-      "DeleteAlimentoDto" : {
+      "DeleteProdutoDto" : {
         "type" : "object",
         "properties" : {
-          "codigoAlimento" : {
+          "codigoProduto" : {
             "type" : "integer"
           },
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           }
         }
       },
-      "EditAlimentoDto" : {
+      "EditProdutoDto" : {
         "type" : "object",
         "properties" : {
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           },
-          "codigoAlimento" : {
+          "codigoProduto" : {
             "type" : "integer"
           },
-          "nomeAlimento" : {
+          "nomeProduto" : {
             "type" : "string"
           },
           "nomeFunciAlter" : {
             "type" : "string"
           },
-          "precoAlimento" : {
+          "precoProduto" : {
             "type" : "number"
           }
         }
@@ -522,19 +522,19 @@
         "type" : "string",
         "example" : "2022-03-10T16:15:50Z"
       },
-      "ListaPedidoAlimentoDto" : {
+      "ListaPedidoProdutoDto" : {
         "type" : "object",
         "properties" : {
-          "codigoTipoAlimento" : {
+          "codigoTipoProduto" : {
             "type" : "integer"
           },
-          "codigoAlimento" : {
+          "codigoProduto" : {
             "type" : "integer"
           },
-          "quantidadeAlimento" : {
+          "quantidadeProduto" : {
             "type" : "integer"
           },
-          "valorAlimento" : {
+          "valorProduto" : {
             "type" : "number"
           },
           "valorTotal" : {
@@ -561,10 +561,10 @@
           "valorTotal" : {
             "type" : "number"
           },
-          "listaPedidoAlimentos" : {
+          "listaPedidoProdutos" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/ListaPedidoAlimentoDto"
+              "$ref" : "#/components/schemas/ListaPedidoProdutoDto"
             }
           }
         }
