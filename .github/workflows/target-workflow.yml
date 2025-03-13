@@ -1,0 +1,36 @@
+name: My Target Workflow
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+  release:
+    types: [published]
+
+jobs:
+  tf_fmt:
+    name: Deploy Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions/init@v0.4.0
+        env:
+          GITHUB_TOKEN: ${{ github.event.client_payload.github_token }}
+          TF_ACTION_WORKING_DIR: "terraform"
+          AWS_ACCESS_KEY_ID: ${{ github.event.client_payload.aws_access_key }}
+          AWS_SECRET_ACCESS_KEY: ${{ github.event.client_payload.aws_secret_key }}
+          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }}
+
+      - name: Terraform Validate
+        uses: hashicorp/terraform-github-actions/validate@v0.3.7
+
+      - name: Terraform Apply
+        uses: hashicorp/terraform-github-actions/apply@v1
+        env:
+          GITHUB_TOKEN: ${{ github.event.client_payload.github_token }}
+          TF_ACTION_WORKING_DIR: "terraform"
+          AWS_ACCESS_KEY_ID: ${{ github.event.client_payload.aws_access_key }}
+          AWS_SECRET_ACCESS_KEY: ${{ github.event.client_payload.aws_secret_key }}
+          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }}
