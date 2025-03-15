@@ -58,5 +58,4 @@ jobs:
         run: |
           sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" \
           kubectl apply -f .kube/fiap.yaml
-          kubectl apply -f .kube/mysql.yaml
           kubectl apply -f .kube/secret.yaml
