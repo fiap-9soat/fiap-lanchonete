@@ -23,7 +23,7 @@ jobs:
           TF_ACTION_WORKING_DIR: "terraform"
           AWS_ACCESS_KEY_ID: ${{ github.event.client_payload.aws_access_key }}
           AWS_SECRET_ACCESS_KEY: ${{ github.event.client_payload.aws_secret_key }}
-          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }}
+          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }} | base64 --decode
 
       - name: Terraform Validate
         uses: hashicorp/terraform-github-actions/validate@v0.3.7
@@ -35,4 +35,4 @@ jobs:
           TF_ACTION_WORKING_DIR: "terraform"
           AWS_ACCESS_KEY_ID: ${{ github.event.client_payload.aws_access_key }}
           AWS_SECRET_ACCESS_KEY: ${{ github.event.client_payload.aws_secret_key }}
-          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }}
+          AWS_SESSION_TOKEN: ${{ github.event.client_payload.aws_token_key }} | base64 --decode
