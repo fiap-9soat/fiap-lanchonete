@@ -1,25 +1,23 @@
 name: My Target Workflow
 
 on:
-  repository_dispatch:
-    types: [trigger-workflow]
-    inputs:
+  workflow_call:
+    secrets:
       aws_access_key:
-        type: string
+        required: true
+      aws-secret-key:
+        required: true
+      aws-session-token:
+        required: true
       aws_region:
-        type: string
+        required: true
       eks_cluster_name:
-        type: string
+        required: true
 
 env:
-  EKS_CLUSTER_NAME: "${{ secrets[inputs.eks_cluster_name] }}"
-  AWS_REGION: "${{ secrets[inputs.aws_region] }}"
-  AWS_ACCESS_KEY: "${{ secrets[inputs.aws_access_key] }}"
-  AWS_SECRET_ACCESS_KEY: "${{ secrets[inputs.aws-secret-access-key] }}"
-  AWS_SESSION_TOKEN: "${{ secrets[inputs.aws-session-token] }}"
-permissions:
-  id-token: write
-  contents: read
+  EKS_CLUSTER_NAME: "${{ secrets.eks_cluster_name }}"
+  AWS_REGION: "${{ secrets.aws-region }}"
+
 
 jobs:
   build:
@@ -37,10 +35,10 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: $AWS_ACCESS_KEY
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
-          aws-session-token: $AWS_SESSION_TOKEN | base64 --decode
-          aws-region: $AWS_REGION
+          aws-access-key-id: "${{ secrets.aws_access_key }}"
+          aws-secret-access-key: "${{ secrets.aws_secret_key }}"
+          aws-session-token: "${{ secrets.aws_session_token }}" | base64 --decode
+          aws-region: "${{ secrets.aws_region }}"
 
       - name: Login to Amazon ECR
         id: login-ecr
