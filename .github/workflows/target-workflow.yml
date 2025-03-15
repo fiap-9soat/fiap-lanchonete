@@ -27,10 +27,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Set short git commit SHA
         id: commit
         uses: prompt/actions-commit-hash@v2
