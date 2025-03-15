@@ -3,11 +3,18 @@ name: My Target Workflow
 on:
   repository_dispatch:
     types: [trigger-workflow]
+    inputs:
+      aws_access_key:
+        type: string
+      aws_region:
+        type: string
+      eks_cluster_name:
+        type: string
 
 env:
-  GITHUB_TOKEN: echo ${{ github.event.client_payload.github_token }}
-  EKS_CLUSTER_NAME: echo ${{ github.event.client_payload.eks_cluster_name }}
-  AWS_REGION: echo ${{ github.event.client_payload.aws_region }}
+  EKS_CLUSTER_NAME: ${{ secrets[inputs.eks_cluster_name] }}
+  AWS_REGION: ${{ secrets[inputs.aws_region] }}
+  AWS_ACCESS_KEY: ${{ secrets[inputs.aws_access_key] }}
 
 permissions:
   id-token: write
@@ -29,10 +36,10 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: echo ${{ github.event.client_payload.aws_access_key }}
-          aws-secret-access-key: echo ${{ github.event.client_payload.aws_secret_key }}
-          aws-session-token: echo ${{ github.event.client_payload.aws_token_key }} | base64 --decode
-          aws-region: echo ${{ github.event.client_payload.aws_region }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} | base64 --decode
+          aws-region: ${{ secrets.AWS_REGION}}
 
       - name: Login to Amazon ECR
         id: login-ecr
