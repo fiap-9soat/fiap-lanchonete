@@ -29,7 +29,7 @@ jobs:
         uses: hashicorp/terraform-github-actions/validate@v0.3.7
 
       - name: Terraform Apply
-        uses: hashicorp/terraform-github-actions/apply@v1
+        uses: hashicorp/terraform-github-actions/apply@v0.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           TF_ACTION_WORKING_DIR: "terraform"
