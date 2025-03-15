@@ -3,20 +3,20 @@ name: My Target Workflow
 on:
   workflow_call:
     secrets:
-      aws_access_key:
+      AWS_ACCESS_KEY:
         required: true
-      aws-secret-key:
+      AWS_SECRET_ACCESS_KEY:
         required: true
-      aws-session-token:
+      AWS_SESSION_TOKEN :
         required: true
-      aws_region:
+      AWS_REGION:
         required: true
-      eks_cluster_name:
+      EKS_CLUSTER_NAME:
         required: true
 
 env:
-  EKS_CLUSTER_NAME: "${{ secrets.eks_cluster_name }}"
-  AWS_REGION: "${{ secrets.aws-region }}"
+  EKS_CLUSTER_NAME: "${{ secrets.EKS_CLUSTER_NAME }}"
+  AWS_REGION: "${{ secrets.AWS_REGION }}"
 
 
 jobs:
@@ -35,10 +35,10 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: "${{ secrets.aws_access_key }}"
-          aws-secret-access-key: "${{ secrets.aws_secret_key }}"
-          aws-session-token: "${{ secrets.aws_session_token }}" | base64 --decode
-          aws-region: "${{ secrets.aws_region }}"
+          aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY }}"
+          aws-secret-access-key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          aws-session-token: "${{ secrets.AWS_SESSION_TOKEN  }}" | base64 --decode
+          aws-region: "${{ secrets.AWS_REGION }}"
 
       - name: Login to Amazon ECR
         id: login-ecr
