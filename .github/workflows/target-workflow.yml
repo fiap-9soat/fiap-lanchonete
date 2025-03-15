@@ -3,80 +3,45 @@ name: My Target Workflow
 on:
   repository_dispatch:
     types: [trigger-workflow]
-  release:
-    types: [published]
+
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PAT }}
-  TF_ACTION_WORKING_DIR: "terraform"
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} | base64 --decode
+  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+  AWS_REGION: ${{ secrets.AWS_REGION}}
 
 jobs:
-  terraform:
-    name: "Terraform Infrastructure Change Management"
+  build:
+    name: Deployment
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        # We keep Terraform files in the terraform directory.
-        working-directory: .
 
     steps:
-      - name: Checkout the repository to the runner
-        uses: actions/checkout@v2
+    - name: Set short git commit SHA
+      id: commit
+      uses: prompt/actions-commit-hash@v2
 
-      - name: Setup Terraform with specified version on the runner
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.11.1
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION}}
 
-      - name: Terraform init
-        id: init
-        run: terraform init
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Terraform format
-        id: fmt
-        run: terraform fmt -check
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
-      - name: Terraform validate
-        id: validate
-        run: terraform validate
-
-      - name: Terraform plan
-        run: terraform plan -no-color -input=false
-        continue-on-error: true
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false
-# jobs:
-#   tf_fmt:
-#     name: Deploy Site
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout Repo
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.PAT }}
-#         uses: actions/checkout@v4
-
-#       - name: Terraform Init
-#         uses: hashicorp/terraform-github-actions/init@v0.4.0
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.PAT }}
-#           TF_ACTION_WORKING_DIR: "terraform"
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} | base64 --decode
-
-#       - name: Terraform Validate
-#         uses: hashicorp/terraform-github-actions/validate@v0.3.7
-
-#       - name: Terraform Apply
-#         uses: hashicorp/terraform-github-actions/apply@v0.4.0
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.PAT }}
-#           TF_ACTION_WORKING_DIR: "terraform"
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} | base64 --decode
+    - name: Deploy to EKS
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}        
+          IMAGE_TAG: ${{ steps.commit.outputs.short }}
+        run: |
+          sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" \
+          kubectl apply -f .kube/fiap.yaml
+          kubectl apply -f .kube/mysql.yaml
+          kubectl apply -f .kube/secret.yaml
