@@ -4,7 +4,6 @@ on:
   repository_dispatch:
     types: [trigger-workflow]
 
-
 env:
   EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
   AWS_REGION: ${{ secrets.AWS_REGION}}
@@ -15,30 +14,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set short git commit SHA
-      id: commit
-      uses: prompt/actions-commit-hash@v2
+      - name: Set short git commit SHA
+        id: commit
+        uses: prompt/actions-commit-hash@v2
 
-    - name: Check out code
-      uses: actions/checkout@v4
-      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION}}
+      - name: Check out code
+        uses: actions/checkout@v4
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION}}
 
-    - name: Update kube config
-      run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Deploy to EKS
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+
+      - name: Deploy to EKS
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}        
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
           sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" \
