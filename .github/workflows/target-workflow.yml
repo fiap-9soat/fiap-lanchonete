@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         uses: actions/checkout@v4
 
       - name: Terraform Init
