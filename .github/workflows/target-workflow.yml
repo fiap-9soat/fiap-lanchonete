@@ -2,6 +2,10 @@ name: My Target Workflow
 
 on:
   workflow_call:
+    inputs:
+      message:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY:
         required: true
