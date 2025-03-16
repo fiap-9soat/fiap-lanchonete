@@ -27,7 +27,9 @@ jobs:
   build:
     name: Deployment
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./api
     steps:
       # - name: Set short git commit SHA
       #   id: commit
