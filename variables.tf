@@ -1,11 +1,30 @@
 variable "mysql_url" {
-  description = "URL de conexão com o banco de dados MySQL"
-  type        = string
+  type = string
+}
+
+variable "mysql_username" {
+  sensitive = true
+  type      = string
+}
+
+variable "mysql_password" {
+  sensitive = true
+  type      = string
+}
+
+variable "mercado_pago_api_key" {
+  sensitive = true
+  type      = string
+}
+
+variable "mercado_pago_id_loja" {
+  sensitive = true
+  type      = string
 }
 
 variable "mercado_pago_id_conta" {
-  description = "ID da conta do Mercado Pago"
-  type        = string
+  sensitive = true
+  type      = number
 }
 
 variable "aws_region" {
