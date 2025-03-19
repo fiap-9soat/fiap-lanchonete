@@ -27,6 +27,8 @@ on:
         required: true
       ID_CONTA:
         required: true
+      PAT:
+        required: true
 
 env:
   TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
