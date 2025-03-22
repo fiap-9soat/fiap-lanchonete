@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.infrastructure.quarkusrest.service;
+package com.fiap.lanchonete.infrastructure.quarkus.rest.service;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 

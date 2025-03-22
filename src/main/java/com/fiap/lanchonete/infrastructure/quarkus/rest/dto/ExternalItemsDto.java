@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.infrastructure.quarkusrest.dto;
+package com.fiap.lanchonete.infrastructure.quarkus.rest.dto;
 
 import java.math.BigDecimal;
 
