@@ -1,14 +1,13 @@
 package com.fiap.lanchonete.application.rest.out;
 
 import org.eclipse.microprofile.config.ConfigProvider;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestQuery;
 
-import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalInfoPedidoDto;
-import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalQrCodeDto;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.dto.ExternalInfoPedidoDto;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.dto.ExternalQrCodeDto;
 import com.mercadopago.resources.merchantorder.MerchantOrder;
 
 import jakarta.enterprise.context.ApplicationScoped;

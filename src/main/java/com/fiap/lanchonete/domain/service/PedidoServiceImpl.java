@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fiap.lanchonete.domain.model.*;
 import com.fiap.lanchonete.domain.ports.in.*;
 import org.jboss.logging.Logger;
 
@@ -16,10 +17,6 @@ import com.fiap.lanchonete.domain.enums.EstadoPedido;
 import com.fiap.lanchonete.domain.enums.TipoAlteracao;
 import com.fiap.lanchonete.domain.mapper.PedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
-import com.fiap.lanchonete.domain.model.Produto;
-import com.fiap.lanchonete.domain.model.Pedido;
-import com.fiap.lanchonete.domain.model.PedidoProduto;
-import com.fiap.lanchonete.domain.model.PedidoQrCodeDto;
 import com.fiap.lanchonete.domain.pojo.ProdutoDto;
 import com.fiap.lanchonete.domain.pojo.CreatePedidoDto;
 import com.fiap.lanchonete.domain.pojo.ListaPedidoProdutoDto;
@@ -37,6 +34,8 @@ import lombok.AllArgsConstructor;
 public class PedidoServiceImpl implements PedidoService {
 
     private final Logger logger = Logger.getLogger(PedidoServiceImpl.class);
+
+    UsuarioAutenticado usuarioAutenticado;
 
     PedidoRepository pedidoRepository;
 
@@ -170,6 +169,10 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);
+
+        if (Objects.nonNull(usuarioAutenticado.getCodigoCliente())){
+            pedido.setCodigoCliente(usuarioAutenticado.getCodigoCliente());
+        }
 
         checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
         if (checaPedidoExiste == null || checaPedidoExiste.isEmpty()) {

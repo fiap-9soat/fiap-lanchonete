@@ -6,6 +6,7 @@ import com.fiap.lanchonete.domain.mapper.HistoricoPedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.HistoricoPedidoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoProdutoMapper;
 import com.fiap.lanchonete.domain.mapper.PedidoMapper;
+import com.fiap.lanchonete.domain.model.UsuarioAutenticado;
 import com.fiap.lanchonete.domain.ports.in.ProdutoService;
 import com.fiap.lanchonete.domain.ports.in.ClienteService;
 import com.fiap.lanchonete.domain.ports.in.HistoricoPedidoProdutoService;
@@ -37,20 +38,21 @@ public class ServiceContext {
 
     @Produces
     public PedidoService pedidoService(PedidoRepository pedidoRepository,
-            PedidoProdutoRepository pedidoProdutoRepository,
-            PedidoMapper pedidoMapper,
-            ProdutoService produtoService,
-            PedidoProdutoMapper pedidoProdutoMapper, HistoricoPedidoService historicoPedidoService,
-            HistoricoPedidoProdutoService historicoPedidoProdutoService,
-            MetodoPagamentoService metodoPagamentoService, WebhookService webhookService) {
-        return new PedidoServiceImpl(pedidoRepository, pedidoProdutoRepository,
+                                       PedidoProdutoRepository pedidoProdutoRepository,
+                                       PedidoMapper pedidoMapper,
+                                       ProdutoService produtoService,
+                                       PedidoProdutoMapper pedidoProdutoMapper, HistoricoPedidoService historicoPedidoService,
+                                       HistoricoPedidoProdutoService historicoPedidoProdutoService,
+                                       MetodoPagamentoService metodoPagamentoService,
+                                       UsuarioAutenticado usuarioAutenticado) {
+        return new PedidoServiceImpl(usuarioAutenticado, pedidoRepository, pedidoProdutoRepository,
                 pedidoMapper, produtoService, pedidoProdutoMapper, historicoPedidoService,
                 historicoPedidoProdutoService, metodoPagamentoService);
     }
 
     @Produces
     public ClienteService clienteService(ClienteRepository clienteRepository,
-            ClienteMapper clienteMapper) {
+                                         ClienteMapper clienteMapper) {
         return new ClienteServiceImpl(clienteRepository, clienteMapper);
     }
 
@@ -61,7 +63,7 @@ public class ServiceContext {
 
     @Produces
     public HistoricoPedidoService historicoPedidoService(HistoricoPedidoRepository historicoPedidoRepository,
-            HistoricoPedidoMapper historicoPedidoMapper) {
+                                                         HistoricoPedidoMapper historicoPedidoMapper) {
         return new HistoricoPedidoServiceImpl(historicoPedidoRepository, historicoPedidoMapper);
     }
 

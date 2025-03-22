@@ -1,10 +1,10 @@
-package com.fiap.lanchonete.infrastructure.quarkusrest.mapper;
+package com.fiap.lanchonete.infrastructure.quarkus.rest.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.fiap.lanchonete.domain.model.QrCodeDto;
-import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalQrCodeDto;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.dto.ExternalQrCodeDto;
 
 @Mapper(componentModel = "jakarta")
 public interface QrCodeDTOMapper {

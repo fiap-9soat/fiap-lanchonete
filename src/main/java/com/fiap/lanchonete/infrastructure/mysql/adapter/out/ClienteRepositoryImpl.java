@@ -37,7 +37,9 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     public Cliente getClienteByCpf(String cpf) {
-        ClienteEntity entity = clientePanacheRepository.find("cpf", cpf).firstResultOptional().orElseThrow(NotFoundException::new);
+        ClienteEntity entity = clientePanacheRepository.find("cpf", cpf)
+                .firstResultOptional()
+                .orElseThrow(NotFoundException::new);
         return clienteEntityMapper.toDomain(entity);
     }
 }

@@ -1,4 +1,4 @@
-package com.fiap.lanchonete.infrastructure.quarkusrest.service;
+package com.fiap.lanchonete.infrastructure.quarkus.rest.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import com.fiap.lanchonete.domain.pojo.ProdutoDto;
 import com.fiap.lanchonete.domain.ports.in.MetodoPagamentoService;
 import com.fiap.lanchonete.domain.ports.out.ProdutoRepository;
 import com.fiap.lanchonete.domain.ports.out.PedidoRepository;
-import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalInfoPedidoDto;
-import com.fiap.lanchonete.infrastructure.quarkusrest.dto.ExternalItemsDto;
-import com.fiap.lanchonete.infrastructure.quarkusrest.mapper.QrCodeDTOMapper;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.dto.ExternalInfoPedidoDto;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.dto.ExternalItemsDto;
+import com.fiap.lanchonete.infrastructure.quarkus.rest.mapper.QrCodeDTOMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
