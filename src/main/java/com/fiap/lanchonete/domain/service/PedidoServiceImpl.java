@@ -170,34 +170,29 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoMapper.toDomain(createPedidoDto);
         pedido.setEstadoPedido(EstadoPedido.INICIADO);
 
-        if (Objects.nonNull(usuarioAutenticado.getCodigoCliente())){
+        if (Objects.nonNull(usuarioAutenticado.getCodigoCliente())) {
             pedido.setCodigoCliente(usuarioAutenticado.getCodigoCliente());
         }
 
         checaPedidoExiste = pedidoRepository.checaSeClienteJaTemPedido(pedido);
+
         if (checaPedidoExiste == null || checaPedidoExiste.isEmpty()) {
             codigoPedido = pedidoRepository.criarPedido(pedido);
-            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + "-" + uuid;
-            pedidoRepository.registrarIdPedidoExterno(codigoPedido, idExterno);
         } else {
             codigoPedido = checaPedidoExiste.getFirst().getCodigoPedido();
-            idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + "-" + uuid;
-            pedidoRepository.registrarIdPedidoExterno(codigoPedido, idExterno);
         }
+
+        idExterno = CODIGO_EXTERNO + LocalDate.now().toString() + "-" + uuid;
+        pedidoRepository.registrarIdPedidoExterno(codigoPedido, idExterno);
 
         final Integer codigoPedidoFinal = codigoPedido;
 
         createPedidoDto.getListaProdutos().forEach(produto -> {
-            try {
-                PedidoProduto pedidoProduto = pedidoProdutoMapper.toDomain(produto);
-                pedidoProduto.setCodigoPedido(codigoPedidoFinal);
-                pedidoProdutoRepository.checarSeTipoProdutoJaExiste(pedidoProduto);
-                pedidoProdutoRepository.inserir(pedidoProduto);
-                historicoPedidoProdutoService.registrarPedidoProduto(pedidoProduto, TipoAlteracao.I);
-            } catch (BadRequestException e) {
-                e.printStackTrace();
-                throw e;
-            }
+            PedidoProduto pedidoProduto = pedidoProdutoMapper.toDomain(produto);
+            pedidoProduto.setCodigoPedido(codigoPedidoFinal);
+            pedidoProdutoRepository.checarSeTipoProdutoJaExiste(pedidoProduto);
+            pedidoProdutoRepository.inserir(pedidoProduto);
+            historicoPedidoProdutoService.registrarPedidoProduto(pedidoProduto, TipoAlteracao.I);
         });
 
         var qrCode = metodoPagamentoService.gerarQrCode(idExterno, pedido, createPedidoDto.getListaProdutos());
@@ -246,8 +241,12 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     private void validarProximoEstado(EstadoPedido estadoAtual, EstadoPedido estadoRequisitado) {
+        if (estadoRequisitado == EstadoPedido.CANCELADO){
+            return;
+        }
+
         if (estadoRequisitado.getCodigo() != Integer.sum(estadoAtual.getCodigo(), 1)) {
-            throw new NotAcceptableException("Estado requisitado inválido");
+            throw new BadRequestException("Estado requisitado inválido");
         }
     }
 

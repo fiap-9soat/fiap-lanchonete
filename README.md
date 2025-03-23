@@ -29,9 +29,9 @@ DB_URL=localhost:3306
 MYSQL_USER=fiap
 MYSQL_PASSWORD=fiap
 MERCADO_PAGO_URL=https://api.mercadopago.com/
-ID_CONTA=662144664
-ID_LOJA=1B2D92F23
-URL_NOTIFICACAO=https://www.yourserver.com/notifications
+MERCADO_PAGO_ID_CONTA=662144664
+MERCADO_PAGO_ID_LOJA=1B2D92F23
+MERCADO_PAGO_URL_NOTIFICACAO=https://www.yourserver.com/notifications
 MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff39-662144664
 ```
 
@@ -67,12 +67,13 @@ Caso algum dos comandos acima não funcione, siga os passos [nesse](https://www.
 Crie um arquivo .env e coloque essas variáveis de ambiente:
 
 ```shell
+DB_URL=localhost:3306
 MYSQL_USER=fiap
 MYSQL_PASSWORD=fiap
 MERCADO_PAGO_URL=https://api.mercadopago.com/
-ID_CONTA=662144664
-ID_LOJA=1B2D92F23
-URL_NOTIFICACAO=https://www.yourserver.com/notifications
+MERCADO_PAGO_ID_CONTA=662144664
+MERCADO_PAGO_ID_LOJA=1B2D92F23
+MERCADO_PAGO_URL_NOTIFICACAO=https://www.yourserver.com/notifications
 MERCADO_PAGO_API_KEY=TEST-8402790990254628-112619-4290252fdac6fd07a3b8bb555578ff39-662144664
 ```
 
@@ -96,7 +97,9 @@ http://localhost:8080/q/docs
 
 ### Kubernetes
 
-Essa é a configuração recomendada para ambientes produtivos.
+Essa é a configuração recomendada para simular o fluxo do ambiente produtivo.  
+Para deploy em ambiente de produção, recomendamos seguir o passo a passo especificado no repositório de `infra`:
+https://github.com/fiap-9soat/fiap-lanchonete-infra
 
 #### Pré-requisitos
 
@@ -186,15 +189,14 @@ mais replicas/pods não é o suficiente para garantir a tolerância a falhas.
 Em ambientes produtivos, é recomendado utilizar um serviço gerenciado, como o
 [Amazon RDS para MySQL](https://aws.amazon.com/pt/rds/mysql/).
 
-### AWS EKS
+### Produção
 
-#### Importante
+#### Terraform
+Para os ambientes produtivos, essa organização possui uma configuração automatizada através do Terraform com a integração do 
+AWS. Basta seguir o guia no repositório de [infra](https://github.com/fiap-9soat/fiap-lanchonete-infra).  
+Os passos abaixo só são necessários caso não seja viavél a utilização do Terraform.  
 
-Não é necessário utilizar `AWS EKS` para viabilizar o deploy do projeto, ele é apenas um dos diversos serviços
-de cluster Kubernetes gerenciados. Essa seção do guia contém algumas dicas para facilitar a configuração, mas não cobre
-todo o fluxo de configuração dos Clusters e NodeGroups da AWS.
-
-#### Pré-requisitos
+#### Manual
 
 Além da necessidade da ferramenta `kubectl`, também é necessário realizar a instalação e configuração
 da `AWS CLI` e do `AWS EKS CLI`.
@@ -259,32 +261,33 @@ A API estará disponível para acesso na porta padrão `8080`, acesse esse ender
 http://localhost:8080/q/docs
 ```
 
-## Fase 2
+## Utilização
 
-### Desenho de arquitetura da aplicação
+Disponibilizamos na raiz do repositório os arquivos de coleção pré-configurados, com documentação e um passo a passo explicito 
+para realizar o fluxo comum de utilização da API:
+1. CRUD para produtos
+2. CRUD para clientes
+3. CRUD para pedidos
+4. Fluxos relacionados ao pedido (recebimento, confirmação de pagamento, cancelamento)
 
-![](/public/img/desenho_aplicacao_fase_2.png)  
-Clique [aqui](https://excalidraw.com/#json=1p_ph-W69GxI4F9MZgRvu,eWeftMENraZ0MDIHP8lLTg) para visualizar em tela cheia.
+### Coleções
+Recomendamos que seja utilizado o `Postman`, `Bruno`, ou algum programa de testagem de APIs compatível.  
 
-### Documentação dos endpoints
+Para o `Postman`, utilize o arquivo `fiap-lanchonete.postman.json`  
+Para o `Bruno`, utilize o arquivo `fiap-lanchonete.bruno.json`  
 
-É recomendável utilizar a documentação Swagger acessível após subir a aplicação (`/q/docs`), ou você pode baixar
-[esse](/public/static/openapi.json) arquivo JSON contendo a especificação OpenAPI 3.0 da API. Basta abrir o arquivo em algum
-editor com suporte a leitura do formato.
+Após a importação, configure a variavel `API_URL` para o valor correto, normalmente `http://localhost:8080` em ambiente local.
 
-### Video de apresentação do projeto
+![](/public/img/print_passo_a_passo_requisicoes.png)
 
-Fizemos um vídeo detalhando a arquitetura do projeto, acessível [aqui](https://youtu.be/3f4BSngvKEE).  
-Nele também tem um guia da ordem de chamada dos endpoints.
+### Autenticação
 
-### Guia completo
+Durante o fluxo de utilização da API, caso o usuário esteja autenticado, o endpoint de criação de pedidos utiliza o código 
+de cliente relacionado ao usuario autenticado atualmente, não sendo necessário criar um cliente para esses casos.  
 
-O fluxo das chamadas segue basicamente a ordem de:
+**Importante**: Para ambiente produtivo (ex: subida da API pelo fluxo do Terraform da organização), é **obrigatório** 
+repassar o `IdToken` recebido na autenticação, através do header `Authorization`.  
+Para mais informações, leia a documentação do [projeto de autenticação](https://github.com/fiap-9soat/fiap-lanchonete-auth).
 
-1. Cadastrar produtos
-2. Cadastrar cliente (opcional, pode ser nulo)
-3. Criar Pedido
-4. Webhook de confirmação de pagamento
-5. Alterar estado do pedido (checkout)
-6. Alterar estado do pedido (em preparação)
-7. Alterar estado do pedido (pronto)
+_Considera-se um usuario autenticado quando um token `JWT` válido é repassado no header `Authorization` e possui as informações necessárias 
+oferecidas pelo provedor de autenticação (ex.: Cognito)_
