@@ -14,6 +14,9 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
+
+import java.util.Base64;
+
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.jboss.logging.Logger;
 
@@ -34,7 +37,8 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) {
         String token = requestContext.getHeaderString("Authorization");
 
-        if (token == null || token.isEmpty()) return;
+        if (token == null || token.isEmpty())
+            return;
 
         JwtDto jwt = decodeJwt(token);
 
@@ -56,7 +60,8 @@ public class AuthFilter implements ContainerRequestFilter {
             Cliente cliente = clienteService.consultarClientePorCpf(usuarioAutenticado.getCpf());
             usuarioAutenticado.setCodigoCliente(cliente.getCodigoCliente());
             return;
-        } catch (NotFoundException ignored) {}
+        } catch (NotFoundException ignored) {
+        }
 
         // Usuario não cadastrado
         CreateClienteDto createClienteDto = new CreateClienteDto(
@@ -71,15 +76,24 @@ public class AuthFilter implements ContainerRequestFilter {
     }
 
     /**
-     * Atenção: essa função *não* verifica a validade do JWT, já que assumimos que esse processo já foi realizado
+     * Atenção: essa função *não* verifica a validade do JWT, já que assumimos que
+     * esse processo já foi realizado
      * na camada de API Gateway.
+     * 
      * @param jwtString
      * @return
      */
     public JwtDto decodeJwt(String jwtString) {
         DecodedJWT jwt = JWT.decode(jwtString);
 
-        return jwtPayloadToDTO(jwt.getPayload());
+        String header = new String(Base64.getUrlDecoder().decode(jwt.getHeader()));
+        String payload = new String(Base64.getUrlDecoder().decode(jwt.getPayload()));
+
+        JwtDto jwtPayload = jwtPayloadToDTO(payload);
+
+        logger.info("Header: " + header);
+        logger.info("JwtPayload: " + jwtPayload);
+        return jwtPayload;
     }
 
     public JwtDto jwtPayloadToDTO(String jsonString) {
