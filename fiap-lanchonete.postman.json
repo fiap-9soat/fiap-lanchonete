@@ -1,0 +1,204 @@
+{
+  "info": {
+    "name": "fiap-lanchonete",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "2 - Listar Clientes",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/clientes"
+      }
+    },
+    {
+      "name": "4 - Listar Produtos",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/produtos/tipo/1"
+      }
+    },
+    {
+      "name": "5 - Criar Pedido",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{API_URL}}/pedidos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoCliente\": 1,\n  \"listaProdutos\": [\n    {\n      \"codigoTipoProduto\": 1,\n      \"codigoProduto\": 1,\n      \"quantidadeProduto\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "1 - Cadastrar Cliente",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{API_URL}}/clientes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Meu\",\n  \"sobrenome\": \"Usuario\",\n  \"cpf\": \"42485133077\",\n  \"email\": \"meuusuario@meuemail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "7 - Listar pedidos recebidos",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/pedidos"
+      }
+    },
+    {
+      "name": "6.1 - Confirmar pagamento do pedido (mock)",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/pedidos/notificacao-pagamento/7"
+      }
+    },
+    {
+      "name": "8 - Cancelar pedido",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{API_URL}}/pedidos/7"
+      }
+    },
+    {
+      "name": "6 - Alterar estado do Pedido",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{API_URL}}/pedidos/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoPedido\": 7,\n  \"estadoPedido\": \"RECEBIDO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "5.1 - Alterar pedido",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": "{{API_URL}}/pedidos/7",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoCliente\": 1,\n  \"listaProdutos\": [\n    {\n      \"codigoTipoProduto\": 1,\n      \"codigoProduto\": 1,\n      \"quantidadeProduto\": 5\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "7.1 - Listar pedidos por cliente",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/pedidos/cliente/1"
+      }
+    },
+    {
+      "name": "2.1 - Listar Clientes por CPF",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{API_URL}}/clientes/42485133077"
+      }
+    },
+    {
+      "name": "3 - Cadastrar Produto",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{API_URL}}/produtos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoTipoProduto\": 1,\n  \"nomeProduto\": \"Rocambole\",\n  \"nomeFunciAlter\": \"prof-fiap\",\n  \"precoProduto\": 15\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "3.1 - Editar Produto",
+      "event": [],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": "{{API_URL}}/produtos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoTipoProduto\": 1,\n  \"codigoProduto\": 1,\n  \"nomeProduto\": \"string\",\n  \"nomeFunciAlter\": \"string\",\n  \"precoProduto\": 30\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "3.2 - Apagar Produto",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{API_URL}}/produtos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoTipoProduto\": 1,\n  \"codigoProduto\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "API_URL",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
