@@ -56,4 +56,5 @@ jobs:
 
       - name: Deploy to EKS cluster
         run: |
-          terraform apply -auto-approve -input=false
+          kubectl apply -f .kube/fiap.yml
+          kubectl apply -f .kube/secret.yml
